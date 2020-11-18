@@ -12,10 +12,28 @@ import org.jsoup.select.Elements;
 
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.GeneralSearchEngine;
+import com.project.eniac.engine.google.service.GoogleDomainService;
+import com.project.eniac.engine.google.service.GoogleDomainServiceImpl;
+import com.project.eniac.engine.google.service.GoogleLanguageService;
+import com.project.eniac.engine.google.service.GoogleLanguageServiceImpl;
+import com.project.eniac.engine.google.service.GoogleRegionService;
+import com.project.eniac.engine.google.service.GoogleRegionServiceImpl;
 import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 
 public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
+
+	private final GoogleRegionService googleRegionService;
+	private final GoogleDomainService googleDomainService;
+	private final GoogleLanguageService googleLanguageService;
+
+	// TODO
+	// on Setting up the bean make googleDomainProvider as a bean and inject it.
+	public GoogleGeneralSearchEngine() {
+		this.googleRegionService = new GoogleRegionServiceImpl();
+		this.googleDomainService = new GoogleDomainServiceImpl();
+		this.googleLanguageService = new GoogleLanguageServiceImpl();
+	}
 
 	@Override
 	public String getEngineName() {
@@ -24,22 +42,31 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 
 	@Override
 	public HttpGet getRequest(MainSearchEntity searchEntity) {
-		String url = "https://www.google.co.in/search";
-		String language = searchEntity.getLanguage();
-		String location = searchEntity.getLocation();
-		String languageAndLocation = language + "-" + location;
+		String language = googleLanguageService.getValidLanguage(searchEntity.getLanguage());
+		String region = googleRegionService.getValidRegion(searchEntity.getLocation());
 
+		String url = new StringBuilder()
+				.append("https://www.")
+				.append(googleDomainService.getDomainByLocation(region))
+				// .append(googleDomainService.getRandomDomain())
+				.append("/search")
+				.toString();
 		try {
+
 			URI uri = new URIBuilder(url)
 					.addParameter("q", searchEntity.getQuery())
-					.addParameter("hl", languageAndLocation)
+					.addParameter("hl", language)
+					.addParameter("lang", language)
 					.addParameter("lr", "lang_" + language)
-					.addParameter("ie", "utf8").addParameter("oe", "utf8").addParameter("safe", "high")
+					.addParameter("gl", region)
+					.addParameter("ie", "utf8")
+					.addParameter("oe", "utf8")
+					.addParameter("safe", "high")
 					.build();
 
 			String acceptLanguage = new StringBuilder()
-					.append(languageAndLocation + "," + language + ";")
-					.append("q=0.8," + language + ";")
+					.append(language).append("-").append(region).append(",").append(language).append(";")
+					.append("q=0.8,").append(language).append(";")
 					.append("q=0.5")
 					.toString();
 
@@ -57,12 +84,12 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 	@Override
 	public GeneralSearchResultEntity getResponse(String reponse) {
 		GeneralSearchResultEntity resultEntity = GeneralSearchResultEntity.getInstanceByEngine(this);
-		
+
 		Document document = Jsoup.parse(reponse);
 		Elements elements = document.select("div.g");
-		
-		for (Element element: elements) {
-			element.select("a[]");
+
+		for (Element element : elements) {
+			element.select("a[href]");
 		}
 
 		resultEntity.setTitle("");
@@ -71,4 +98,5 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 
 		return resultEntity;
 	}
+
 }

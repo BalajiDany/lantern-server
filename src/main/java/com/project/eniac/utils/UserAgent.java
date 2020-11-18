@@ -7,7 +7,7 @@ public class UserAgent {
 	};
 	
 	public static String getRandomUserAgent() {
-		int index = RandomNumberGenerator.getRandomInt(userAgents.length);
+		int index = RandomGenerator.getRandomInt(userAgents.length);
 		return userAgents[index];
 	}
 }
