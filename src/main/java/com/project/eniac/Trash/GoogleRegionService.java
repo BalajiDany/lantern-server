@@ -1,4 +1,5 @@
-package com.project.eniac.engine.google.service;
+package com.project.eniac.Trash;
+
 
 public interface GoogleRegionService {
 

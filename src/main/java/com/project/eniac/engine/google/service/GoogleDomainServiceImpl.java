@@ -1,26 +1,22 @@
 package com.project.eniac.engine.google.service;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.project.eniac.utils.RandomGenerator;
+import com.project.eniac.utils.RandomUtil;
 
 public class GoogleDomainServiceImpl implements GoogleDomainService {
 	
 	// TODO
 	// Once DB schema is defined move to table.
 	private static Map<String, String> domainMap = new HashMap<String, String>();
-	
+
 	private static String DEFAULT_DOMAIN = "google.com";
 
 	static {
 
-		
 		/**
 		 * [Auto Generated]
 		 * 
@@ -250,7 +246,7 @@ public class GoogleDomainServiceImpl implements GoogleDomainService {
 		// Make util to fetch the random map value !should be generic
 		// Need more care. Talking more than 100ms to get random Value;
 		List<String> domains = domainMap.values().stream().collect(Collectors.toList());	
-		int index = RandomGenerator.getRandomInt(domains.size());
+		int index = RandomUtil.getRandomInt(domains.size());
 		return domains.get(index);
 	}
 }

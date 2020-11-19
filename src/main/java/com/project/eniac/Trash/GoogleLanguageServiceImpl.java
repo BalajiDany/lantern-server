@@ -1,11 +1,12 @@
-package com.project.eniac.engine.google.service;
+package com.project.eniac.Trash;
+
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.project.eniac.utils.RandomGenerator;
+import com.project.eniac.utils.RandomUtil;
 
 public class GoogleLanguageServiceImpl implements GoogleLanguageService {
 
@@ -69,23 +70,7 @@ public class GoogleLanguageServiceImpl implements GoogleLanguageService {
 		regionMap.put("sn", "chiShona");
 		regionMap.put("co", "Corsican");
 		regionMap.put("cy", "Cymraeg");
-		regionMap.put("da", "dansk");
-		regionMap.put("yo", "Èdè Yorùbá");
-		regionMap.put("et", "eesti");
-		regionMap.put("xx-elmer", "Elmer Fudd");
-		regionMap.put("eo", "esperanto");
-		regionMap.put("eu", "euskara");
-		regionMap.put("ee", "Eʋegbe");
-		regionMap.put("fil", "Filipino");
-		regionMap.put("tl", "Filipino");
-		regionMap.put("fo", "føroyskt");
-		regionMap.put("fy", "Frysk");
-		regionMap.put("gaa", "Ga");
-		regionMap.put("ga", "Gaeilge");
-		regionMap.put("gd", "Gàidhlig");
-		regionMap.put("gl", "galego");
-		regionMap.put("gn", "Guarani");
-		regionMap.put("xx-hacker", "Hacker");
+		GeneralSearchResultEntity;
 		regionMap.put("ht", "Haitian Creole");
 		regionMap.put("ha", "Hausa");
 		regionMap.put("haw", "ʻŌlelo Hawaiʻi");
@@ -201,7 +186,7 @@ public class GoogleLanguageServiceImpl implements GoogleLanguageService {
 		// Make util to fetch the random map value !should be generic
 		// Need more care. Talking more than 100ms to get random Value;
 		List<String> domains = regionMap.values().stream().collect(Collectors.toList());	
-		int index = RandomGenerator.getRandomInt(domains.size());
+		int index = RandomUtil.getRandomInt(domains.size());
 		return domains.get(index);
 	}
 }

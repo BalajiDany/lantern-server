@@ -1,5 +1,7 @@
 package com.project.eniac.engine;
 
+import java.util.List;
+
 import org.apache.http.client.methods.HttpGet;
 
 import com.project.eniac.entity.MainSearchEntity;
@@ -9,7 +11,7 @@ public interface BaseSearchEngine<T> {
 
 	HttpGet getRequest(MainSearchEntity mainSearchEntity);
 
-	T getResponse(String reponse);
+	List<T> getResponse(String reponse);
 	
 	String getEngineName();
 	

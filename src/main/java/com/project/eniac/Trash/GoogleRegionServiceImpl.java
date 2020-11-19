@@ -1,11 +1,12 @@
-package com.project.eniac.engine.google.service;
+package com.project.eniac.Trash;
+
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.project.eniac.utils.RandomGenerator;
+import com.project.eniac.utils.RandomUtil;
 
 public class GoogleRegionServiceImpl implements GoogleRegionService {
 
@@ -226,8 +227,6 @@ public class GoogleRegionServiceImpl implements GoogleRegionService {
 
 	@Override
 	public String getDefaultRegion() {
-		// As of now
-		// ZZ - Location is based on the request ip.
 		return "ZZ";
 	}
 
@@ -242,7 +241,7 @@ public class GoogleRegionServiceImpl implements GoogleRegionService {
 		// Make util to fetch the random map value !should be generic
 		// Need more care. Talking more than 100ms to get random Value;
 		List<String> domains = regionMap.values().stream().collect(Collectors.toList());	
-		int index = RandomGenerator.getRandomInt(domains.size());
+		int index = RandomUtil.getRandomInt(domains.size());
 		return domains.get(index);
 	}
 
