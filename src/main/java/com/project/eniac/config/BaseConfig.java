@@ -6,8 +6,10 @@ import org.springframework.context.annotation.PropertySource;
 
 import com.project.eniac.service.CommonLanguageServiceImpl;
 import com.project.eniac.service.CommonLocationServiceImpl;
+import com.project.eniac.service.HttpClientServiceImpl;
 import com.project.eniac.service.spec.CommonLanguageService;
 import com.project.eniac.service.spec.CommonLocationService;
+import com.project.eniac.service.spec.HttpClientService;
 
 @Configuration
 @PropertySource("classpath:eniac.properties")
@@ -21,6 +23,11 @@ public class BaseConfig {
 	@Bean
 	CommonLocationService commonLocationService() {
 		return new CommonLocationServiceImpl();
+	}
+
+	@Bean 
+	HttpClientService httpClientService() {
+		return new HttpClientServiceImpl();
 	}
 
 }

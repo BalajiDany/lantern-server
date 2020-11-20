@@ -18,13 +18,23 @@ import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.entity.ResultEntity.TorrentSearchResultEntity;
+import com.project.eniac.service.spec.HttpClientService;
 import com.project.eniac.types.EngineResultType;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
+	
+	private final HttpClientService httpClientService;
 
+	@Override
+	public HttpClientService getHttpClientService() {
+		return this.httpClientService;
+	}
+	
 	@Override
 	public String getEngineName() {
 		return "Pirate Bay";
