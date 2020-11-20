@@ -1,6 +1,6 @@
 package com.project.eniac.types;
 
-public enum EngineCategory {
+public enum EngineType {
 	GENERAL,
 	TORRENT,
 }

@@ -23,7 +23,7 @@ public class RandomUtil {
 		return list.get(index);
 	}
 
-	public static <T> T getRandomElement(@NonNull T... array) {
+	public static <T> T getRandomElement(@NonNull T[] array) {
 		if (array.length == 0) {
 			return null;
 		}

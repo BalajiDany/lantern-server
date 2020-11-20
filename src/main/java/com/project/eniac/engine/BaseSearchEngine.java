@@ -1,19 +1,18 @@
 package com.project.eniac.engine;
 
-import java.util.List;
-
 import org.apache.http.client.methods.HttpGet;
 
 import com.project.eniac.entity.MainSearchEntity;
-import com.project.eniac.types.EngineCategory;
+import com.project.eniac.entity.ResultEntity.SearchResultEntity;
+import com.project.eniac.types.EngineType;
 
 public interface BaseSearchEngine<T> {
 
 	HttpGet getRequest(MainSearchEntity mainSearchEntity);
 
-	List<T> getResponse(String reponse);
+	SearchResultEntity<T> getResponse(String response);
 	
 	String getEngineName();
 	
-	EngineCategory getEngineCategory();
+	EngineType getEngineType();
 }
