@@ -3,9 +3,7 @@ package com.project.eniac.engine.google;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.http.client.methods.HttpGet;
@@ -18,8 +16,7 @@ import org.springframework.util.StringUtils;
 
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.GeneralSearchEngine;
-import com.project.eniac.engine.google.service.GoogleDomainService;
-import com.project.eniac.engine.google.service.GoogleDomainServiceImpl;
+import com.project.eniac.engine.google.util.GoogleRequestUtil;
 import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
@@ -33,28 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 
-	private final GoogleDomainService googleDomainService;
-
-	private final Map<String, String> locationOverideMap = new HashMap<String, String>() {
-		private static final long serialVersionUID = 1L;
-		{
-			put("CH", "US");
-		}
-	};
-
-	private final Map<String, String> languageOverideMap = new HashMap<String, String>() {
-		private static final long serialVersionUID = 1L;
-		{
-			put("de", "en");
-		}
-	};
-
-	// TODO
-	// on Setting up the bean make googleDomainProvider as a bean and inject it.
-	public GoogleGeneralSearchEngine() {
-		this.googleDomainService = new GoogleDomainServiceImpl();
-	}
-
 	@Override
 	public String getEngineName() {
 		return "Google";
@@ -62,15 +37,15 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 
 	@Override
 	public HttpGet getRequest(MainSearchEntity searchEntity) {
-		String language = searchEntity.getLanguage();
-		String region = searchEntity.getLocation();
 		
-		if (locationOverideMap.containsKey(region)) region = locationOverideMap.get(region);
-		if (languageOverideMap.containsKey(region)) region = languageOverideMap.get(region);
-
+		GoogleRequestUtil googleRequestUtil = new GoogleRequestUtil();
+		
+		String language = googleRequestUtil.getLanguage(searchEntity.getLanguage());
+		String region = googleRequestUtil.getRegion(searchEntity.getLocation());
+		
 		String url = new StringBuilder()
 				.append("https://www.")
-				.append(googleDomainService.getDomainByLocation(region))
+				.append(googleRequestUtil.getDomainByLocation(region))
 				.append("/search")
 				.toString();
 		try {

@@ -1,0 +1,68 @@
+
+GoogleDomainServiceImpl
+
+/**
+		 * [Auto Generated]
+		 * 
+		 * This Data is scraped from the (https://www.google.com/supported_domains)
+		 * 
+		 * Open the Link and run the script in console.
+		 * 
+			const domains = document.body.innerText.split(' ');
+			let str = '';
+			domains.sort().forEach(domain => {
+				const splited = domain.split('.');
+				const region = splited[splited.length - 1] || '';
+			
+				if (region && region !== '')
+					str += `domainMap.put("${region.toUpperCase()}", "${domain}");\n`
+			});
+			console.log(str);
+		 * 
+		 * 
+		 * NOTE: it will create like ".google.ad" (find and replace .google => google )
+		 * 
+		 */
+		 
+		 
+		 GoogleLanguageServiceImpl
+		 
+		 /**
+		 * [Auto Generated]
+		 * This Data is scraped from the (https://www.google.com/preferences?fg=1&safe=images)
+		 * 
+		 * Open the link and choose language tab 
+		 * run the script in console.
+		 * 
+		 * 
+			const languages = document.querySelectorAll('.jfk-radiobutton'); let str = '';
+			languages.forEach(radioButton => {
+				const region = radioButton.getAttribute('data-value');
+				const regionName = radioButton.querySelector('.jfk-radiobutton-label').innerText;
+				str += `regionMap.put("${region}", "${regionName}");\n`
+			});
+			console.log(str);
+		 * 
+		 * NOTE: It comes with region too,
+		 * so make sure to remove region entries
+		 */
+		 
+		 GoogleRegionServiceImpl
+		 
+		 /**
+		 * [Auto Generated]
+		 * This Data is scraped from the (https://www.google.com/preferences?fg=1&safe=images)
+		 * 
+		 * Open the link and run the script in console.
+		 * 
+		 * 
+			const regions = document.querySelectorAll('.DB6WRb'); let str = '';
+			regions.forEach(dom => {
+				const radioButton = dom.querySelector('.jfk-radiobutton')
+				const region = radioButton.getAttribute('data-value');
+				const regionName = radioButton.querySelector('.jfk-radiobutton-label').innerText;
+				str += `regionMap.put("${region}", "${regionName}");\n`
+			});
+			console.log(str);
+		 * 
+		 */
