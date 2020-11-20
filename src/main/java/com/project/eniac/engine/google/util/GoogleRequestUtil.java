@@ -33,7 +33,7 @@ public class GoogleRequestUtil{
 		domainMap.put("IT", "google.it");
 	}
 	
-	private final Map<String, String> locationOverideMap = new HashMap<String, String>() {
+	private static final Map<String, String> locationOverideMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put("CH", "US");
@@ -41,34 +41,34 @@ public class GoogleRequestUtil{
 		}
 	};
 
-	private final Map<String, String> languageOverideMap = new HashMap<String, String>() {
+	private static final Map<String, String> languageOverideMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put("de", "en");
 		}
 	};
 
-	public String getLanguage(String inputLanguage) {
+	public static String getLanguage(String inputLanguage) {
 		return languageOverideMap.containsKey(inputLanguage) ? languageOverideMap.get(inputLanguage) : inputLanguage;
 	}
 
-	public String getRegion(String inputRegion) {
+	public static String getRegion(String inputRegion) {
 		return locationOverideMap.containsKey(inputRegion) ? locationOverideMap.get(inputRegion) : inputRegion;
 	}
 
-	public String getDomain(String location) {
-		return this.getDomainByLocation(location);
+	public static String getDomain(String location) {
+		return getDomainByLocation(location);
 	}
 	
-	public String getDefaultDomain() {
+	public static String getDefaultDomain() {
 		return DEFAULT_DOMAIN;
 	}
 
-	public String getDomainByLocation(String location) {
-		return domainMap.getOrDefault(location, this.getDefaultDomain());
+	public static String getDomainByLocation(String location) {
+		return domainMap.getOrDefault(location, getDefaultDomain());
 	}
 
-	public String getRandomDomain() {
+	public static String getRandomDomain() {
 		// Make util to fetch the random map value !should be generic
 		// Need more care. Talking more than 100ms to get random Value;
 		List<String> domains = domainMap.values().stream().collect(Collectors.toList());	

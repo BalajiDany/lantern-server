@@ -38,14 +38,12 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 	@Override
 	public HttpGet getRequest(MainSearchEntity searchEntity) {
 		
-		GoogleRequestUtil googleRequestUtil = new GoogleRequestUtil();
-		
-		String language = googleRequestUtil.getLanguage(searchEntity.getLanguage());
-		String region = googleRequestUtil.getRegion(searchEntity.getLocation());
+		String language = GoogleRequestUtil.getLanguage(searchEntity.getLanguage());
+		String region = GoogleRequestUtil.getRegion(searchEntity.getLocation());
 		
 		String url = new StringBuilder()
 				.append("https://www.")
-				.append(googleRequestUtil.getDomainByLocation(region))
+				.append(GoogleRequestUtil.getDomainByLocation(region))
 				.append("/search")
 				.toString();
 		try {
