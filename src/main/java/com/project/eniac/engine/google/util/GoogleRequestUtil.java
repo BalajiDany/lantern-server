@@ -7,19 +7,19 @@ public class GoogleRequestUtil{
 
 	private static String DEFAULT_DOMAIN = "google.com";
 
-	private static Map<String, String> domainMap = new HashMap<String, String>() {
+	private static final Map<String, String> domainMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
-			domainMap.put("CH", "google.ch");
-			domainMap.put("CN", "google.cn");
-			domainMap.put("IN", "google.co.in");
-			domainMap.put("JP", "google.co.jp");
-			domainMap.put("KR", "google.co.kr");
-			domainMap.put("UK", "google.co.uk");
-			domainMap.put("BR", "google.com.br");
-			domainMap.put("DE", "google.de");
-			domainMap.put("FR", "google.fr");
-			domainMap.put("IT", "google.it");
+			put("CH", "google.ch");
+			put("CN", "google.cn");
+			put("IN", "google.co.in");
+			put("JP", "google.co.jp");
+			put("KR", "google.co.kr");
+			put("UK", "google.co.uk");
+			put("BR", "google.com.br");
+			put("DE", "google.de");
+			put("FR", "google.fr");
+			put("IT", "google.it");
 		}
 	};
 
