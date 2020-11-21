@@ -28,7 +28,7 @@ public class GoogleGeneralSearchEngineTest {
 	@Autowired
 	private GoogleGeneralSearchEngine googleGeneralSearchEngine;
 
-	private final static String SEARCH_QUERY = "madras central";
+	private final static String SEARCH_QUERY = "The Big Bang Theory";
 
 	@Test
 	void verifySearch() {
