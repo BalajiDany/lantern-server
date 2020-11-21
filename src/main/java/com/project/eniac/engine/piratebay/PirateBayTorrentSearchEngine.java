@@ -14,12 +14,14 @@ import org.json.JSONObject;
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.TorrentSearchEngine;
 import com.project.eniac.entity.MainSearchEntity;
-import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.entity.ResultEntity.TorrentSearchResultEntity;
-import com.project.eniac.service.spec.HttpClientService;
+import com.project.eniac.entity.ResultEntity.TorrentSearchResultEntity.TorrentSearchResultEntityBuilder;
+import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
+import com.project.eniac.utils.ConvertionUtil;
+import com.project.eniac.utils.TorrentUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +29,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
-	
-	private final HttpClientService httpClientService;
+
+	private final HttpClientProviderService httpClientService;
 
 	@Override
-	public HttpClientService getHttpClientService() {
+	public HttpClientProviderService getHttpClientService() {
 		return this.httpClientService;
 	}
-	
+
 	@Override
 	public String getEngineName() {
 		return "Pirate Bay";
@@ -72,7 +74,7 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 
 	@Override
 	public SearchResultEntity<TorrentSearchResultEntity> getResponse(String response) {
-		
+
 		List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<TorrentSearchResultEntity>();
 		JSONArray resultArray = null;
 		try {
@@ -121,25 +123,33 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 	private TorrentSearchResultEntity formEntity(JSONObject jsonObject) {
 		if (jsonObject == null) return null;
 
-		String torrentName = jsonObject.getString("name");
-		String torrentSize = jsonObject.getString("size");
-		String torrentUrl = jsonObject.getString("id");
-		String magneticLink = jsonObject.getString("info_hash");
-		String uploadedDate = jsonObject.getString("added");
-		String category = jsonObject.getString("category");
-		int seeders = jsonObject.getInt("seeders");
-		int leechers = jsonObject.getInt("leechers");
+		TorrentSearchResultEntityBuilder searchResultEntityBuilder = TorrentSearchResultEntity.builder();
 
-		return TorrentSearchResultEntity.builder()
-				.torrentName(torrentName)
-				.torrentSize(torrentSize)
-				.torrentUrl(torrentUrl)
-				.magneticLink(magneticLink)
-				.uploadedDate(uploadedDate)
-				.category(category)
-				.seeders(seeders)
-				.leechers(leechers)
-				.build();
+		String torrentName = jsonObject.getString("name");
+		searchResultEntityBuilder.torrentName(torrentName);
+
+		long torrentSize = jsonObject.getLong("size");
+		searchResultEntityBuilder.torrentSize(ConvertionUtil.convertBytesToReadable(torrentSize));
+
+		long torrentId = jsonObject.getLong("id");
+		searchResultEntityBuilder.torrentUrl("https://thepiratebay.org/description.php?id=" + torrentId);
+
+		String infoHash = jsonObject.getString("info_hash");
+		searchResultEntityBuilder.magneticLink("magnet:?xt=urn:btih:" + infoHash);
+
+		long uploadedDate = jsonObject.getLong("added");
+		searchResultEntityBuilder.uploadedDate(ConvertionUtil.parseDate(uploadedDate));
+
+		int category = jsonObject.getInt("category");
+		searchResultEntityBuilder.category(TorrentUtil.getCategory(category));
+
+		int seeders = jsonObject.getInt("seeders");
+		searchResultEntityBuilder.seeders(seeders);
+
+		int leechers = jsonObject.getInt("leechers");
+		searchResultEntityBuilder.leechers(leechers);
+
+		return searchResultEntityBuilder.build();
 	}
 
 }

@@ -36,7 +36,7 @@ public class PirateBayTorrentSearchEngineTest {
 		searchEntity.setQuery(SEARCH_QUERY);
 		searchEntity.setLanguage(commonLanguageService.getDefaultLanguage());
 		searchEntity.setLocation(commonLocationService.getDefaultLocation());
-		
+
 		SearchResultEntity<TorrentSearchResultEntity> entity = pirateBayTorrentSearchEngine.performSearch(searchEntity);
 		logResponse(entity);
 	}

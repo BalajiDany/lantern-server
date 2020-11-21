@@ -6,7 +6,7 @@ import java.util.Random;
 import lombok.NonNull;
 
 public class RandomUtil {
-	
+
 	private static Random random = new Random();
 
 	public static int getRandomInt(int range) {

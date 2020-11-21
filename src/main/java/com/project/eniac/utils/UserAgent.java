@@ -32,4 +32,5 @@ public class UserAgent {
 	public static String getRandomUserAgent() {
 		return RandomUtil.getRandomElement(userAgents);
 	}
+
 }

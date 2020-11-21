@@ -22,7 +22,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.TorrentSearchEngine;
 import com.project.eniac.entity.MainSearchEntity;
-import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
 import com.project.eniac.entity.ResultEntity.TorrentSearchResultEntity;
 import com.project.eniac.service.CommonLanguageServiceImpl;
@@ -32,7 +31,7 @@ import com.project.eniac.utils.UserAgent;
 
 @SpringBootApplication
 public class EniacApplication {
-	
+
 	// Run this command
 	// mvn clean install eclipse:clean eclipse:eclipse -DdownloadJavadocs=true
 
@@ -66,16 +65,16 @@ public class EniacApplication {
 	}
 
 	public static void performanceSearch(Map<String, TorrentSearchEngine> engines, CommonLanguageServiceImpl lan, CommonLocationServiceImpl loc, String searchText) {
-		
+
 		long startTime = System.currentTimeMillis();
-		
+
 		performSearchOne(engines, lan, loc, searchText);
 
 		long stopTime = System.currentTimeMillis();
 		long runTime = stopTime - startTime;
 		System.out.println("OverAll Time for " + searchText + " : " + runTime);
 	}
-	
+
 	public static void performSearchOne(Map<String, TorrentSearchEngine> engines, CommonLanguageServiceImpl lan, CommonLocationServiceImpl loc, String searchText) {
 
 		MainSearchEntity searchEntity = new MainSearchEntity();
@@ -103,17 +102,17 @@ public class EniacApplication {
 //			long stopTime = System.currentTimeMillis();
 //			long runTime = stopTime - startTime;
 //			System.out.println("Request Time : " + runTime);
-			
-			
+
+
 			SearchResultEntity<TorrentSearchResultEntity> searchResultEntity = engine.getResponse(response);
-			
+
 			EngineResultType resultType = searchResultEntity.getEngineResultType();
-			
+
 			if (resultType == EngineResultType.FOUND_SEARCH_RESULT) {
 				List<TorrentSearchResultEntity> resultEntity = searchResultEntity.getSearchResult();
-				
+
 				System.out.println(" =============== " + searchResultEntity.getEngineName() + " - " + searchResultEntity.getEngineType() + " =============== ");
-				
+
 				System.out.println("Total Results : " + resultEntity.size());
 
 				resultEntity.forEach(result -> {
@@ -126,7 +125,7 @@ public class EniacApplication {
 			} else {
 				System.out.println("No Result Reason : " + resultType);
 			}
-			
+
 
 		}
 	}

@@ -12,12 +12,12 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import com.project.eniac.engine.BaseSearchEngine;
-import com.project.eniac.service.spec.HttpClientService;
+import com.project.eniac.service.spec.HttpClientProviderService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class HttpClientServiceImpl implements HttpClientService {
+public class HttpClientProviderServiceImpl implements HttpClientProviderService {
 
 	private final Map<String, CloseableHttpClient> httpClientMap = new HashMap<String, CloseableHttpClient>();
 

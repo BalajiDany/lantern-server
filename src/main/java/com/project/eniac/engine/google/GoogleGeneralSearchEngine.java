@@ -21,7 +21,7 @@ import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity.SearchResultEntityBuilder;
-import com.project.eniac.service.spec.HttpClientService;
+import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
 
 import lombok.RequiredArgsConstructor;
@@ -30,11 +30,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
-	
-	private final HttpClientService httpClientService;
+
+	private final HttpClientProviderService httpClientService;
 
 	@Override
-	public HttpClientService getHttpClientService() {
+	public HttpClientProviderService getHttpClientService() {
 		return this.httpClientService;
 	}
 
@@ -50,7 +50,7 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 
 		String url = new StringBuilder()
 				.append("https://www.")
-				.append(GoogleRequestUtil.getDomainByLocation(region))
+				.append(GoogleRequestUtil.getDomain(region))
 				.append("/search")
 				.toString();
 		try {
@@ -79,7 +79,7 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 			return request;
 		} catch (URISyntaxException exception) {
 			log.error("Exception on Creating URL : {}", url);
-			log.error("\t Additional Param Region : {} and Language : {}", region, language);			
+			log.error("\t Additional Param Region : {} and Language : {}", region, language);
 			return null;
 		}
 	}
@@ -113,7 +113,7 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 			String content = contentElement.text();
 
 			boolean isInvalidContent = StringUtils.isEmpty(url)
-					|| StringUtils.isEmpty(title) 
+					|| StringUtils.isEmpty(title)
 					|| StringUtils.isEmpty(content);
 
 			if (isInvalidContent) continue;
@@ -136,7 +136,6 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 					.build();
 		} else if (document.select("#search").isEmpty()) {
 			// if contains id captcha-form then google blocked this ip
-
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
 		} else {
