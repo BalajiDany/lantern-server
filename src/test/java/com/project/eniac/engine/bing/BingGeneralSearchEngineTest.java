@@ -1,4 +1,4 @@
-package com.project.eniac.engine.google;
+package com.project.eniac.engine.bing;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest
-public class GoogleGeneralSearchEngineTest {
+public class BingGeneralSearchEngineTest {
 
 	@Autowired
 	private CommonLanguageService commonLanguageService;
@@ -26,9 +26,9 @@ public class GoogleGeneralSearchEngineTest {
 	private CommonLocationService commonLocationService;
 
 	@Autowired
-	private GoogleGeneralSearchEngine googleGeneralSearchEngine;
+	private BingGeneralSearchEngine bingGeneralSearchEngine;
 
-	private final static String SEARCH_QUERY = "madras central";
+	private final static String SEARCH_QUERY = "The Big Bang Theory";
 
 	@Test
 	void verifySearch() {
@@ -38,7 +38,7 @@ public class GoogleGeneralSearchEngineTest {
 		searchEntity.setLanguage(commonLanguageService.getDefaultLanguage());
 		searchEntity.setLocation(commonLocationService.getDefaultLocation());
 
-		SearchResultEntity<GeneralSearchResultEntity> entity = googleGeneralSearchEngine.performSearch(searchEntity);
+		SearchResultEntity<GeneralSearchResultEntity> entity = bingGeneralSearchEngine.performSearch(searchEntity);
 		logResponse(entity);
 	}
 

@@ -17,12 +17,12 @@ public abstract class BaseSearchEngine<T> {
 
 	abstract public HttpClientProviderService getHttpClientService();
 
-	abstract public HttpGet getRequest(MainSearchEntity mainSearchEntity);
+	abstract public HttpGet getRequest(MainSearchEntity searchEntity);
 
 	abstract public SearchResultEntity<T> getResponse(String response);
 
-	public SearchResultEntity<T> performSearch(MainSearchEntity mainSearchEntity) {
-		HttpGet getRequest = this.getRequest(mainSearchEntity);
+	public SearchResultEntity<T> performSearch(MainSearchEntity searchEntity) {
+		HttpGet getRequest = this.getRequest(searchEntity);
 
 		String userAgent = UserAgent.getRandomUserAgent();
 		getRequest.addHeader(RequestHeaders.KEY_USER_AGENT, userAgent);

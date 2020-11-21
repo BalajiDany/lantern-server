@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.GeneralSearchEngine;
-import com.project.eniac.engine.google.util.GoogleRequestUtil;
+import com.project.eniac.engine.google.utils.GoogleRequestUtil;
 import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
