@@ -1,7 +1,5 @@
 package com.project.eniac.engine.bing;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +9,7 @@ import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
 import com.project.eniac.service.spec.CommonLanguageService;
 import com.project.eniac.service.spec.CommonLocationService;
-import com.project.eniac.types.EngineResultType;
+import com.project.eniac.utils.Printer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,22 +37,7 @@ public class BingGeneralSearchEngineTest {
 		searchEntity.setLocation(commonLocationService.getDefaultLocation());
 
 		SearchResultEntity<GeneralSearchResultEntity> entity = bingGeneralSearchEngine.performSearch(searchEntity);
-		logResponse(entity);
-	}
-
-	private <T> void logResponse(SearchResultEntity<T> entity) {
-		log.info("Engine Name   : " + entity.getEngineName());
-		log.info("Engine Type   : " + entity.getEngineType());
-		log.info("Engine Result : " + entity.getEngineResultType());
-
-		if (entity.getEngineResultType() == EngineResultType.FOUND_SEARCH_RESULT) {
-			List<T> searchResultList = entity.getSearchResult();
-			log.info("Result Count  : " + searchResultList.size());
-
-			for (T searchResult : searchResultList) {
-				log.info(searchResult.toString());
-			}
-		}
+		Printer.printGeneralSearchResultEntity(entity);
 	}
 
 }
