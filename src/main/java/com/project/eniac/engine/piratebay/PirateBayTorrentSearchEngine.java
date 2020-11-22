@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.project.eniac.constant.RequestHeaders;
+import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.TorrentSearchEngine;
 import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
@@ -39,7 +40,7 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 
 	@Override
 	public String getEngineName() {
-		return "Pirate Bay";
+		return EngineConstant.ENGINE_PIRATEBAY;
 	}
 
 	@Override

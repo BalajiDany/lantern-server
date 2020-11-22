@@ -19,7 +19,6 @@ public class GeneralSearchEngineConfiguration {
 		return new GoogleGeneralSearchEngine(httpClientService);
 	}
 
-
 	@Bean
 	@ConditionalOnProperty(value = "project.eniac.engine.general.bing.enable", havingValue = "true", matchIfMissing = true)
 	GeneralSearchEngine bingGeneralSearchEngine(HttpClientProviderService httpClientService) {

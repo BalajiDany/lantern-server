@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.springframework.util.StringUtils;
 
 import com.project.eniac.constant.RequestHeaders;
+import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.GeneralSearchEngine;
 import com.project.eniac.engine.bing.utils.BingRequestUtil;
 import com.project.eniac.entity.MainSearchEntity;
@@ -34,7 +35,7 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 
 	@Override
 	public String getEngineName() {
-		return "Bing";
+		return EngineConstant.ENGINE_BING;
 	}
 
 	@Override

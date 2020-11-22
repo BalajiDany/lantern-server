@@ -4,5 +4,6 @@ public enum EngineType {
 
 	GENERAL,
 	TORRENT,
+	VIDEO,
 
 }

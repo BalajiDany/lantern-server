@@ -5,6 +5,7 @@ import java.util.List;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
 import com.project.eniac.entity.ResultEntity.TorrentSearchResultEntity;
+import com.project.eniac.entity.ResultEntity.VideoSearchResultEntity;
 import com.project.eniac.types.EngineResultType;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,25 @@ public class Printer {
 				log.info(fixedLengthString("Upload Date : ", KEY_LENGTH) + searchResult.getUploadedDate());
 				log.info(fixedLengthString("Seeders : ", KEY_LENGTH) + searchResult.getSeeders());
 				log.info(fixedLengthString("Leechers : ", KEY_LENGTH) + searchResult.getLeechers());
+			}
+		}
+	}
+
+	public static void printVideoSearchResultEntity(SearchResultEntity<VideoSearchResultEntity> entity) {
+		printBaseAndGetResult(entity);
+		if (entity.getEngineResultType() == EngineResultType.FOUND_SEARCH_RESULT) {
+			List<VideoSearchResultEntity> searchResultList = entity.getSearchResult();
+			log.info("Result Count  : " + searchResultList.size());
+
+			int KEY_LENGTH = 16;
+			for (VideoSearchResultEntity searchResult : searchResultList) {
+				log.info("");
+				log.info(fixedLengthString("Title : ", KEY_LENGTH)+ searchResult.getTitle());
+				log.info(fixedLengthString("Content : ", KEY_LENGTH) + searchResult.getContent());
+				log.info(fixedLengthString("URL : ", KEY_LENGTH) + searchResult.getUrl());
+				log.info(fixedLengthString("Upload Date : ", KEY_LENGTH) + searchResult.getUploadedDate());
+				log.info(fixedLengthString("Duration : ", KEY_LENGTH) + searchResult.getDuration());
+				log.info(fixedLengthString("Thumpnail : ", KEY_LENGTH) + searchResult.getThumpnailUrl());
 			}
 		}
 	}
