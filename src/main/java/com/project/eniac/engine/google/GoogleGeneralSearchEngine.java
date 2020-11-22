@@ -134,15 +134,14 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#search").isEmpty()) {
+		} else if (document.select("#search").isEmpty() == false) {
+			return resultEntityBuilder
+					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
+		} else {
 			// if contains id captcha-form then google blocked this ip
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
-		} else {
-			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
 		}
-
 	}
 
 }

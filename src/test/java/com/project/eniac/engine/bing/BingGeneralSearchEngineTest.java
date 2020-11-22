@@ -11,9 +11,6 @@ import com.project.eniac.service.spec.CommonLanguageService;
 import com.project.eniac.service.spec.CommonLocationService;
 import com.project.eniac.utils.Printer;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @SpringBootTest
 public class BingGeneralSearchEngineTest {
 

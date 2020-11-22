@@ -5,13 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 
-import com.project.eniac.engine.BaseSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,15 +22,17 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
 
 	private final Map<String, CloseableHttpClient> httpClientMap = new HashMap<String, CloseableHttpClient>();
 
+	@Value("${project.eniac.configuration.network.connention.timeout}")
+	private int networkTimeOut;
+
 	@Override
-	public <T> String makeRequest(HttpGet getRequest, BaseSearchEngine<T> searchEngine) {
-		return this.makeRequest(getRequest, searchEngine, false);
+	public <T> String makeRequest(HttpGet getRequest, String clientId) {
+		return this.makeRequest(getRequest, clientId, false);
 	}
 
 	@Override
-	public <T> String makeRequest(HttpGet getRequest, BaseSearchEngine<T> searchEngine, boolean resetClient) {
-		String clientId = searchEngine.getEngineName();
-		if (resetClient) this.resetClient(searchEngine);
+	public <T> String makeRequest(HttpGet getRequest, String clientId, boolean resetClient) {
+		if (resetClient) this.resetClient(clientId);
 
 		// Perform Request
 		CloseableHttpClient httpclient = this.getHttpClient(clientId);
@@ -41,12 +44,13 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
 			return EntityUtils.toString(entity);
 		} catch (IOException exception) {
 			return "";
+		} catch (IllegalStateException exception) {
+			return "";
 		}
 	}
 
 	@Override
-	public <T> void resetClient(BaseSearchEngine<T> searchEngine) {
-		String clientId = searchEngine.getEngineName();
+	public <T> void resetClient(String clientId) {
 
 		try {
 			if (httpClientMap.containsKey(clientId)) httpClientMap.get(clientId).close();
@@ -68,7 +72,13 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
 	}
 
 	private CloseableHttpClient createHttpClient() {
-		return HttpClients.createDefault();
+		RequestConfig configuration = RequestConfig.custom()
+				.setConnectTimeout(networkTimeOut)
+				.build();
+
+		return HttpClientBuilder.create()
+				.setDefaultRequestConfig(configuration)
+				.build();
 	}
 
 }

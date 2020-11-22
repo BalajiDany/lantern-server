@@ -109,13 +109,13 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (resultArray == null) {
+		} else if (resultArray != null) {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN)
+					.engineResultType(EngineResultType.NO_SERACH_RESULT)
 					.build();
 		} else {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT)
+					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN)
 					.build();
 		}
 	}

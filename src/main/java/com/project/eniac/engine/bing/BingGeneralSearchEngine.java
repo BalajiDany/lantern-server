@@ -115,12 +115,12 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#search").isEmpty()) {
-			return resultEntityBuilder
-					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
-		} else {
+		} else if (document.select("#b_results .b_no").isEmpty() == false) {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
+		} else {
+			return resultEntityBuilder
+					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
 		}
 	}
 
