@@ -48,7 +48,8 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 		String language = BingRequestUtil.getLanguage(searchEntity.getLanguage());
 		String region = BingRequestUtil.getRegion(searchEntity.getLocation());
 
-		String url = "https://www.bing.com/search";
+//		String url = "https://www.bing.com/search";
+		String url = "https://s.bingparachute.com/search";
 
 		try {
 

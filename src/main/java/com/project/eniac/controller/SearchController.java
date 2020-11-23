@@ -1,35 +1,49 @@
 package com.project.eniac.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
-import com.project.eniac.service.spec.SearchService;
+import com.project.eniac.entity.ResultEntity.SearchResponseEntity;
+import com.project.eniac.entity.ResultEntity.TorrentSearchResultEntity;
+import com.project.eniac.entity.ResultEntity.VideoSearchResultEntity;
+import com.project.eniac.service.spec.CommonSearchService;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController
+@RestController("/search")
 @RequiredArgsConstructor
 public class SearchController {
 
-	private final SearchService searchService;
+	private final CommonSearchService searchService;
 
-	@RequestMapping("/all")
-	List<GeneralSearchResultEntity> searchAll(MainSearchEntity searchEntity){
-		return searchService.searchAll(searchEntity);
+	@GetMapping("/general")
+	SearchResponseEntity<GeneralSearchResultEntity> searchGeneral(String query){
+		MainSearchEntity searchEntity = new MainSearchEntity();
+		searchEntity.setQuery(query);
+		searchEntity.setLanguage("en");
+		searchEntity.setLocation("US");
+
+		return searchService.generalSearch(searchEntity);
 	}
 
-	@RequestMapping("/videos")
-	List<GeneralSearchResultEntity> searchVideos(MainSearchEntity searchEntity){
-		return null;
+	@GetMapping("/torrent")
+	SearchResponseEntity<TorrentSearchResultEntity> searchVideos(String query){
+		MainSearchEntity searchEntity = new MainSearchEntity();
+		searchEntity.setQuery(query);
+		searchEntity.setLanguage("en");
+		searchEntity.setLocation("US");
+		return searchService.torrentSearch(searchEntity);
 	}
 
-	@RequestMapping("/images")
-	List<GeneralSearchResultEntity> searchImages(MainSearchEntity searchEntity){
-		return null;
+	@GetMapping("/video")
+	SearchResponseEntity<VideoSearchResultEntity> searchImages(String query){
+		MainSearchEntity searchEntity = new MainSearchEntity();
+		searchEntity.setQuery(query);
+		searchEntity.setLanguage("en");
+		searchEntity.setLocation("US");
+		return searchService.videoSearch(searchEntity);
 	}
 
 }
