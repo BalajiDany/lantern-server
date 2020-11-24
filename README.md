@@ -18,7 +18,7 @@
 ## Project Title
 
 [![Build Status](https://travis-ci.com/BalajiDany/eniac.svg?token=pqdDDYcKAzzpYPLgX2BL&branch=main)](https://travis-ci.com/BalajiDany/eniac)
-[![Generic badge](https://img.shields.io/badge/Contributors-2-blue.svg)](https://github.com/BalajiDany/eniac/graphs/contributors)
+[![GitHub contributors](https://img.shields.io/github/contributors/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/graphs/contributors)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/BalajiDany/eniac/blob/main/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/issues)
 [![GitHub forks](https://img.shields.io/github/forks/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/network)
@@ -42,7 +42,6 @@ A list of commonly used resources that I find helpful are listed in the [acknowl
 ### Built With
 
 List of major library that are used in this projects. 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Lombok](https://projectlombok.org/)
 * [HttpClient](https://hc.apache.org/httpcomponents-client-ga/)
