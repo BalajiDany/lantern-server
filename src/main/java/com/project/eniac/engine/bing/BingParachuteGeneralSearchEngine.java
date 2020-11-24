@@ -1,10 +1,9 @@
-package com.project.eniac.engine.google;
+package com.project.eniac.engine.bing;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
@@ -17,7 +16,7 @@ import org.springframework.util.StringUtils;
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.GeneralSearchEngine;
-import com.project.eniac.engine.google.utils.GoogleRequestUtil;
+import com.project.eniac.engine.bing.utils.BingRequestUtil;
 import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
@@ -30,9 +29,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
+public class BingParachuteGeneralSearchEngine extends GeneralSearchEngine {
 
 	private final HttpClientProviderService httpClientService;
+
+	@Override
+	public String getEngineName() {
+		return EngineConstant.ENGINE_BING_PARACHUTE;
+	}
 
 	@Override
 	public HttpClientProviderService getHttpClientService() {
@@ -40,41 +44,22 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 	}
 
 	@Override
-	public String getEngineName() {
-		return EngineConstant.ENGINE_GOOGLE;
-	}
-
-	@Override
 	public HttpGet getRequest(MainSearchEntity searchEntity) {
-		String language = GoogleRequestUtil.getLanguage(searchEntity.getLanguage());
-		String region = GoogleRequestUtil.getRegion(searchEntity.getLocation());
+		String language = BingRequestUtil.getLanguage(searchEntity.getLanguage());
+		String region = BingRequestUtil.getRegion(searchEntity.getLocation());
 
-		String url = new StringBuilder()
-				.append("https://www.")
-				.append(GoogleRequestUtil.getDomain(region))
-				.append("/search")
-				.toString();
+		String url = "https://s.bingparachute.com/search";
+
 		try {
 
 			URI uri = new URIBuilder(url)
 					.addParameter("q", searchEntity.getQuery())
-					.addParameter("hl", language)
-					.addParameter("lang", language)
-					.addParameter("lr", "lang_" + language)
-					.addParameter("gl", region)
-					.addParameter("ie", "utf8")
-					.addParameter("oe", "utf8")
-//					.addParameter("safe", "high")
+					.addParameter("setlang", language)
+					.addParameter("setmkt", region)
 					.build();
 
-			String acceptLanguage = new StringBuilder()
-					.append(language).append("-").append(region).append(",")
-					.append(language).append(";q=0.8,")
-					.append(language).append(";q=0.5")
-					.toString();
-
 			HttpGet request = new HttpGet(uri);
-			request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, acceptLanguage);
+			request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, "en-US,en;q=0.9en-US,en;q=0.9");
 			request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
 
 			return request;
@@ -83,6 +68,7 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 			log.error("\t Additional Param Region : {} and Language : {}", region, language);
 			return null;
 		}
+
 	}
 
 	@Override
@@ -91,27 +77,22 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<GeneralSearchResultEntity>();
 
 		Document document = Jsoup.parse(response);
-		Elements elements = document.select("#search > div > div > div.g"); // Select all results
+		Elements elements = document.select("li.b_algo"); // Select all results
 
 		for (Element element : elements) {
-			Set<String> classNames = element.classNames();
 
-			// It is not common search result
-			if (classNames.size() > 1) continue;
+			Element anchorElement = element.selectFirst("h2 > a");
+			Element bodyElement = element.selectFirst("div.b_caption > p");
 
-			Element anchorElement = element.selectFirst("div.yuRUbf > a");
-			Element titleElement = element.selectFirst("div.yuRUbf > a > h3 > span");
-			Element contentElement = element.selectFirst("div.IsZvec span.aCOpRe");
-
-			boolean isInValidelement = anchorElement == null
-					|| titleElement == null
-					|| contentElement == null;
-
-			if (isInValidelement) continue;
+			if (anchorElement == null) continue;
+			if (bodyElement == null) {
+				bodyElement = element.selectFirst("div.tab-content p.b_paractl");
+				if (bodyElement == null) continue;
+			}
 
 			String url = anchorElement.attr("href");
-			String title = titleElement.text();
-			String content = contentElement.text();
+			String title = anchorElement.text();
+			String content = bodyElement.text();
 
 			boolean isInvalidContent = StringUtils.isEmpty(url)
 					|| StringUtils.isEmpty(title)
@@ -135,11 +116,10 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#search").isEmpty() == false) {
+		} else if (document.select("#b_results .b_no").isEmpty() == false) {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
 		} else {
-			if (document.select("#captcha-form").isEmpty() == false) log.error("Google Captch Required");
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
 		}

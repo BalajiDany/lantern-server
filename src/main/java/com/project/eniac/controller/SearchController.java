@@ -24,7 +24,6 @@ public class SearchController {
 		searchEntity.setQuery(query);
 		searchEntity.setLanguage("en");
 		searchEntity.setLocation("US");
-
 		return searchService.generalSearch(searchEntity);
 	}
 

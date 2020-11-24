@@ -8,4 +8,6 @@ public class EngineConstant {
 
 	public static final String ENGINE_BING = "Bing";
 
+	public static final String ENGINE_BING_PARACHUTE = "Bing PARACHUTE";
+
 }

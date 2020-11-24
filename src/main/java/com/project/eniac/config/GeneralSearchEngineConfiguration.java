@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.project.eniac.engine.GeneralSearchEngine;
 import com.project.eniac.engine.bing.BingGeneralSearchEngine;
+import com.project.eniac.engine.bing.BingParachuteGeneralSearchEngine;
 import com.project.eniac.engine.google.GoogleGeneralSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 
@@ -23,6 +24,13 @@ public class GeneralSearchEngineConfiguration {
 	@ConditionalOnProperty(value = "project.eniac.engine.general.bing.enable", havingValue = "true", matchIfMissing = true)
 	GeneralSearchEngine bingGeneralSearchEngine(HttpClientProviderService httpClientService) {
 		return new BingGeneralSearchEngine(httpClientService);
+	}
+
+
+	@Bean
+	@ConditionalOnProperty(value = "project.eniac.engine.general.bingparachute.enable", havingValue = "true", matchIfMissing = true)
+	GeneralSearchEngine bingParachuteGeneralSearchEngine(HttpClientProviderService httpClientService) {
+		return new BingParachuteGeneralSearchEngine(httpClientService);
 	}
 
 }

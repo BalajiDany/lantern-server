@@ -65,7 +65,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
 					.addParameter("ie", "utf8")
 					.addParameter("oe", "utf8")
 					.addParameter("tbm", "vid")
-					.addParameter("safe", "high")
+//					.addParameter("safe", "high")
 					.build();
 
 			String acceptLanguage = new StringBuilder()

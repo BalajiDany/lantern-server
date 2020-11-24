@@ -58,6 +58,7 @@ public class CommonSearchServiceImpl implements CommonSearchService {
 		this.renovateMainSearchEntity(searchEntity);
 
 		List<SearchResultEntity<VideoSearchResultEntity>> resutlEntity = videoSearchEngines.stream().parallel()
+
 			.map(engine -> engine.performSearch(searchEntity))
 			.filter(this::afterSearch)
 			.collect(Collectors.toList());
