@@ -19,7 +19,7 @@
 
 [![Build Status](https://travis-ci.com/BalajiDany/eniac.svg?token=pqdDDYcKAzzpYPLgX2BL&branch=main)](https://travis-ci.com/BalajiDany/eniac)
 [![Generic badge](https://img.shields.io/badge/Contributors-2-blue.svg)](https://github.com/BalajiDany/eniac/graphs/contributors)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/BalajiDany/eniac/blob/main/LICENSE)
 
 <!-- ABOUT THE PROJECT -->
 ### About The Project
