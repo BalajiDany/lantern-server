@@ -25,25 +25,29 @@
 [![GitHub stars](https://img.shields.io/github/stars/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/stargazers)
 
 <!-- ABOUT THE PROJECT -->
-### About The Project
+### A Meta Search Engine
 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+Welcome :wave:, Yet an another java based Meta Search Engine with highly modular structure. It rapidly send queries to several search engines, aggregates the results and categorizes the result by search engines they come from.
 
 Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
+* **Highly modular** - Adding a new search engine/ Updating the previous engine is easy and *Highly Configurable.*
+* **Privacy respecting** - Focused mainly on protecting the privacy of a user.
+* **More information** - Get much more information than you using a standard engine :upside_down_face:
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have have contributed to expanding this template!
+you can also deploy, and create your personal instance. We highly recommend not to share the instnace. Most of the search engines will block the IP if it identifies unusual traffic.
+To know more about MetaSearch Engine refer [ryte-wiki](https://en.ryte.com/wiki/Meta_Search_Engine)
 
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+A list of commonly used resources that I find helpful are listed in the [acknowledgements](https://github.com/BalajiDany/eniac#acknowledgements).
 
 ### Built With
 
+List of major library that are used in this projects. 
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [Lombok](https://projectlombok.org/)
+* [HttpClient](https://hc.apache.org/httpcomponents-client-ga/)
+* [jsoup](https://jsoup.org/)
+* [json](http://www.JSON.org/)
 
 <!-- GETTING STARTED -->
 ## Getting Started
