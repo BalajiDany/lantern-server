@@ -51,8 +51,8 @@ List of major library that are used in this projects.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Currently there was no frontend to support this API. We will start supporting for front end once we launched the stable version.
+To build this api, please follow the below steps.
 
 ### Prerequisites
 
