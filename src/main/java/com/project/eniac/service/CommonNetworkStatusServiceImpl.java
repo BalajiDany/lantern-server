@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.scheduling.annotation.Async;
@@ -34,7 +36,7 @@ public class CommonNetworkStatusServiceImpl implements CommonNetworkStatusServic
 
 	@Override
 	public String getIpAddress() {
-		if (currentIp == null) isNetworkAliveNow();
+		if (ObjectUtils.isEmpty(currentIp)) isNetworkAliveNow();
 		return currentIp;
 	}
 
@@ -58,7 +60,7 @@ public class CommonNetworkStatusServiceImpl implements CommonNetworkStatusServic
 
 			String response = httpClientProviderService.makeRequest(request, "utils", true);
 
-			isNetworkAlive = response != null && response != "";
+			isNetworkAlive = StringUtils.isNotBlank(response);
 			currentIp = isNetworkAlive ? response : "NA";
 
 			if (isNetworkAlive) log.info("Network alive, Public IP : {}", currentIp);

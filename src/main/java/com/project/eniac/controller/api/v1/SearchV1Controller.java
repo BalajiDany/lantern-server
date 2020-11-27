@@ -1,6 +1,7 @@
-package com.project.eniac.controller;
+package com.project.eniac.controller.api.v1;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.eniac.entity.MainSearchEntity;
@@ -12,9 +13,10 @@ import com.project.eniac.service.spec.CommonSearchService;
 
 import lombok.RequiredArgsConstructor;
 
-@RestController("/search")
+@RestController()
+@RequestMapping("api/v1/search")
 @RequiredArgsConstructor
-public class SearchController {
+public class SearchV1Controller {
 
 	private final CommonSearchService searchService;
 

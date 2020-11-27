@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.project.eniac.service.spec.CommonLocationService;
@@ -37,7 +38,7 @@ public class CommonLocationServiceImpl implements CommonLocationService {
 	public void init() {
 
 		// To ensure location is capitalized.
-		if (this.defaultLocation != null) {
+		if (ObjectUtils.isNotEmpty(this.defaultLocation)) {
 			this.defaultLocation = this.defaultLocation.toUpperCase();
 		}
 

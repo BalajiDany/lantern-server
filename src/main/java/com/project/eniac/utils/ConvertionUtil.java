@@ -1,10 +1,16 @@
 package com.project.eniac.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.text.CharacterIterator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.text.StringCharacterIterator;
+import java.util.Base64;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class ConvertionUtil {
 
@@ -28,6 +34,37 @@ public class ConvertionUtil {
 	public static String parseDate(long date) {
 		long adjusted = date * 1000;
 		return dateFormat.format(new Date(adjusted));
+	}
+
+	public static int parseInt(String integerStr) {
+		try {
+			return Integer.parseInt(integerStr);
+		} catch (NumberFormatException exception) {
+			return 0;
+		}
+	}
+
+	public static String decodeURL(String url) {
+		try {
+			return URLDecoder
+					.decode(url.replace("+", "%2B"), "UTF-8")
+					.replace("%2B", "+");
+		} catch (UnsupportedEncodingException exception) {
+			return null;
+		}
+	}
+
+	public static String encodeURL(String url) {
+		try {
+			return URLEncoder.encode(url, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			return StringUtils.EMPTY;
+		}
+	}
+
+	public static String base64UrlDecoder(String encodedUrl) {
+		byte[] decodedBytes = Base64.getUrlDecoder().decode(encodedUrl);
+		return new String(decodedBytes);
 	}
 
 }

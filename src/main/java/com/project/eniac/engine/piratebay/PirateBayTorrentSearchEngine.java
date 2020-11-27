@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.JSONArray;
@@ -91,7 +92,7 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 				// Extract Data
 				TorrentSearchResultEntity entity = this.formEntity(resultObject);
 
-				if (entity.getTorrentName() == null) continue;
+				if (ObjectUtils.isEmpty(entity.getTorrentName())) continue;
 
 				searchResultEntity.add(entity);
 			}
@@ -110,7 +111,7 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (resultArray != null) {
+		} else if (ObjectUtils.isNotEmpty(resultArray)) {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.NO_SERACH_RESULT)
 					.build();
@@ -122,7 +123,7 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 	}
 
 	private TorrentSearchResultEntity formEntity(JSONObject jsonObject) {
-		if (jsonObject == null) return null;
+		if (ObjectUtils.isEmpty(jsonObject)) return null;
 
 		TorrentSearchResultEntityBuilder searchResultEntityBuilder = TorrentSearchResultEntity.builder();
 
@@ -136,6 +137,7 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 		searchResultEntityBuilder.torrentUrl("https://thepiratebay.org/description.php?id=" + torrentId);
 
 		String infoHash = jsonObject.getString("info_hash");
+		// https://github.com/JimmyLaurent/torrent-search-api/blob/master/lib/providers/thepiratebay.js#L28
 		searchResultEntityBuilder.magneticLink("magnet:?xt=urn:btih:" + infoHash);
 
 		long uploadedDate = jsonObject.getLong("added");

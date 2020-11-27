@@ -8,6 +8,7 @@ import com.project.eniac.engine.GeneralSearchEngine;
 import com.project.eniac.engine.bing.BingGeneralSearchEngine;
 import com.project.eniac.engine.bing.BingParachuteGeneralSearchEngine;
 import com.project.eniac.engine.google.GoogleGeneralSearchEngine;
+import com.project.eniac.engine.yahoo.YahooGeneralSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 
 @Configuration
@@ -31,6 +32,12 @@ public class GeneralSearchEngineConfiguration {
 	@ConditionalOnProperty(value = "project.eniac.engine.general.bingparachute.enable", havingValue = "true", matchIfMissing = true)
 	GeneralSearchEngine bingParachuteGeneralSearchEngine(HttpClientProviderService httpClientService) {
 		return new BingParachuteGeneralSearchEngine(httpClientService);
+	}
+
+	@Bean
+	@ConditionalOnProperty(value = "project.eniac.engine.general.yahoo.enable", havingValue = "true", matchIfMissing = true)
+	GeneralSearchEngine yahooGeneralSearchEngine(HttpClientProviderService httpClientService) {
+		return new YahooGeneralSearchEngine(httpClientService);
 	}
 
 }

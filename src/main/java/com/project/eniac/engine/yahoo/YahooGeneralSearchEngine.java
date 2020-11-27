@@ -1,4 +1,4 @@
-package com.project.eniac.engine.bing;
+package com.project.eniac.engine.yahoo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,59 +16,64 @@ import org.jsoup.select.Elements;
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.GeneralSearchEngine;
-import com.project.eniac.engine.bing.utils.BingRequestUtil;
+import com.project.eniac.engine.yahoo.utils.YahooRequestUtil;
 import com.project.eniac.entity.MainSearchEntity;
 import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity;
 import com.project.eniac.entity.ResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
+import com.project.eniac.utils.ConvertionUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class BingGeneralSearchEngine extends GeneralSearchEngine {
+public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 
-	private final HttpClientProviderService httpClientService;
+	private final HttpClientProviderService httpClientProviderService;
 
 	@Override
 	public String getEngineName() {
-		return EngineConstant.ENGINE_BING;
+		return EngineConstant.ENGINE_YAHOO;
 	}
 
 	@Override
 	public HttpClientProviderService getHttpClientService() {
-		return this.httpClientService;
+		return this.httpClientProviderService;
 	}
 
 	@Override
 	public HttpGet getRequest(MainSearchEntity searchEntity) {
-		String language = BingRequestUtil.getLanguage(searchEntity.getLanguage());
-		String region = BingRequestUtil.getRegion(searchEntity.getLocation());
+		String domain = YahooRequestUtil.getDomainByLocation(searchEntity.getLocation());
 
-		String url = "https://www.bing.com/search";
-
+		String url = new StringBuilder()
+				.append("https://")
+				.append(domain)
+				.append("/search")
+				.toString();
 		try {
 
 			URI uri = new URIBuilder(url)
-					.addParameter("q", searchEntity.getQuery())
-					.addParameter("setlang", language)
-					.addParameter("setmkt", region)
+					.addParameter("p", searchEntity.getQuery())
+					.addParameter("fr", "yfp-t")
+					.addParameter("fp", "1")
+					.addParameter("toggle", "1")
+					.addParameter("cop", "mss")
+					.addParameter("ie", "utf8")
+//					.addParameter("safe", "high")
 					.build();
 
 			HttpGet request = new HttpGet(uri);
-			request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, "en-US,en;q=0.9en-US,en;q=0.9");
+			request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, "en-US,en;q=0.9");
 			request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
 
 			return request;
 		} catch (URISyntaxException exception) {
 			log.error("Exception on Creating URL : {}", url);
-			log.error("\t Additional Param Region : {} and Language : {}", region, language);
 			return null;
 		}
-
 	}
 
 	@Override
@@ -77,22 +82,20 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<GeneralSearchResultEntity>();
 
 		Document document = Jsoup.parse(response);
-		Elements elements = document.select("li.b_algo"); // Select all results
+		Elements elements = document.select("div.relsrch"); // Select all results
 
 		for (Element element : elements) {
+			Element anchorElement = element.selectFirst("div.compTitle > h3 > a");
+			Element contentElement = element.selectFirst("div.compText > p");
 
-			Element anchorElement = element.selectFirst("h2 > a");
-			Element bodyElement = element.selectFirst("div.b_caption > p");
+			boolean isInValidelement = anchorElement == null
+					|| contentElement == null;
 
-			if (anchorElement == null) continue;
-			if (bodyElement == null) {
-				bodyElement = element.selectFirst("div.tab-content p.b_paractl");
-				if (bodyElement == null) continue;
-			}
+			if (isInValidelement) continue;
 
 			String url = anchorElement.attr("href");
 			String title = anchorElement.text();
-			String content = bodyElement.text();
+			String content = contentElement.text();
 
 			boolean isInvalidContent = StringUtils.isEmpty(url)
 					|| StringUtils.isEmpty(title)
@@ -101,7 +104,7 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 			if (isInvalidContent) continue;
 
 			GeneralSearchResultEntity resultEntity = GeneralSearchResultEntity.builder()
-					.url(url).title(title).content(content).build();
+					.url(this.extractURL(url)).title(title).content(content).build();
 			searchResultEntity.add(resultEntity);
 		}
 
@@ -116,7 +119,7 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#b_results .b_no").isEmpty() == false) {
+		} else if (document.select("#results").isEmpty() == false) {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
 		} else {
@@ -125,4 +128,33 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 		}
 	}
 
+	private String extractURL(String url) {
+		String yahooExtracted = extractYahooClick(url);
+		return yahooExtracted.contains("www.bing.com/aclick") ? this.extractBingClick(yahooExtracted) : yahooExtracted;
+	}
+
+	private String extractYahooClick(String url) {
+		for (String splitedURL : url.split("/")) {
+			if (!splitedURL.startsWith("RU=")) continue;
+
+			String extractedURL = splitedURL.replace("RU=", "");
+			String correctedUrl = ConvertionUtil.decodeURL(extractedURL);
+
+			return StringUtils.isEmpty(correctedUrl) ? url : correctedUrl;
+		}
+		return url;
+	}
+
+	private String extractBingClick(String url) {
+		for (String splitedURL : url.split("&")) {
+			if (!splitedURL.startsWith("u=")) continue;
+
+			String extractedURL = splitedURL.replace("u=", "");
+			String base64DecodedURL = ConvertionUtil.base64UrlDecoder(extractedURL);
+			String correctedUrl = ConvertionUtil.decodeURL(base64DecodedURL);
+
+			return StringUtils.isEmpty(correctedUrl) ? url : correctedUrl;
+		}
+		return url;
+	}
 }
