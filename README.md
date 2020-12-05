@@ -27,21 +27,21 @@
 <!-- ABOUT THE PROJECT -->
 ### A Meta Search Engine
 
-Welcome :wave:, Yet an another java based Meta Search Engine with highly modular structure. It rapidly send queries to several search engines, aggregates the results and categorizes the result by search engines they come from.
+Welcome :wave:, Yet another java based Meta Search Engine with a highly modular structure. It rapidly sends queries to several search engines, aggregates the results, and categorizes the result by search engines they come from.
 
 Here's why:
 * **Highly modular** - Adding a new search engine/ Updating the previous engine is easy and *Highly Configurable.*
 * **Privacy respecting** - Focused mainly on protecting the privacy of a user.
 * **More information** - Get much more information than you using a standard engine :upside_down_face:
 
-you can also deploy, and create your personal instance. We highly recommend not to share the instnace. Most of the search engines will block the IP if it identifies unusual traffic.
+you can also deploy, and create your personal instance. We highly recommend not to share the instance. Most of the search engines will block the IP if it identifies unusual traffic.
 To know more about MetaSearch Engine refer [ryte-wiki](https://en.ryte.com/wiki/Meta_Search_Engine)
 
-A list of commonly used resources that I find helpful are listed in the [acknowledgements](https://github.com/BalajiDany/eniac#acknowledgements).
+A list of commonly used resources that I find helpful are listed in the [acknowledgments](https://github.com/BalajiDany/eniac#acknowledgements).
 
 ### Built With
 
-List of major library that are used in this projects. 
+List of the major library that is used in these projects. 
 * [Spring Boot](https://spring.io/projects/spring-boot)
 * [Lombok](https://projectlombok.org/)
 * [HttpClient](https://hc.apache.org/httpcomponents-client-ga/)
@@ -51,47 +51,50 @@ List of major library that are used in this projects.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Currently there was no frontend to support this API. We will start supporting for front end once we launched the stable version.
-To build this api, please follow the below steps.
+Currently, there was no frontend to support this API. We will start supporting for front end once we launched the stable version.
+To build this API, please follow the below steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+For building and running the application you need:
+
+* [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* [Maven](https://maven.apache.org)
+* [Git](https://git-scm.com/downloads)
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/BalajiDany/eniac.git
    ```
-3. Install NPM packages
+2. Navigate to the folder
    ```sh
-   npm install
+   cd enaic
    ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
+3. Start the application using maven
+   ```sh
+   ./mvnw spring-boot:run   # For Windows: mvnw spring-boot:run
    ```
-
-
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Available Search Engines
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+- General :cookie:
+  - [Bing](https://www.bing.com/)
+  - [Google](https://www.google.com/)
+  - [Yahoo](https://yahoo.com/)
+- Torrent :beer:
+  - [PirateBay](/#)
+  - [kickass](/#)
+- Video :popcorn:
+  - [Google Video](https://www.google.com/videohp)
 
 
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -127,7 +130,6 @@ Project Link: [https://github.com/BalajiDany/eniac](https://github.com/BalajiDan
 * [Sticky Kit](http://leafo.net/sticky-kit)
 * [JVectorMap](http://jvectormap.com)
 * [Font Awesome](https://fontawesome.com)
-
 
 ##
 
