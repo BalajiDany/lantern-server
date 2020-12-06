@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.project.eniac.engine.VideoSearchEngine;
-import com.project.eniac.engine.google.GoogleVideoSearchEngine;
+import com.project.eniac.engine.impl.google.GoogleVideoSearchEngine;
+import com.project.eniac.engine.spec.VideoSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 
 @Configuration

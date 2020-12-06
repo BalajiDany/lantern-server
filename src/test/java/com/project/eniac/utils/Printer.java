@@ -2,10 +2,10 @@ package com.project.eniac.utils;
 
 import java.util.List;
 
-import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
-import com.project.eniac.entity.ResultEntity.SearchResultEntity;
-import com.project.eniac.entity.ResultEntity.TorrentSearchResultEntity;
-import com.project.eniac.entity.ResultEntity.VideoSearchResultEntity;
+import com.project.eniac.entity.EngineResultEntity.GeneralSearchResultEntity;
+import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
+import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity;
+import com.project.eniac.entity.EngineResultEntity.VideoSearchResultEntity;
 import com.project.eniac.types.EngineResultType;
 
 import lombok.extern.slf4j.Slf4j;

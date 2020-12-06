@@ -4,11 +4,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.project.eniac.engine.GeneralSearchEngine;
-import com.project.eniac.engine.bing.BingGeneralSearchEngine;
-import com.project.eniac.engine.bing.BingParachuteGeneralSearchEngine;
-import com.project.eniac.engine.google.GoogleGeneralSearchEngine;
-import com.project.eniac.engine.yahoo.YahooGeneralSearchEngine;
+import com.project.eniac.engine.impl.bing.BingGeneralSearchEngine;
+import com.project.eniac.engine.impl.bing.BingParachuteGeneralSearchEngine;
+import com.project.eniac.engine.impl.google.GoogleGeneralSearchEngine;
+import com.project.eniac.engine.impl.yahoo.YahooGeneralSearchEngine;
+import com.project.eniac.engine.spec.GeneralSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 
 @Configuration
@@ -26,7 +26,6 @@ public class GeneralSearchEngineConfiguration {
 	GeneralSearchEngine bingGeneralSearchEngine(HttpClientProviderService httpClientService) {
 		return new BingGeneralSearchEngine(httpClientService);
 	}
-
 
 	@Bean
 	@ConditionalOnProperty(value = "project.eniac.engine.general.bingparachute.enable", havingValue = "true", matchIfMissing = true)

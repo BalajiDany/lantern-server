@@ -66,3 +66,8 @@ GoogleDomainServiceImpl
 			console.log(str);
 		 * 
 		 */
+
+// https://sg.search.yahoo.com/search?p=covid+19&fr=yfp-t&fp=1&toggle=1&cop=mss&ei=UTF-8
+// https://www.wordsapi.com/mashape/words/tamil?when=2020-11-27T09:37:53.726Z&encrypted=8cfdb18ae723929be89607bfe658bdbeaeb52e0937fd91b8
+// https://wordweb.info/developer/SQL/search.pl?w=search
+// https://www.wordwebonline.com/en/<search word>

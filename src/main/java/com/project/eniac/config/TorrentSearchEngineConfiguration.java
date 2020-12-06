@@ -4,9 +4,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.project.eniac.engine.TorrentSearchEngine;
-import com.project.eniac.engine.kickass.KickassTorrentSearchEngine;
-import com.project.eniac.engine.piratebay.PirateBayTorrentSearchEngine;
+import com.project.eniac.engine.impl.kickass.KickassTorrentSearchEngine;
+import com.project.eniac.engine.impl.piratebay.PirateBayTorrentSearchEngine;
+import com.project.eniac.engine.spec.TorrentSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 
 @Configuration
@@ -24,4 +24,5 @@ public class TorrentSearchEngineConfiguration {
 	TorrentSearchEngine kickassTorrentSearchEngine(HttpClientProviderService httpClientService) {
 		return new KickassTorrentSearchEngine(httpClientService);
 	}
+
 }

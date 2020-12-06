@@ -4,9 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.project.eniac.entity.MainSearchEntity;
-import com.project.eniac.entity.ResultEntity.GeneralSearchResultEntity;
-import com.project.eniac.entity.ResultEntity.SearchResultEntity;
+import com.project.eniac.engine.impl.bing.BingParachuteGeneralSearchEngine;
+import com.project.eniac.entity.SearchRequestEntity;
+import com.project.eniac.entity.EngineResultEntity.GeneralSearchResultEntity;
+import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
 import com.project.eniac.service.spec.CommonLanguageService;
 import com.project.eniac.service.spec.CommonLocationService;
 import com.project.eniac.utils.Printer;
@@ -28,7 +29,7 @@ public class BingParachuteGeneralSearchEngineTest {
 	@Test
 	void verifySearch() {
 
-		MainSearchEntity searchEntity = new MainSearchEntity();
+		SearchRequestEntity searchEntity = new SearchRequestEntity();
 		searchEntity.setQuery(SEARCH_QUERY);
 		searchEntity.setLanguage(commonLanguageService.getDefaultLanguage());
 		searchEntity.setLocation(commonLocationService.getDefaultLocation());

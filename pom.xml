@@ -86,4 +86,21 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<activatedProfiles>dev</activatedProfiles>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<activatedProfiles>prod</activatedProfiles>
+			</properties>
+		</profile>
+	</profiles>
 </project>
