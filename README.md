@@ -113,7 +113,7 @@ Apache-2.0 License - Please have a look at the [LICENSE.md](LICENSE.md) for more
 
 Balaji Dhanapal - d.balaji.mc@gmail.com
 
-Pavithra Palanisamy - 
+Pavithra Palanisamy - pavithrakowsika@gmail.com
 
 Project Link: [https://github.com/BalajiDany/eniac](https://github.com/BalajiDany/eniac)
 
