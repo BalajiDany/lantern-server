@@ -12,9 +12,9 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class ConvertionUtil {
+public class ConversionUtil {
 
-	private static DateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd MMM, yyyy");
 
 	public static String convertBytesToReadable(long bytes) {
 		long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
@@ -33,7 +33,7 @@ public class ConvertionUtil {
 
 	public static String parseDate(long date) {
 		long adjusted = date * 1000;
-		return dateFormat.format(new Date(adjusted));
+		return DATE_FORMAT.format(new Date(adjusted));
 	}
 
 	public static int parseInt(String integerStr) {

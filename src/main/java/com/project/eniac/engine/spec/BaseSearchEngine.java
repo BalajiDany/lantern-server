@@ -1,19 +1,16 @@
 package com.project.eniac.engine.spec;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.client.methods.HttpUriRequest;
-
 import com.project.eniac.constant.RequestHeaders;
-import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
+import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
 import com.project.eniac.types.EngineType;
 import com.project.eniac.utils.UserAgent;
-
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.methods.HttpUriRequest;
 
 @Data
 @Slf4j
@@ -47,7 +44,7 @@ public abstract class BaseSearchEngine<T> {
 		log.info("URL : {}", getRequest.getURI().toString());
 		String response = httpClientService.makeRequest(getRequest, this.getEngineName());
 
-		SearchResultEntity<T> responseEntity = null;
+		SearchResultEntity<T> responseEntity;
 
 		long stopTime = System.currentTimeMillis();
 		long runTime = stopTime - startTime;

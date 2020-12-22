@@ -72,7 +72,7 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
 	@Override
 	public SearchResultEntity<GeneralSearchResultEntity> getResponse(String response) {
 
-		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<GeneralSearchResultEntity>();
+		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<>();
 
 		Document document = Jsoup.parse(response);
 		Elements elements = document.select("div.result__body"); // Select all results
@@ -110,9 +110,9 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("div.result--no-result").isEmpty() == false) {
+		} else if (!document.select("div.result--no-result").isEmpty()) {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
+					.engineResultType(EngineResultType.NO_SEARCH_RESULT).build();
 		} else {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();

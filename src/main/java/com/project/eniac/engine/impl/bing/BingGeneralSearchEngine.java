@@ -119,7 +119,7 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 					.build();
 		} else if (!document.select("#b_results .b_no").isEmpty()) {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
+					.engineResultType(EngineResultType.NO_SEARCH_RESULT).build();
 		} else {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();

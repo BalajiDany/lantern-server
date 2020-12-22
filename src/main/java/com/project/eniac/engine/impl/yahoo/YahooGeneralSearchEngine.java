@@ -24,7 +24,7 @@ import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
-import com.project.eniac.utils.ConvertionUtil;
+import com.project.eniac.utils.ConversionUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -80,7 +80,7 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 	@Override
 	public SearchResultEntity<GeneralSearchResultEntity> getResponse(String response) {
 
-		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<GeneralSearchResultEntity>();
+		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<>();
 
 		Document document = Jsoup.parse(response);
 		Elements elements = document.select("div.relsrch"); // Select all results
@@ -89,10 +89,10 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 			Element anchorElement = element.selectFirst("div.compTitle > h3 > a");
 			Element contentElement = element.selectFirst("div.compText > p");
 
-			boolean isInValidelement = anchorElement == null
+			boolean isInValidElement = anchorElement == null
 					|| contentElement == null;
 
-			if (isInValidelement) continue;
+			if (isInValidElement) continue;
 
 			String url = anchorElement.attr("href");
 			String title = anchorElement.text();
@@ -120,9 +120,9 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#results").isEmpty() == false) {
+		} else if (!document.select("#results").isEmpty()) {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
+					.engineResultType(EngineResultType.NO_SEARCH_RESULT).build();
 		} else {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
@@ -135,11 +135,11 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 	}
 
 	private String extractYahooClick(String url) {
-		for (String splitedURL : url.split("/")) {
-			if (!splitedURL.startsWith("RU=")) continue;
+		for (String splitURL : url.split("/")) {
+			if (!splitURL.startsWith("RU=")) continue;
 
-			String extractedURL = splitedURL.replace("RU=", "");
-			String correctedUrl = ConvertionUtil.decodeURL(extractedURL);
+			String extractedURL = splitURL.replace("RU=", "");
+			String correctedUrl = ConversionUtil.decodeURL(extractedURL);
 
 			return StringUtils.isEmpty(correctedUrl) ? url : correctedUrl;
 		}
@@ -147,12 +147,12 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 	}
 
 	private String extractBingClick(String url) {
-		for (String splitedURL : url.split("&")) {
-			if (!splitedURL.startsWith("u=")) continue;
+		for (String splitURL : url.split("&")) {
+			if (!splitURL.startsWith("u=")) continue;
 
-			String extractedURL = splitedURL.replace("u=", "");
-			String base64DecodedURL = ConvertionUtil.base64UrlDecoder(extractedURL);
-			String correctedUrl = ConvertionUtil.decodeURL(base64DecodedURL);
+			String extractedURL = splitURL.replace("u=", "");
+			String base64DecodedURL = ConversionUtil.base64UrlDecoder(extractedURL);
+			String correctedUrl = ConversionUtil.decodeURL(base64DecodedURL);
 
 			return StringUtils.isEmpty(correctedUrl) ? url : correctedUrl;
 		}

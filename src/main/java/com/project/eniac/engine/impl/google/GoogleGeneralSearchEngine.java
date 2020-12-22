@@ -83,7 +83,7 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 	@Override
 	public SearchResultEntity<GeneralSearchResultEntity> getResponse(String response) {
 
-		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<GeneralSearchResultEntity>();
+		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<>();
 
 		Document document = Jsoup.parse(response);
 		Elements elements = document.select("#search > div > div > div.g"); // Select all results
@@ -130,11 +130,11 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#search").isEmpty() == false) {
+		} else if (!document.select("#search").isEmpty()) {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
+					.engineResultType(EngineResultType.NO_SEARCH_RESULT).build();
 		} else {
-			if (document.select("#captcha-form").isEmpty() == false) log.error("Google Captch Required");
+			if (!document.select("#captcha-form").isEmpty()) log.error("Google Captch Required");
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
 		}

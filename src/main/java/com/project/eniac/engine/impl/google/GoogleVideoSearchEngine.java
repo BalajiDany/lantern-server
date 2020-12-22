@@ -83,7 +83,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
 
 	@Override
 	public SearchResultEntity<VideoSearchResultEntity> getResponse(String response) {
-		List<VideoSearchResultEntity> searchResultEntity = new ArrayList<VideoSearchResultEntity>();
+		List<VideoSearchResultEntity> searchResultEntity = new ArrayList<>();
 
 		Document document = Jsoup.parse(response);
 		Elements elements = document.select("#search > div > div > div.g"); // Select all results
@@ -98,37 +98,37 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
 			Element titleElement = element.selectFirst("div.yuRUbf > a > h3 > span");
 			Element contentElement = element.selectFirst("div.IsZvec span.aCOpRe");
 			Element uploadedDateElement = element.selectFirst("div.IsZvec div.fG8Fp");
-			Element thumpnailElement = element.selectFirst("div.IsZvec > div > div > a");
+			Element thumbnailElement = element.selectFirst("div.IsZvec > div > div > a");
 			Element durationElement = element.selectFirst("div.ij69rd.UHe5G");
 
-			boolean isInValidelement = anchorElement == null
+			boolean isInValidElement = anchorElement == null
 					|| titleElement == null
 					|| contentElement == null
 					|| uploadedDateElement == null
-					|| thumpnailElement == null
+					|| thumbnailElement == null
 					|| durationElement == null;
 
-			if (isInValidelement) continue;
+			if (isInValidElement) continue;
 
 			String url = anchorElement.attr("href");
 			String title = titleElement.text();
 			String content = contentElement.text();
 			String uploadedDate = uploadedDateElement.ownText();
-			String thumpnailUrl = thumpnailElement.attr("href");
+			String thumbnailUrl = thumbnailElement.attr("href");
 			String duration = durationElement.ownText();
 
 			boolean isInvalidContent = StringUtils.isEmpty(url)
 					|| StringUtils.isEmpty(title)
 					|| StringUtils.isEmpty(content)
 					|| StringUtils.isEmpty(uploadedDate)
-					|| StringUtils.isEmpty(thumpnailUrl)
+					|| StringUtils.isEmpty(thumbnailUrl)
 					|| StringUtils.isEmpty(duration);
 
 			if (isInvalidContent) continue;
 
 			VideoSearchResultEntity resultEntity = VideoSearchResultEntity.builder()
 					.url(url).title(title).content(content)
-					.uploadedDate(uploadedDate).duration(duration).thumpnailUrl(thumpnailUrl).build();
+					.uploadedDate(uploadedDate).duration(duration).thumbnailUrl(thumbnailUrl).build();
 			searchResultEntity.add(resultEntity);
 		}
 
@@ -143,11 +143,11 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#search").isEmpty() == false) {
+		} else if (!document.select("#search").isEmpty()) {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
+					.engineResultType(EngineResultType.NO_SEARCH_RESULT).build();
 		} else {
-			if (document.select("#captcha-form").isEmpty() == false) log.error("Google Captch Required");
+			if (!document.select("#captcha-form").isEmpty()) log.error("Google Captch Required");
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
 		}

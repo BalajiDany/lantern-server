@@ -32,13 +32,13 @@ public class EngineStatusServiceImpl implements EngineStatusService {
 	}
 
 	private EngineStatusResponseEntity formResponseEntity(BaseSearchEngine<?> searchEngine) {
-		EngineStatusResponseEntityBuilder statusResponseentity = EngineStatusResponseEntity.builder();
+		EngineStatusResponseEntityBuilder statusResponseEntity = EngineStatusResponseEntity.builder();
 
-		statusResponseentity.engineName(searchEngine.getEngineName());
-		statusResponseentity.engineType(searchEngine.getEngineType());
-		statusResponseentity.isEnabled(searchEngine.isEnabled());
+		statusResponseEntity.engineName(searchEngine.getEngineName());
+		statusResponseEntity.engineType(searchEngine.getEngineType());
+		statusResponseEntity.isEnabled(searchEngine.isEnabled());
 
-		return statusResponseentity.build();
+		return statusResponseEntity.build();
 	}
 
 }

@@ -17,6 +17,6 @@ public class VideoSearchResultEntity {
 
 	private String duration;
 
-	private String thumpnailUrl;
+	private String thumbnailUrl;
 
 }

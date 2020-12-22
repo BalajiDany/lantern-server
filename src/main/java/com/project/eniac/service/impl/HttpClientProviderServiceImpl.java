@@ -20,18 +20,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HttpClientProviderServiceImpl implements HttpClientProviderService {
 
-	private final Map<String, CloseableHttpClient> httpClientMap = new HashMap<String, CloseableHttpClient>();
+	private final Map<String, CloseableHttpClient> httpClientMap = new HashMap<>();
 
-	@Value("${project.eniac.configuration.network.connention.timeout}")
+	@Value("${project.eniac.configuration.network.connection.timeout}")
 	private int networkTimeOut;
 
 	@Override
-	public <T> String makeRequest(HttpUriRequest request, String clientId) {
+	public String makeRequest(HttpUriRequest request, String clientId) {
 		return this.makeRequest(request, clientId, false);
 	}
 
 	@Override
-	public <T> String makeRequest(HttpUriRequest request, String clientId, boolean resetClient) {
+	public String makeRequest(HttpUriRequest request, String clientId, boolean resetClient) {
 		if (resetClient) this.resetClient(clientId);
 
 		// Perform Request
@@ -42,15 +42,13 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
 			HttpEntity entity = response.getEntity();
 
 			return EntityUtils.toString(entity);
-		} catch (IOException exception) {
-			return "";
-		} catch (IllegalStateException exception) {
+		} catch (IOException | IllegalStateException exception) {
 			return "";
 		}
 	}
 
 	@Override
-	public <T> void resetClient(String clientId) {
+	public void resetClient(String clientId) {
 
 		try {
 			if (httpClientMap.containsKey(clientId)) httpClientMap.get(clientId).close();

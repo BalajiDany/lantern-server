@@ -24,7 +24,7 @@ import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity.TorrentSearchResultEntityBuilder;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
-import com.project.eniac.utils.ConvertionUtil;
+import com.project.eniac.utils.ConversionUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 	public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
 		String url =  new StringBuilder(BASE_URL)
 				.append("usearch/")
-				.append(ConvertionUtil.encodeURL(searchEntity.getQuery()))
+				.append(ConversionUtil.encodeURL(searchEntity.getQuery()))
 				.append("/").toString();
 
 		try {
@@ -74,7 +74,7 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 
 	@Override
 	public SearchResultEntity<TorrentSearchResultEntity> getResponse(String response) {
-		List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<TorrentSearchResultEntity>();
+		List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<>();
 
 		Document document = Jsoup.parse(response);
 		Elements elements = document.select("tr#torrent_latest_torrents"); // Select all results
@@ -98,7 +98,7 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 					.build();
 		} else if (elements.isEmpty()) {
 			return resultEntityBuilder
-					.engineResultType(EngineResultType.NO_SERACH_RESULT)
+					.engineResultType(EngineResultType.NO_SEARCH_RESULT)
 					.build();
 		} else {
 			return resultEntityBuilder
@@ -130,21 +130,21 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 		String[] urls = href.split("url=");
 		if (urls.length < 2) return null;
 
-		String link = ConvertionUtil.decodeURL(urls[1]);
-		String cleanLink = ConvertionUtil.decodeURL(link);
-		searchResultEntity.magneticLink(cleanLink);
+		String link = ConversionUtil.decodeURL(urls[1]);
+
+		if (ObjectUtils.isNotEmpty(link)) {
+			String cleanLink = ConversionUtil.decodeURL(link);
+			searchResultEntity.magneticLink(cleanLink);
+		}
 
 		Elements otherElements = element.select("td.center");
 		for (Element otherElement : otherElements) {
 			if (otherElement.hasClass("nobr")) {
 				searchResultEntity.torrentSize(otherElement.text());
-				continue;
 			} else if (otherElement.hasClass("green")) {
-				searchResultEntity.seeders(ConvertionUtil.parseInt(otherElement.text()));
-				continue;
+				searchResultEntity.seeders(ConversionUtil.parseInt(otherElement.text()));
 			} else if (otherElement.hasClass("red")) {
-				searchResultEntity.leechers(ConvertionUtil.parseInt(otherElement.text()));
-				continue;
+				searchResultEntity.leechers(ConversionUtil.parseInt(otherElement.text()));
 			} else {
 				searchResultEntity.uploadedDate(otherElement.text());
 			}

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class GoogleRequestUtil{
 
-	private static String DEFAULT_DOMAIN = "google.com";
+	private static final String DEFAULT_DOMAIN = "google.com";
 
 	private static final Map<String, String> domainMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
@@ -23,7 +23,7 @@ public class GoogleRequestUtil{
 		}
 	};
 
-	private static final Map<String, String> locationOverideMap = new HashMap<String, String>() {
+	private static final Map<String, String> locationOverrideMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put("CH", "US");
@@ -31,7 +31,7 @@ public class GoogleRequestUtil{
 		}
 	};
 
-	private static final Map<String, String> languageOverideMap = new HashMap<String, String>() {
+	private static final Map<String, String> languageOverrideMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put("de", "en");
@@ -39,11 +39,11 @@ public class GoogleRequestUtil{
 	};
 
 	public static String getLanguage(String inputLanguage) {
-		return languageOverideMap.containsKey(inputLanguage) ? languageOverideMap.get(inputLanguage) : inputLanguage;
+		return languageOverrideMap.getOrDefault(inputLanguage, inputLanguage);
 	}
 
 	public static String getRegion(String inputRegion) {
-		return locationOverideMap.containsKey(inputRegion) ? locationOverideMap.get(inputRegion) : inputRegion;
+		return locationOverrideMap.getOrDefault(inputRegion, inputRegion);
 	}
 
 	public static String getDomain(String location) {

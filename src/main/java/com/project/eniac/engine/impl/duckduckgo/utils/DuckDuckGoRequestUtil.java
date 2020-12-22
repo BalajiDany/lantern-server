@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DuckDuckGoRequestUtil {
-	private static final Map<String, String> locationOverideMap = new HashMap<String, String>() {
+	private static final Map<String, String> locationOverrideMap = new HashMap<String, String>() {
 		private static final long serialVersionUID = 1L;
 		{
 			put("US", "us-en");
@@ -21,7 +21,7 @@ public class DuckDuckGoRequestUtil {
 	};
 
 	public static String getRegion(String inputRegion) {
-		return locationOverideMap.containsKey(inputRegion) ? locationOverideMap.get(inputRegion) : inputRegion;
+		return locationOverrideMap.getOrDefault(inputRegion, inputRegion);
 	}
 
 }

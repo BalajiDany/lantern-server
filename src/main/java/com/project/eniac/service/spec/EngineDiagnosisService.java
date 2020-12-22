@@ -5,10 +5,10 @@ import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
 
 public interface EngineDiagnosisService {
 
-	public void diagnosisEngine(BaseSearchEngine<?> searchEngine, SearchResultEntity<?> response);
+	void diagnosisEngine(BaseSearchEngine<?> searchEngine, SearchResultEntity<?> response);
 
-	public void disableEngine(BaseSearchEngine<?> searchEngine);
+	void disableEngine(BaseSearchEngine<?> searchEngine);
 
-	public void enableEngine(BaseSearchEngine<?> searchEngine);
+	void enableEngine(BaseSearchEngine<?> searchEngine);
 
 }

@@ -45,7 +45,7 @@ public class SearchServiceImpl implements SearchService {
 		long startTime = System.currentTimeMillis();
 		this.renovateMainSearchEntity(searchEntity);
 
-		List<SearchResultEntity<GeneralSearchResultEntity>> resutlEntity = generalSearchEngines.stream().parallel()
+		List<SearchResultEntity<GeneralSearchResultEntity>> resultEntity = generalSearchEngines.stream().parallel()
 			.filter(BaseSearchEngine::isEnabled)
 			.map(engine -> {
 				SearchResultEntity<GeneralSearchResultEntity> response = engine.performSearch(searchEntity);
@@ -58,7 +58,7 @@ public class SearchServiceImpl implements SearchService {
 		long stopTime = System.currentTimeMillis();
 		long runTime = stopTime - startTime;
 		return SearchResponseEntity.<GeneralSearchResultEntity>builder()
-				.searchResult(resutlEntity)
+				.searchResult(resultEntity)
 				.searchDuration(runTime)
 				.build();
 	}
@@ -68,7 +68,7 @@ public class SearchServiceImpl implements SearchService {
 		long startTime = System.currentTimeMillis();
 		this.renovateMainSearchEntity(searchEntity);
 
-		List<SearchResultEntity<VideoSearchResultEntity>> resutlEntity = videoSearchEngines.stream().parallel()
+		List<SearchResultEntity<VideoSearchResultEntity>> resultEntity = videoSearchEngines.stream().parallel()
 			.filter(BaseSearchEngine::isEnabled)
 			.map(engine -> {
 				SearchResultEntity<VideoSearchResultEntity> response = engine.performSearch(searchEntity);
@@ -81,7 +81,7 @@ public class SearchServiceImpl implements SearchService {
 		long stopTime = System.currentTimeMillis();
 		long runTime = stopTime - startTime;
 		return SearchResponseEntity.<VideoSearchResultEntity>builder()
-				.searchResult(resutlEntity)
+				.searchResult(resultEntity)
 				.searchDuration(runTime)
 				.build();
 	}
@@ -91,7 +91,7 @@ public class SearchServiceImpl implements SearchService {
 		long startTime = System.currentTimeMillis();
 		this.renovateMainSearchEntity(searchEntity);
 
-		List<SearchResultEntity<TorrentSearchResultEntity>> resutlEntity = torrentSearchEngines.stream().parallel()
+		List<SearchResultEntity<TorrentSearchResultEntity>> resultEntity = torrentSearchEngines.stream().parallel()
 			.filter(BaseSearchEngine::isEnabled)
 			.map(engine -> {
 				SearchResultEntity<TorrentSearchResultEntity> response = engine.performSearch(searchEntity);
@@ -104,7 +104,7 @@ public class SearchServiceImpl implements SearchService {
 		long stopTime = System.currentTimeMillis();
 		long runTime = stopTime - startTime;
 		return SearchResponseEntity.<TorrentSearchResultEntity>builder()
-				.searchResult(resutlEntity)
+				.searchResult(resultEntity)
 				.searchDuration(runTime)
 				.build();
 	}

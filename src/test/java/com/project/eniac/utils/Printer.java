@@ -64,7 +64,7 @@ public class Printer {
 				log.info(fixedLengthString("URL : ", KEY_LENGTH) + searchResult.getUrl());
 				log.info(fixedLengthString("Upload Date : ", KEY_LENGTH) + searchResult.getUploadedDate());
 				log.info(fixedLengthString("Duration : ", KEY_LENGTH) + searchResult.getDuration());
-				log.info(fixedLengthString("Thumpnail : ", KEY_LENGTH) + searchResult.getThumpnailUrl());
+				log.info(fixedLengthString("Thumbnail : ", KEY_LENGTH) + searchResult.getThumbnailUrl());
 			}
 		}
 	}
