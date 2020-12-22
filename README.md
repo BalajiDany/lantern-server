@@ -84,6 +84,7 @@ For building and running the application you need:
   - [Bing](https://www.bing.com/)
   - [Google](https://www.google.com/)
   - [Yahoo](https://yahoo.com/)
+  - [DuckDuckGo](https://duckduckgo.com/)
 - Torrent :beer:
   - [PirateBay](/#)
   - [kickass](/#)
