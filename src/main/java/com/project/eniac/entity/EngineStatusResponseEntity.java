@@ -1,7 +1,6 @@
 package com.project.eniac.entity;
 
 import com.project.eniac.types.EngineType;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,12 +8,12 @@ import lombok.Data;
 @Builder
 public class EngineStatusResponseEntity {
 
-	private String engineName;
+    private String engineName;
 
-	private EngineType engineType;
+    private EngineType engineType;
 
-	private boolean isEnabled;
+    private boolean isEnabled;
 
-	private long lastSearchDuration;
+    private long lastSearchDuration;
 
 }

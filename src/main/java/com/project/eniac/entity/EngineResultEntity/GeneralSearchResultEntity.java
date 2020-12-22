@@ -7,10 +7,10 @@ import lombok.Data;
 @Builder
 public class GeneralSearchResultEntity {
 
-	private String title;
+    private String title;
 
-	private String url;
+    private String url;
 
-	private String content;
+    private String content;
 
 }

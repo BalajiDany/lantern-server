@@ -2,12 +2,12 @@ package com.project.eniac.service.spec;
 
 public interface NetworkStatusService {
 
-	String getIpAddress();
+    String getIpAddress();
 
-	boolean isNetworkAlive();
+    boolean isNetworkAlive();
 
-	boolean isNetworkAliveNow();
+    boolean isNetworkAliveNow();
 
-	void refresh();
+    void refresh();
 
 }

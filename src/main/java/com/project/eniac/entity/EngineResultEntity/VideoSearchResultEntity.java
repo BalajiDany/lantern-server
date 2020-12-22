@@ -7,16 +7,16 @@ import lombok.Data;
 @Builder
 public class VideoSearchResultEntity {
 
-	private String title;
+    private String title;
 
-	private String content;
+    private String content;
 
-	private String url;
+    private String url;
 
-	private String uploadedDate;
+    private String uploadedDate;
 
-	private String duration;
+    private String duration;
 
-	private String thumbnailUrl;
+    private String thumbnailUrl;
 
 }

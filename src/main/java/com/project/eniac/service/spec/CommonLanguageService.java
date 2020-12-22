@@ -4,12 +4,12 @@ import java.util.Map;
 
 public interface CommonLanguageService {
 
-	String getDefaultLanguage();
+    String getDefaultLanguage();
 
-	boolean isValidLanguage(String sampleLanguage);
+    boolean isValidLanguage(String sampleLanguage);
 
-	String getSupportedLanguage(String sampleLanguage);
+    String getSupportedLanguage(String sampleLanguage);
 
-	Map<String, String> getAllSupportedLanguage();
+    Map<String, String> getAllSupportedLanguage();
 
 }

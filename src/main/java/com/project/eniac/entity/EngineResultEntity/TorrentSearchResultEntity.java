@@ -7,20 +7,20 @@ import lombok.Data;
 @Builder
 public class TorrentSearchResultEntity {
 
-	private String torrentName;
+    private String torrentName;
 
-	private String torrentSize;
+    private String torrentSize;
 
-	private String torrentUrl;
+    private String torrentUrl;
 
-	private String magneticLink;
+    private String magneticLink;
 
-	private String uploadedDate;
+    private String uploadedDate;
 
-	private String category;
+    private String category;
 
-	private int seeders;
+    private int seeders;
 
-	private int leechers;
+    private int leechers;
 
 }

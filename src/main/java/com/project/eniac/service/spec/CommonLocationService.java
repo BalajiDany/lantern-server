@@ -4,12 +4,12 @@ import java.util.Map;
 
 public interface CommonLocationService {
 
-	String getDefaultLocation();
+    String getDefaultLocation();
 
-	boolean isValidLocation(String location);
+    boolean isValidLocation(String location);
 
-	String getSupportedLocation(String sampleLocation);
+    String getSupportedLocation(String sampleLocation);
 
-	Map<String, String> getAllSupportedLocation();
+    Map<String, String> getAllSupportedLocation();
 
 }

@@ -5,9 +5,9 @@ import com.project.eniac.types.EngineType;
 
 public abstract class GeneralSearchEngine extends BaseSearchEngine<GeneralSearchResultEntity> {
 
-	@Override
-	public EngineType getEngineType() {
-		return EngineType.GENERAL;
-	}
+    @Override
+    public EngineType getEngineType() {
+        return EngineType.GENERAL;
+    }
 
 }

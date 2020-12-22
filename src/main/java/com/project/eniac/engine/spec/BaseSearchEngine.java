@@ -16,52 +16,52 @@ import org.apache.http.client.methods.HttpUriRequest;
 @Slf4j
 public abstract class BaseSearchEngine<T> {
 
-	private boolean enabled = true;
+    private boolean enabled = true;
 
-	private int breakdownCountInRow = 0;
+    private int breakdownCountInRow = 0;
 
-	private int timeoutCountInRow = 0;
+    private int timeoutCountInRow = 0;
 
-	abstract public String getEngineName();
+    abstract public String getEngineName();
 
-	abstract public EngineType getEngineType();
+    abstract public EngineType getEngineType();
 
-	abstract public HttpClientProviderService getHttpClientService();
+    abstract public HttpClientProviderService getHttpClientService();
 
-	abstract public HttpUriRequest getRequest(SearchRequestEntity searchEntity);
+    abstract public HttpUriRequest getRequest(SearchRequestEntity searchEntity);
 
-	abstract public SearchResultEntity<T> getResponse(String response);
+    abstract public SearchResultEntity<T> getResponse(String response);
 
-	public SearchResultEntity<T> performSearch(SearchRequestEntity searchEntity) {
-		long startTime = System.currentTimeMillis();
+    public SearchResultEntity<T> performSearch(SearchRequestEntity searchEntity) {
+        long startTime = System.currentTimeMillis();
 
-		HttpUriRequest getRequest = this.getRequest(searchEntity);
+        HttpUriRequest getRequest = this.getRequest(searchEntity);
 
-		String userAgent = UserAgent.getRandomUserAgent();
-		getRequest.addHeader(RequestHeaders.KEY_USER_AGENT, userAgent);
+        String userAgent = UserAgent.getRandomUserAgent();
+        getRequest.addHeader(RequestHeaders.KEY_USER_AGENT, userAgent);
 
-		HttpClientProviderService httpClientService = this.getHttpClientService();
-		log.info("URL : {}", getRequest.getURI().toString());
-		String response = httpClientService.makeRequest(getRequest, this.getEngineName());
+        HttpClientProviderService httpClientService = this.getHttpClientService();
+        log.info("URL : {}", getRequest.getURI().toString());
+        String response = httpClientService.makeRequest(getRequest, this.getEngineName());
 
-		SearchResultEntity<T> responseEntity;
+        SearchResultEntity<T> responseEntity;
 
-		long stopTime = System.currentTimeMillis();
-		long runTime = stopTime - startTime;
+        long stopTime = System.currentTimeMillis();
+        long runTime = stopTime - startTime;
 
-		// Time Out
-		if (StringUtils.isBlank(response)) {
-			responseEntity = SearchResultEntity
-					.<T>builder()
-					.engineName(this.getEngineName())
-					.engineType(this.getEngineType())
-					.engineResultType(EngineResultType.ENGINE_TIME_OUT)
-					.build();
-		} else {
-			responseEntity = this.getResponse(response);
-		}
-		responseEntity.setDuration(runTime);
-		return responseEntity;
-	}
+        // Time Out
+        if (StringUtils.isBlank(response)) {
+            responseEntity = SearchResultEntity
+                    .<T>builder()
+                    .engineName(this.getEngineName())
+                    .engineType(this.getEngineType())
+                    .engineResultType(EngineResultType.ENGINE_TIME_OUT)
+                    .build();
+        } else {
+            responseEntity = this.getResponse(response);
+        }
+        responseEntity.setDuration(runTime);
+        return responseEntity;
+    }
 
 }

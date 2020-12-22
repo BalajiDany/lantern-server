@@ -5,9 +5,9 @@ import com.project.eniac.types.EngineType;
 
 public abstract class TorrentSearchEngine extends BaseSearchEngine<TorrentSearchResultEntity> {
 
-	@Override
-	public EngineType getEngineType() {
-		return EngineType.TORRENT;
-	}
+    @Override
+    public EngineType getEngineType() {
+        return EngineType.TORRENT;
+    }
 
 }

@@ -5,36 +5,38 @@ import java.util.Map;
 
 public class BingRequestUtil {
 
-	private static final Map<String, String> locationOverrideMap = new HashMap<String, String>() {
-		private static final long serialVersionUID = 1L;
-		{
-			put("US", "en-us");
-			put("CN", "zh-cn");
-			put("JP", "ja-jp");
-			put("DE", "de-de");
-			put("IN", "en-in");
-			put("GB", "en-gb");
-			put("KR", "ko-kr");
-			put("BR", "pt-br");
-			put("FR", "fr-fr");
-			put("IT", "it-it");
-		}
-	};
+    private static final Map<String, String> locationOverrideMap = new HashMap<String, String>() {
+        private static final long serialVersionUID = 1L;
 
-	private static final Map<String, String> languageOverrideMap = new HashMap<String, String>() {
-		private static final long serialVersionUID = 1L;
-		{
-			put("pt", "pt-pt");
-			put("zh", "zh-hans");
-		}
-	};
+        {
+            put("US", "en-us");
+            put("CN", "zh-cn");
+            put("JP", "ja-jp");
+            put("DE", "de-de");
+            put("IN", "en-in");
+            put("GB", "en-gb");
+            put("KR", "ko-kr");
+            put("BR", "pt-br");
+            put("FR", "fr-fr");
+            put("IT", "it-it");
+        }
+    };
 
-	public static String getLanguage(String inputLanguage) {
-		return languageOverrideMap.getOrDefault(inputLanguage, inputLanguage);
-	}
+    private static final Map<String, String> languageOverrideMap = new HashMap<String, String>() {
+        private static final long serialVersionUID = 1L;
 
-	public static String getRegion(String inputRegion) {
-		return locationOverrideMap.getOrDefault(inputRegion, inputRegion);
-	}
+        {
+            put("pt", "pt-pt");
+            put("zh", "zh-hans");
+        }
+    };
+
+    public static String getLanguage(String inputLanguage) {
+        return languageOverrideMap.getOrDefault(inputLanguage, inputLanguage);
+    }
+
+    public static String getRegion(String inputRegion) {
+        return locationOverrideMap.getOrDefault(inputRegion, inputRegion);
+    }
 
 }

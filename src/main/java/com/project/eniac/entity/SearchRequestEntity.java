@@ -5,14 +5,14 @@ import lombok.Data;
 @Data
 public class SearchRequestEntity {
 
-	private String query;
+    private String query;
 
-	private String language;
+    private String language;
 
-	private String location;
+    private String location;
 
-	private long startFrom;
+    private long startFrom;
 
-	private long offset;
+    private long offset;
 
 }
