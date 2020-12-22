@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,7 +46,7 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 	}
 
 	@Override
-	public HttpGet getRequest(SearchRequestEntity searchEntity) {
+	public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
 		String url = "https://apibay.org/q.php";
 		try {
 

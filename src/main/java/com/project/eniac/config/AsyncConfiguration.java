@@ -18,4 +18,9 @@ public class AsyncConfiguration  {
 		return new ThreadPoolTaskExecutor();
 	}
 
+	@Bean(name = "engineDiagnosisTaskExecutor")
+	public Executor engineDiagnosisTaskExecutor() {
+		return new ThreadPoolTaskExecutor();
+	}
+
 }

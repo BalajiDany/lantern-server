@@ -8,6 +8,7 @@ import com.project.eniac.service.impl.NetworkStatusServiceImpl;
 import com.project.eniac.service.impl.SearchServiceImpl;
 import com.project.eniac.service.spec.CommonLanguageService;
 import com.project.eniac.service.spec.CommonLocationService;
+import com.project.eniac.service.spec.EngineDiagnosisService;
 import com.project.eniac.service.spec.EngineStatusService;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.service.spec.NetworkStatusService;
@@ -23,6 +24,8 @@ public class CommonServiceConfiguration {
 
 	private final CommonLocationService commonLocationService;
 
+	private final EngineDiagnosisService engineDiagnosisService;
+
 	private final HttpClientProviderService httpClientService;
 
 	@Bean
@@ -32,7 +35,7 @@ public class CommonServiceConfiguration {
 
 	@Bean
 	SearchService searchService() {
-		return new SearchServiceImpl(commonLanguageService, commonLocationService);
+		return new SearchServiceImpl(commonLanguageService, commonLocationService, engineDiagnosisService);
 	}
 
 	@Bean

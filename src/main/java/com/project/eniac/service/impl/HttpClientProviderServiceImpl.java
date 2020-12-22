@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
@@ -26,19 +26,19 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
 	private int networkTimeOut;
 
 	@Override
-	public <T> String makeRequest(HttpGet getRequest, String clientId) {
-		return this.makeRequest(getRequest, clientId, false);
+	public <T> String makeRequest(HttpUriRequest request, String clientId) {
+		return this.makeRequest(request, clientId, false);
 	}
 
 	@Override
-	public <T> String makeRequest(HttpGet getRequest, String clientId, boolean resetClient) {
+	public <T> String makeRequest(HttpUriRequest request, String clientId, boolean resetClient) {
 		if (resetClient) this.resetClient(clientId);
 
 		// Perform Request
 		CloseableHttpClient httpclient = this.getHttpClient(clientId);
 		CloseableHttpResponse response;
 		try {
-			response = httpclient.execute(getRequest);
+			response = httpclient.execute(request);
 			HttpEntity entity = response.getEntity();
 
 			return EntityUtils.toString(entity);

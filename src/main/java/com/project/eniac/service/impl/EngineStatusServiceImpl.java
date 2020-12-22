@@ -36,7 +36,7 @@ public class EngineStatusServiceImpl implements EngineStatusService {
 
 		statusResponseentity.engineName(searchEngine.getEngineName());
 		statusResponseentity.engineType(searchEngine.getEngineType());
-		statusResponseentity.isEnabled(true);
+		statusResponseentity.isEnabled(searchEngine.isEnabled());
 
 		return statusResponseentity.build();
 	}

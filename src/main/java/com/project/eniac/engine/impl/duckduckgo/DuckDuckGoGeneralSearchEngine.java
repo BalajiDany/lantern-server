@@ -1,10 +1,11 @@
-package com.project.eniac.engine.impl.yahoo;
+package com.project.eniac.engine.impl.duckduckgo;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -16,7 +17,7 @@ import org.jsoup.select.Elements;
 
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
-import com.project.eniac.engine.impl.yahoo.utils.YahooRequestUtil;
+import com.project.eniac.engine.impl.duckduckgo.utils.DuckDuckGoRequestUtil;
 import com.project.eniac.engine.spec.GeneralSearchEngine;
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.entity.EngineResultEntity.GeneralSearchResultEntity;
@@ -24,45 +25,36 @@ import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
-import com.project.eniac.utils.ConvertionUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class YahooGeneralSearchEngine extends GeneralSearchEngine {
+public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
 
 	private final HttpClientProviderService httpClientProviderService;
 
 	@Override
 	public String getEngineName() {
-		return EngineConstant.ENGINE_YAHOO;
+		return EngineConstant.ENGINE_DUCK_DUCK_GO;
 	}
 
 	@Override
 	public HttpClientProviderService getHttpClientService() {
-		return this.httpClientProviderService;
+		return httpClientProviderService;
 	}
 
 	@Override
 	public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
-		String domain = YahooRequestUtil.getDomainByLocation(searchEntity.getLocation());
+		String url = "https://html.duckduckgo.com/html";
+		String location = DuckDuckGoRequestUtil.getRegion(searchEntity.getLocation());
 
-		String url = new StringBuilder()
-				.append("https://")
-				.append(domain)
-				.append("/search")
-				.toString();
 		try {
 
 			URI uri = new URIBuilder(url)
-					.addParameter("p", searchEntity.getQuery())
-					.addParameter("fr", "yfp-t")
-					.addParameter("fp", "1")
-					.addParameter("toggle", "1")
-					.addParameter("cop", "mss")
-					.addParameter("ie", "utf8")
+					.addParameter("q", searchEntity.getQuery())
+					.addParameter("kl", location)
 //					.addParameter("safe", "high")
 					.build();
 
@@ -83,20 +75,18 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<GeneralSearchResultEntity>();
 
 		Document document = Jsoup.parse(response);
-		Elements elements = document.select("div.relsrch"); // Select all results
+		Elements elements = document.select("div.result__body"); // Select all results
 
 		for (Element element : elements) {
-			Element anchorElement = element.selectFirst("div.compTitle > h3 > a");
-			Element contentElement = element.selectFirst("div.compText > p");
 
-			boolean isInValidelement = anchorElement == null
-					|| contentElement == null;
+			Element anchorElement = element.selectFirst("h2.result__title > a");
+			Element bodyElement = element.selectFirst("a.result__snippet");
 
-			if (isInValidelement) continue;
+			if (ObjectUtils.anyNull(anchorElement, bodyElement)) continue;
 
 			String url = anchorElement.attr("href");
 			String title = anchorElement.text();
-			String content = contentElement.text();
+			String content = bodyElement.text();
 
 			boolean isInvalidContent = StringUtils.isEmpty(url)
 					|| StringUtils.isEmpty(title)
@@ -105,7 +95,7 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 			if (isInvalidContent) continue;
 
 			GeneralSearchResultEntity resultEntity = GeneralSearchResultEntity.builder()
-					.url(this.extractURL(url)).title(title).content(content).build();
+					.url(url).title(title).content(content).build();
 			searchResultEntity.add(resultEntity);
 		}
 
@@ -120,43 +110,13 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#results").isEmpty() == false) {
+		} else if (document.select("div.result--no-result").isEmpty() == false) {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
 		} else {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
 		}
-	}
-
-	private String extractURL(String url) {
-		String yahooExtracted = extractYahooClick(url);
-		return yahooExtracted.contains("www.bing.com/aclick") ? this.extractBingClick(yahooExtracted) : yahooExtracted;
-	}
-
-	private String extractYahooClick(String url) {
-		for (String splitedURL : url.split("/")) {
-			if (!splitedURL.startsWith("RU=")) continue;
-
-			String extractedURL = splitedURL.replace("RU=", "");
-			String correctedUrl = ConvertionUtil.decodeURL(extractedURL);
-
-			return StringUtils.isEmpty(correctedUrl) ? url : correctedUrl;
-		}
-		return url;
-	}
-
-	private String extractBingClick(String url) {
-		for (String splitedURL : url.split("&")) {
-			if (!splitedURL.startsWith("u=")) continue;
-
-			String extractedURL = splitedURL.replace("u=", "");
-			String base64DecodedURL = ConvertionUtil.base64UrlDecoder(extractedURL);
-			String correctedUrl = ConvertionUtil.decodeURL(base64DecodedURL);
-
-			return StringUtils.isEmpty(correctedUrl) ? url : correctedUrl;
-		}
-		return url;
 	}
 
 }

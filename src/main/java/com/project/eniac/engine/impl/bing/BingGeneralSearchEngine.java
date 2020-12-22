@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,7 +45,7 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 	}
 
 	@Override
-	public HttpGet getRequest(SearchRequestEntity searchEntity) {
+	public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
 		String language = BingRequestUtil.getLanguage(searchEntity.getLanguage());
 		String region = BingRequestUtil.getRegion(searchEntity.getLocation());
 
@@ -74,7 +75,7 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 	@Override
 	public SearchResultEntity<GeneralSearchResultEntity> getResponse(String response) {
 
-		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<GeneralSearchResultEntity>();
+		List<GeneralSearchResultEntity> searchResultEntity = new ArrayList<>();
 
 		Document document = Jsoup.parse(response);
 		Elements elements = document.select("li.b_algo"); // Select all results
@@ -116,7 +117,7 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
 					.searchResult(searchResultEntity)
 					.engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
 					.build();
-		} else if (document.select("#b_results .b_no").isEmpty() == false) {
+		} else if (!document.select("#b_results .b_no").isEmpty()) {
 			return resultEntityBuilder
 					.engineResultType(EngineResultType.NO_SERACH_RESULT).build();
 		} else {

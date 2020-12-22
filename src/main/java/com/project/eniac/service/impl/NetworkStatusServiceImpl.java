@@ -55,7 +55,7 @@ public class NetworkStatusServiceImpl implements NetworkStatusService {
 			URI uri = new URIBuilder(url).build();
 
 			HttpGet request = new HttpGet(uri);
-			request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, "en-US,en;q=0.9");
+			request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
 			request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
 
 			String response = httpClientProviderService.makeRequest(request, "utils", true);

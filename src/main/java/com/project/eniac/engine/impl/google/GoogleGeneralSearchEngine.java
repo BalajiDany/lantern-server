@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,7 +46,7 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
 	}
 
 	@Override
-	public HttpGet getRequest(SearchRequestEntity searchEntity) {
+	public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
 		String language = GoogleRequestUtil.getLanguage(searchEntity.getLanguage());
 		String region = GoogleRequestUtil.getRegion(searchEntity.getLocation());
 

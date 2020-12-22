@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,7 +45,7 @@ public class BingParachuteGeneralSearchEngine extends GeneralSearchEngine {
 	}
 
 	@Override
-	public HttpGet getRequest(SearchRequestEntity searchEntity) {
+	public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
 		String language = BingRequestUtil.getLanguage(searchEntity.getLanguage());
 		String region = BingRequestUtil.getRegion(searchEntity.getLocation());
 

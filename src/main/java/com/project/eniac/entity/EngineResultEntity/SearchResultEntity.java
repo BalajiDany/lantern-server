@@ -20,4 +20,6 @@ public class SearchResultEntity<T> {
 
 	private EngineResultType engineResultType;
 
+	private long duration;
+
 }

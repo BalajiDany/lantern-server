@@ -29,6 +29,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.16</version>
 			<optional>true</optional>
 		</dependency>
 
@@ -95,6 +96,13 @@
 			<properties>
 				<activatedProfiles>dev</activatedProfiles>
 			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-devtools</artifactId>
+					<optional>true</optional>
+				</dependency>
+			</dependencies>
 		</profile>
 		<profile>
 			<id>prod</id>

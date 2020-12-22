@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.project.eniac.engine.impl.bing.BingGeneralSearchEngine;
 import com.project.eniac.engine.impl.bing.BingParachuteGeneralSearchEngine;
+import com.project.eniac.engine.impl.duckduckgo.DuckDuckGoGeneralSearchEngine;
 import com.project.eniac.engine.impl.google.GoogleGeneralSearchEngine;
 import com.project.eniac.engine.impl.yahoo.YahooGeneralSearchEngine;
 import com.project.eniac.engine.spec.GeneralSearchEngine;
@@ -37,6 +38,12 @@ public class GeneralSearchEngineConfiguration {
 	@ConditionalOnProperty(value = "project.eniac.engine.general.yahoo.enable", havingValue = "true", matchIfMissing = true)
 	GeneralSearchEngine yahooGeneralSearchEngine(HttpClientProviderService httpClientService) {
 		return new YahooGeneralSearchEngine(httpClientService);
+	}
+
+	@Bean
+	@ConditionalOnProperty(value = "project.eniac.engine.general.duckduckgo.enable", havingValue = "true", matchIfMissing = true)
+	GeneralSearchEngine duckDuckGoGeneralSearchEngine(HttpClientProviderService httpClientService) {
+		return new DuckDuckGoGeneralSearchEngine(httpClientService);
 	}
 
 }

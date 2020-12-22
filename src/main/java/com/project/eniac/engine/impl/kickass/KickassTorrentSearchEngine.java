@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -47,7 +48,7 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 	}
 
 	@Override
-	public HttpGet getRequest(SearchRequestEntity searchEntity) {
+	public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
 		String url =  new StringBuilder(BASE_URL)
 				.append("usearch/")
 				.append(ConvertionUtil.encodeURL(searchEntity.getQuery()))

@@ -2,6 +2,7 @@ package com.project.eniac;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
@@ -9,6 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 // To test the each Search Engine run the corresponding Test files.
 
 // API
-// http://localhost:8080/eniac/api/v1/general?query=spring%20boot
-// http://localhost:8080/eniac/api/v1/torrent?query=spring%20boot
-// http://localhost:8080/eniac/api/v1/video?query=spring%20boot
+// http://localhost:8080/eniac/api/v1/search/general?query=spring%20boot
+// http://localhost:8080/eniac/api/v1/search/torrent?query=spring%20boot
+// http://localhost:8080/eniac/api/v1/search/video?query=spring%20boot
 
 @Slf4j
 @SpringBootApplication
@@ -48,12 +53,26 @@ public class EniacApplication {
 			log.warn("Unable to find host name, using 'localhost' as fallback");
 		}
 
+		String localServer = "http://localhost:" + serverPort + contextPath;
 		log.info("---------------------------------------------------------");
 		log.info("Application   : {}", applicationName);
-		log.info("Server        : http://localhost:{}{}", serverPort, contextPath);
+		log.info("Server        : {}", localServer);
 		log.info("External      : http://{}:{}{}", hostAddress, serverPort, contextPath);
 		log.info("Profile(s)    : {}", profileBuilder.toString());
 		log.info("---------------------------------------------------------");
+
+		Map<RequestMappingInfo, HandlerMethod> handlerMethodsMap = context.getBean(RequestMappingHandlerMapping.class)
+			.getHandlerMethods();
+
+		log.info("All Registered End point(s) (local)");
+		for (Map.Entry<RequestMappingInfo, HandlerMethod> handlerMethod: handlerMethodsMap.entrySet()) {
+			RequestMappingInfo requestMappingInfo = handlerMethod.getKey();
+			RequestMethodsRequestCondition requestMethods = requestMappingInfo.getMethodsCondition();
+			for (String endpoints: requestMappingInfo.getPatternsCondition().getPatterns()) {
+				log.info("{} {}{}", requestMethods, localServer, endpoints);
+			}
+		}
+
 	}
 
 }
