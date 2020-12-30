@@ -74,7 +74,12 @@ For building and running the application you need:
    ```
 3. Start the application using maven
    ```sh
-   ./mvnw spring-boot:run   # For Windows: mvnw spring-boot:run
+   # For Mac
+   chmod +x mvnw
+   ./mvnw spring-boot:run
+   
+   # For Windows: 
+   mvnw spring-boot:run
    ```
 
 <!-- USAGE EXAMPLES -->
