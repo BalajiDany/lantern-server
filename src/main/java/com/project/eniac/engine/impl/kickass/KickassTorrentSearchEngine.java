@@ -91,7 +91,7 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
         // Result Delivery
         if (searchResultEntity.size() > 0) {
             return resultEntityBuilder
-                    .searchResult(searchResultEntity)
+                    .searchResults(searchResultEntity)
                     .engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
                     .build();
         } else if (elements.isEmpty()) {

@@ -10,8 +10,8 @@ import java.util.List;
 @Builder
 public class SearchResponseEntity<T> {
 
-    private long searchDuration;
+    private long duration;
 
-    private List<SearchResultEntity<T>> searchResult;
+    private List<SearchResultEntity<T>> searchResults;
 
 }

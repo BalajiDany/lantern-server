@@ -1,5 +1,6 @@
 package com.project.eniac.engine.impl.duckduckgo;
 
+import ch.qos.logback.core.CoreConstants;
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.impl.duckduckgo.utils.DuckDuckGoRequestUtil;
@@ -10,6 +11,7 @@ import com.project.eniac.entity.EngineResultEntity.SearchResultEntity.SearchResu
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
+import com.project.eniac.utils.ConversionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -77,6 +79,10 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
 
         for (Element element : elements) {
 
+            // Block Add
+            Element addElement = element.selectFirst("a.badge--ad");
+            if (ObjectUtils.isNotEmpty(addElement)) continue;
+
             Element anchorElement = element.selectFirst("h2.result__title > a");
             Element bodyElement = element.selectFirst("a.result__snippet");
 
@@ -93,7 +99,7 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
             if (isInvalidContent) continue;
 
             GeneralSearchResultEntity resultEntity = GeneralSearchResultEntity.builder()
-                    .url(url).title(title).content(content).build();
+                    .url(this.extractUrl(url)).title(title).content(content).build();
             searchResultEntity.add(resultEntity);
         }
 
@@ -105,7 +111,7 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
         // Result Delivery
         if (searchResultEntity.size() != 0) {
             return resultEntityBuilder
-                    .searchResult(searchResultEntity)
+                    .searchResults(searchResultEntity)
                     .engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
                     .build();
         } else if (!document.select("div.result--no-result").isEmpty()) {
@@ -115,6 +121,18 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
             return resultEntityBuilder
                     .engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
         }
+    }
+
+    private String extractUrl(String url) {
+        for (String splitURL : url.split("\\?")) {
+            if (!splitURL.startsWith("uddg=")) continue;
+
+            String extractedURL = splitURL.replace("uddg=", "");
+            String correctedUrl = ConversionUtil.decodeURL(extractedURL);
+
+            return StringUtils.isEmpty(correctedUrl) ? url : correctedUrl;
+        }
+        return url;
     }
 
 }

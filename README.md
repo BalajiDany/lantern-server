@@ -90,7 +90,8 @@ For building and running the application you need:
   - [kickass](/#)
 - Video :popcorn:
   - [Google Video](https://www.google.com/videohp)
-
+- Code :pizza:
+  - [Stack Overflow (Powered by Google)](https://stackoverflow.com/)
 
 <!-- CONTRIBUTING -->
 ## Contributing

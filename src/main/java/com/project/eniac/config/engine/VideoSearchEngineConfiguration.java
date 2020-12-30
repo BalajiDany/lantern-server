@@ -1,4 +1,4 @@
-package com.project.eniac.config;
+package com.project.eniac.config.engine;
 
 import com.project.eniac.engine.impl.google.GoogleVideoSearchEngine;
 import com.project.eniac.engine.spec.VideoSearchEngine;

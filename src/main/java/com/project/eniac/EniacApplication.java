@@ -63,7 +63,7 @@ public class EniacApplication {
         Map<RequestMappingInfo, HandlerMethod> handlerMethodsMap = context.getBean(RequestMappingHandlerMapping.class)
                 .getHandlerMethods();
 
-        log.info("All Registered End point(s) (local)");
+        log.info("All Registered End point(s) - local");
         for (Map.Entry<RequestMappingInfo, HandlerMethod> handlerMethod : handlerMethodsMap.entrySet()) {
             RequestMappingInfo requestMappingInfo = handlerMethod.getKey();
             RequestMethodsRequestCondition requestMethods = requestMappingInfo.getMethodsCondition();

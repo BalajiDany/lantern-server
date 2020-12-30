@@ -13,7 +13,7 @@ public class SearchResultEntity<T> {
 
     private String engineName;
 
-    private List<T> searchResult;
+    private List<T> searchResults;
 
     private EngineType engineType;
 

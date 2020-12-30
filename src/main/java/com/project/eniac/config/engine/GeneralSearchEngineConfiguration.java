@@ -1,4 +1,4 @@
-package com.project.eniac.config;
+package com.project.eniac.config.engine;
 
 import com.project.eniac.engine.impl.bing.BingGeneralSearchEngine;
 import com.project.eniac.engine.impl.bing.BingParachuteGeneralSearchEngine;

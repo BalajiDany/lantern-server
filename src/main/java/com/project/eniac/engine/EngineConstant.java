@@ -16,4 +16,6 @@ public class EngineConstant {
 
     public static final String ENGINE_DUCK_DUCK_GO = "Duck Duck Go";
 
+    public static final String ENGINE_STACK_OVERFLOW = "StackOverflow (Powered by Google)";
+
 }

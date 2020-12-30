@@ -41,7 +41,7 @@ public abstract class BaseSearchEngine<T> {
         getRequest.addHeader(RequestHeaders.KEY_USER_AGENT, userAgent);
 
         HttpClientProviderService httpClientService = this.getHttpClientService();
-        log.info("URL : {}", getRequest.getURI().toString());
+        log.debug("URL : {}", getRequest.getURI().toString());
         String response = httpClientService.makeRequest(getRequest, this.getEngineName());
 
         SearchResultEntity<T> responseEntity;

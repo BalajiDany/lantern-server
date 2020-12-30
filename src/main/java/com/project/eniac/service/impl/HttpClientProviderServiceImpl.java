@@ -3,6 +3,7 @@ package com.project.eniac.service.impl;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -70,6 +71,7 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
     private CloseableHttpClient createHttpClient() {
         RequestConfig configuration = RequestConfig.custom()
                 .setConnectTimeout(networkTimeOut)
+                .setCookieSpec(CookieSpecs.STANDARD)
                 .build();
 
         return HttpClientBuilder.create()

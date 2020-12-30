@@ -1,13 +1,7 @@
 package com.project.eniac.service.impl;
 
-import com.project.eniac.engine.spec.BaseSearchEngine;
-import com.project.eniac.engine.spec.GeneralSearchEngine;
-import com.project.eniac.engine.spec.TorrentSearchEngine;
-import com.project.eniac.engine.spec.VideoSearchEngine;
-import com.project.eniac.entity.EngineResultEntity.GeneralSearchResultEntity;
-import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
-import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity;
-import com.project.eniac.entity.EngineResultEntity.VideoSearchResultEntity;
+import com.project.eniac.engine.spec.*;
+import com.project.eniac.entity.EngineResultEntity.*;
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.entity.SearchResponseEntity;
 import com.project.eniac.service.spec.CommonLanguageService;
@@ -17,6 +11,7 @@ import com.project.eniac.service.spec.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,14 +24,17 @@ public class SearchServiceImpl implements SearchService {
 
     private final EngineDiagnosisService engineDiagnosisService;
 
-    @Autowired
+    @Autowired(required = false)
     private List<GeneralSearchEngine> generalSearchEngines;
 
-    @Autowired
-    private List<VideoSearchEngine> videoSearchEngines;
+    @Autowired(required = false)
+    private List<VideoSearchEngine> videoSearchEngines = new ArrayList<>();
 
-    @Autowired
-    private List<TorrentSearchEngine> torrentSearchEngines;
+    @Autowired(required = false)
+    private List<TorrentSearchEngine> torrentSearchEngines = new ArrayList<>();
+
+    @Autowired(required = false)
+    private List<CodeSearchEngine> codeSearchEngines = new ArrayList<>();
 
     @Override
     public SearchResponseEntity<GeneralSearchResultEntity> generalSearch(SearchRequestEntity searchEntity) {
@@ -56,8 +54,8 @@ public class SearchServiceImpl implements SearchService {
         long stopTime = System.currentTimeMillis();
         long runTime = stopTime - startTime;
         return SearchResponseEntity.<GeneralSearchResultEntity>builder()
-                .searchResult(resultEntity)
-                .searchDuration(runTime)
+                .searchResults(resultEntity)
+                .duration(runTime)
                 .build();
     }
 
@@ -79,8 +77,8 @@ public class SearchServiceImpl implements SearchService {
         long stopTime = System.currentTimeMillis();
         long runTime = stopTime - startTime;
         return SearchResponseEntity.<VideoSearchResultEntity>builder()
-                .searchResult(resultEntity)
-                .searchDuration(runTime)
+                .searchResults(resultEntity)
+                .duration(runTime)
                 .build();
     }
 
@@ -102,8 +100,31 @@ public class SearchServiceImpl implements SearchService {
         long stopTime = System.currentTimeMillis();
         long runTime = stopTime - startTime;
         return SearchResponseEntity.<TorrentSearchResultEntity>builder()
-                .searchResult(resultEntity)
-                .searchDuration(runTime)
+                .searchResults(resultEntity)
+                .duration(runTime)
+                .build();
+    }
+
+    @Override
+    public SearchResponseEntity<CodeSearchResultEntity> codeSearch(SearchRequestEntity searchEntity) {
+        long startTime = System.currentTimeMillis();
+        this.renovateMainSearchEntity(searchEntity);
+
+        List<SearchResultEntity<CodeSearchResultEntity>> resultEntity = codeSearchEngines.stream().parallel()
+                .filter(BaseSearchEngine::isEnabled)
+                .map(engine -> {
+                    SearchResultEntity<CodeSearchResultEntity> response = engine.performSearch(searchEntity);
+                    afterSearch(engine, response);
+                    return response;
+                })
+                .filter(this::isValidResponse)
+                .collect(Collectors.toList());
+
+        long stopTime = System.currentTimeMillis();
+        long runTime = stopTime - startTime;
+        return SearchResponseEntity.<CodeSearchResultEntity>builder()
+                .searchResults(resultEntity)
+                .duration(runTime)
                 .build();
     }
 

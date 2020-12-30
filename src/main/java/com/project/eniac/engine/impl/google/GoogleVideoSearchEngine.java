@@ -138,7 +138,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
         // Result Delivery
         if (searchResultEntity.size() != 0) {
             return resultEntityBuilder
-                    .searchResult(searchResultEntity)
+                    .searchResults(searchResultEntity)
                     .engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
                     .build();
         } else if (!document.select("#search").isEmpty()) {
