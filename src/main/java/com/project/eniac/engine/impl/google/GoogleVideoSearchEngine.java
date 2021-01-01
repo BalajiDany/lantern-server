@@ -26,6 +26,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,9 +35,13 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
 
     private final HttpClientProviderService httpClientService;
 
+    private static final String YOUTUBE_SITE = "site:youtube.com";
+    private static final String THUMBNAIL_PREFIX = "https://i.ytimg.com/vi/";
+    private static final String THUMBNAIL_SUFFIX = "/default.jpg";
+
     @Override
     public String getEngineName() {
-        return EngineConstant.ENGINE_GOOGLE;
+        return EngineConstant.ENGINE_GOOGLE_VIDEO;
     }
 
     @Override
@@ -45,6 +51,9 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
 
     @Override
     public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
+        String searchQuery = new StringBuilder(searchEntity.getQuery())
+                .append(StringUtils.SPACE)
+                .append(YOUTUBE_SITE).toString();
         String language = GoogleRequestUtil.getLanguage(searchEntity.getLanguage());
         String region = GoogleRequestUtil.getRegion(searchEntity.getLocation());
 
@@ -56,7 +65,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
         try {
 
             URI uri = new URIBuilder(url)
-                    .addParameter("q", searchEntity.getQuery())
+                    .addParameter("q", searchQuery)
                     .addParameter("hl", language)
                     .addParameter("lang", language)
                     .addParameter("lr", "lang_" + language)
@@ -96,14 +105,12 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
             Element titleElement = element.selectFirst("div.yuRUbf > a > h3 > span");
             Element contentElement = element.selectFirst("div.IsZvec span.aCOpRe");
             Element uploadedDateElement = element.selectFirst("div.IsZvec div.fG8Fp");
-            Element thumbnailElement = element.selectFirst("div.IsZvec > div > div > a");
             Element durationElement = element.selectFirst("div.ij69rd.UHe5G");
 
             boolean isInValidElement = anchorElement == null
                     || titleElement == null
                     || contentElement == null
                     || uploadedDateElement == null
-                    || thumbnailElement == null
                     || durationElement == null;
 
             if (isInValidElement) continue;
@@ -112,7 +119,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
             String title = titleElement.text();
             String content = contentElement.text();
             String uploadedDate = uploadedDateElement.ownText();
-            String thumbnailUrl = thumbnailElement.attr("href");
+            String thumbnailUrl = this.extractThumbnailUrl(url);
             String duration = durationElement.ownText();
 
             boolean isInvalidContent = StringUtils.isEmpty(url)
@@ -149,6 +156,26 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
             return resultEntityBuilder
                     .engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
         }
+    }
+
+    private String extractThumbnailUrl(String url) {
+        if (StringUtils.isBlank(url)) return  url;
+        String videoId = this.getYoutubeId(url);
+
+        if (StringUtils.isBlank(videoId)) return url;
+
+        return THUMBNAIL_PREFIX + videoId + THUMBNAIL_SUFFIX;
+    }
+
+    public String getYoutubeId(String url) {
+        String pattern = "https?:\\/\\/(?:[0-9A-Z-]+\\.)?(?:youtu\\.be\\/|youtube\\.com\\S*[^\\w\\-\\s])([\\w\\-]{11})(?=[^\\w\\-]|$)(?![?=&+%\\w]*(?:['\"][^<>]*>|<\\/a>))[?=&+%\\w]*";
+
+        Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = compiledPattern.matcher(url);
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return null;
     }
 
 }
