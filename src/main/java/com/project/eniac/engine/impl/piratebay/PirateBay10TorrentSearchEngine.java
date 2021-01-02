@@ -81,7 +81,6 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
     @Override
     public SearchResultEntity<TorrentSearchResultEntity> getResponse(String response) {
         List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<>();
-        System.out.println(response);
 
         Document document = Jsoup.parse(response);
         Elements elements = document.select("table#searchResult tr"); // Select all results

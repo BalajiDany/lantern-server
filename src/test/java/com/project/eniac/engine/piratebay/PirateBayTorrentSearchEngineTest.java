@@ -7,11 +7,13 @@ import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.service.spec.CommonLanguageService;
 import com.project.eniac.service.spec.CommonLocationService;
 import com.project.eniac.utils.Printer;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Disabled("Until Api is Up/Implementing Auto proxy")
 public class PirateBayTorrentSearchEngineTest {
 
     @Autowired
