@@ -1,10 +1,25 @@
-package com.project.eniac.engine.impl.kickass;
+/*
+ *  Copyright 2021
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.project.eniac.engine.impl.piratebay;
 
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.spec.TorrentSearchEngine;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
-import com.project.eniac.entity.EngineResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity.TorrentSearchResultEntityBuilder;
 import com.project.eniac.entity.SearchRequestEntity;
@@ -14,6 +29,7 @@ import com.project.eniac.utils.ConversionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
@@ -29,15 +45,15 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-public class KickassTorrentSearchEngine extends TorrentSearchEngine {
+public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
 
     private final HttpClientProviderService httpClientProviderService;
 
-    private static final String BASE_URL = "https://kickass.onl";
+    private static final String BASE_URL = "https://torrent-finder.com/tpb";
 
     @Override
     public String getEngineName() {
-        return EngineConstant.ENGINE_KICKASS;
+        return EngineConstant.ENGINE_PIRATEBAY_PROXY;
     }
 
     @Override
@@ -47,22 +63,14 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 
     @Override
     public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
-        String url = new StringBuilder(BASE_URL)
-                .append("/usearch/")
-                .append(ConversionUtil.encodeURL(searchEntity.getQuery()))
-                .append("/").toString();
-
+        String url = new StringBuilder(BASE_URL).toString();
         try {
 
-            URI uri = new URIBuilder(url)
-                    .addParameter("field", "seeders")
-                    .addParameter("sorder", "desc")
+            URI uri = new URIBuilder(BASE_URL)
+                    .addParameter("q", searchEntity.getQuery())
                     .build();
 
             HttpGet request = new HttpGet(uri);
-            request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
-            request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
-
             return request;
         } catch (URISyntaxException exception) {
             log.error("Exception on Creating URL : {}", url);
@@ -73,17 +81,17 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
     @Override
     public SearchResultEntity<TorrentSearchResultEntity> getResponse(String response) {
         List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<>();
+        System.out.println(response);
 
         Document document = Jsoup.parse(response);
-        Elements elements = document.select("tr#torrent_latest_torrents"); // Select all results
+        Elements elements = document.select("table#searchResult tr"); // Select all results
 
         for (Element element : elements) {
             TorrentSearchResultEntity torrentSearchResultEntity = this.extractEntity(element);
-
             if (ObjectUtils.isNotEmpty(torrentSearchResultEntity)) searchResultEntity.add(torrentSearchResultEntity);
         }
 
-        SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
+        SearchResultEntity.SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
                 .<TorrentSearchResultEntity>builder()
                 .engineName(this.getEngineName())
                 .engineType(this.getEngineType());
@@ -107,46 +115,36 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 
     private TorrentSearchResultEntity extractEntity(Element element) {
         if (ObjectUtils.isEmpty(element)) return null;
-
         TorrentSearchResultEntityBuilder searchResultEntity = TorrentSearchResultEntity.builder();
 
-        Element torrentNameElement = element.selectFirst("div.torrentname > div > a");
-        if (ObjectUtils.isEmpty(torrentNameElement)) return null;
-        searchResultEntity.torrentName(torrentNameElement.text());
+        Element titleElement = element.selectFirst("div.detName > a");
+        Element typeElement = element.selectFirst("td.vertTh > center > a");
+        Element magneticLinkElement = element.selectFirst("td > a");
+        Element otherDetails = element.selectFirst("td > font.detDesc");
+        Elements seedersAndLeechers = element.select("td[align=right]");
 
-        String torrentURL = torrentNameElement.attr("href");
-        searchResultEntity.torrentUrl(BASE_URL + torrentURL);
+        if (ObjectUtils.anyNull(titleElement, typeElement, magneticLinkElement)) return null;
+        if (ObjectUtils.anyNull(otherDetails, seedersAndLeechers)) return null;
 
-        Element category = element.selectFirst("div.torrentname > div > span > strong");
-        if (ObjectUtils.isEmpty(category)) return null;
-        searchResultEntity.category(category.text());
+        searchResultEntity.torrentName(titleElement.text());
+        searchResultEntity.torrentUrl(titleElement.attr("href"));
+        searchResultEntity.category(typeElement.text());
+        searchResultEntity.magneticLink(magneticLinkElement.attr("href"));
 
-        Element magnetIcon = element.selectFirst("div.iaconbox > a[rel]");
-        if (ObjectUtils.isEmpty(magnetIcon)) return null;
-
-        String href = magnetIcon.attr("href");
-        String[] urls = href.split("url=");
-        if (urls.length < 2) return null;
-
-        String link = ConversionUtil.decodeURL(urls[1]);
-
-        if (ObjectUtils.isNotEmpty(link)) {
-            String cleanLink = ConversionUtil.decodeURL(link);
-            searchResultEntity.magneticLink(cleanLink);
-        }
-
-        Elements otherElements = element.select("td.center");
-        for (Element otherElement : otherElements) {
-            if (otherElement.hasClass("nobr")) {
-                searchResultEntity.torrentSize(otherElement.text());
-            } else if (otherElement.hasClass("green")) {
-                searchResultEntity.seeders(ConversionUtil.parseInt(otherElement.text()));
-            } else if (otherElement.hasClass("red")) {
-                searchResultEntity.leechers(ConversionUtil.parseInt(otherElement.text()));
-            } else {
-                searchResultEntity.uploadedDate(otherElement.text());
+        String otherDetail = otherDetails.text();
+        if (StringUtils.isBlank(otherDetail)) return null;
+        for (String detail : otherDetail.split(",")) {
+            if (detail.contains("Uploaded")) {
+                searchResultEntity.uploadedDate(detail.replace("Uploaded", ""));
+            } else if (detail.contains("Size")) {
+                searchResultEntity.torrentSize(detail.replace("Size", ""));
             }
         }
+
+        Element seederElement = seedersAndLeechers.get(0);
+        Element leecherElement = seedersAndLeechers.get(1);
+        if (ObjectUtils.isEmpty(seederElement) && ObjectUtils.isEmpty(leecherElement)) return null;
+        searchResultEntity.seeders(ConversionUtil.parseInt(seederElement.text()));
 
         return searchResultEntity.build();
     }

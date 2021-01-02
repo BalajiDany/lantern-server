@@ -159,7 +159,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
     }
 
     private String extractThumbnailUrl(String url) {
-        if (StringUtils.isBlank(url)) return  url;
+        if (StringUtils.isBlank(url)) return url;
         String videoId = this.getYoutubeId(url);
 
         if (StringUtils.isBlank(videoId)) return url;

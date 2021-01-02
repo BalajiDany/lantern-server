@@ -3,38 +3,38 @@ GoogleDomainServiceImpl
 
 /**
 		 * [Auto Generated]
-		 * 
+		 *
 		 * This Data is scraped from the (https://www.google.com/supported_domains)
-		 * 
+		 *
 		 * Open the Link and run the script in console.
-		 * 
+		 *
 			const domains = document.body.innerText.split(' ');
 			let str = '';
 			domains.sort().forEach(domain => {
 				const splited = domain.split('.');
 				const region = splited[splited.length - 1] || '';
-			
+
 				if (region && region !== '')
 					str += `domainMap.put("${region.toUpperCase()}", "${domain}");\n`
 			});
 			console.log(str);
-		 * 
-		 * 
+		 *
+		 *
 		 * NOTE: it will create like ".google.ad" (find and replace .google => google )
-		 * 
+		 *
 		 */
-		 
-		 
+
+
 		 GoogleLanguageServiceImpl
-		 
+
 		 /**
 		 * [Auto Generated]
 		 * This Data is scraped from the (https://www.google.com/preferences?fg=1&safe=images)
-		 * 
-		 * Open the link and choose language tab 
+		 *
+		 * Open the link and choose language tab
 		 * run the script in console.
-		 * 
-		 * 
+		 *
+		 *
 			const languages = document.querySelectorAll('.jfk-radiobutton'); let str = '';
 			languages.forEach(radioButton => {
 				const region = radioButton.getAttribute('data-value');
@@ -42,20 +42,20 @@ GoogleDomainServiceImpl
 				str += `regionMap.put("${region}", "${regionName}");\n`
 			});
 			console.log(str);
-		 * 
+		 *
 		 * NOTE: It comes with region too,
 		 * so make sure to remove region entries
 		 */
-		 
+
 		 GoogleRegionServiceImpl
-		 
+
 		 /**
 		 * [Auto Generated]
 		 * This Data is scraped from the (https://www.google.com/preferences?fg=1&safe=images)
-		 * 
+		 *
 		 * Open the link and run the script in console.
-		 * 
-		 * 
+		 *
+		 *
 			const regions = document.querySelectorAll('.DB6WRb'); let str = '';
 			regions.forEach(dom => {
 				const radioButton = dom.querySelector('.jfk-radiobutton')
@@ -64,10 +64,32 @@ GoogleDomainServiceImpl
 				str += `regionMap.put("${region}", "${regionName}");\n`
 			});
 			console.log(str);
-		 * 
+		 *
 		 */
 
 // https://sg.search.yahoo.com/search?p=covid+19&fr=yfp-t&fp=1&toggle=1&cop=mss&ei=UTF-8
 // https://www.wordsapi.com/mashape/words/tamil?when=2020-11-27T09:37:53.726Z&encrypted=8cfdb18ae723929be89607bfe658bdbeaeb52e0937fd91b8
 // https://wordweb.info/developer/SQL/search.pl?w=search
 // https://www.wordwebonline.com/en/<search word>
+
+
+#343a40!important
+File BalajiDany/eniac-front:.travis.yml not found on RemoteVcs
+
+
+https://snowfl.com/SaroGOKSgUaefTMexyEqffaniIIhmDfCude/windows%2010/J8hzqJNb/0/SEED/NONE/1?_=1609584233817
+https://snowfl.com/SaroGOKSgUaefTMexyEqffaniIIhmDfCude/windows%2010/BymcuOhn/0/SEED/NONE/1?_=1609584233818
+https://snowfl.com/SaroGOKSgUaefTMexyEqffaniIIhmDfCude/windows%2010/J8hzqJNb/0/NONE/NONE/1?_=1609584233817
+
+https://thepiratebay10.org/switchview.php?view=s
+https://torrent-finder.com/tpb?q=Windows%2010
+
+http://itorrents.org/torrent/C627E24F15D0F0D35FDC4EF17101E34C43872F52.torrent?title=MOOKUTHI-AMMAN-(2020)-1080p-Tamil-(Org-Vers)-TRUE-WEB-DL--AVC--UNTOUCHED--(DD 5-1--192Kbps)--3
+
+https://limetorrents.unblockninja.com/search/all/Windows-10/seeds/1/
+https://limetorrents.unblockninja.com/search/all/idm/date/1/
+
+
+magnet:?xt=urn:btih:BF1F6074146E33F0F9AA0997AE7A399A446727EC&amp;dn=Mookuthi+Amman+%282020%29+Tamil+%281080p+WEBRip+x265+10bit%29+-+%5BMusafirboy%5D&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.me%3A2710%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.me%3A2740%2Fannounce&amp;tr=udp%3A%2F%2Fretracker.lanta-net.ru%3A2710%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.me%3A2730%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.me%3A2770%2Fannounce&amp;tr=udp%3A%2F%2Fipv6.tracker.harry.lu%3A80%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.open-internet.nl%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fopen.demonii.si%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fdenis.stalker.upeer.me%3A6969%2Fannounce
+
+

@@ -28,13 +28,13 @@ public class SearchServiceImpl implements SearchService {
     private List<GeneralSearchEngine> generalSearchEngines;
 
     @Autowired(required = false)
-    private List<VideoSearchEngine> videoSearchEngines = new ArrayList<>();
+    private final List<VideoSearchEngine> videoSearchEngines = new ArrayList<>();
 
     @Autowired(required = false)
-    private List<TorrentSearchEngine> torrentSearchEngines = new ArrayList<>();
+    private final List<TorrentSearchEngine> torrentSearchEngines = new ArrayList<>();
 
     @Autowired(required = false)
-    private List<CodeSearchEngine> codeSearchEngines = new ArrayList<>();
+    private final List<CodeSearchEngine> codeSearchEngines = new ArrayList<>();
 
     @Override
     public SearchResponseEntity<GeneralSearchResultEntity> generalSearch(SearchRequestEntity searchEntity) {

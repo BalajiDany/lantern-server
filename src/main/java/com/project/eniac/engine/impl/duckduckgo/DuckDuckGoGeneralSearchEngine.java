@@ -1,6 +1,5 @@
 package com.project.eniac.engine.impl.duckduckgo;
 
-import ch.qos.logback.core.CoreConstants;
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.impl.duckduckgo.utils.DuckDuckGoRequestUtil;
