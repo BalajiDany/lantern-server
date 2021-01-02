@@ -95,6 +95,7 @@ For building and running the application you need:
 - Torrent :beer:
   - [PirateBay](/#)
   - [kickass](/#)
+  - [LimeTorrent](/#)
 - Video :popcorn:
   - [Google Video](https://www.google.com/videohp)
 - Code :pizza:
