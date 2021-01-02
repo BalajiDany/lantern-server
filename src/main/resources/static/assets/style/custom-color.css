@@ -1,0 +1,31 @@
+.custom-background {
+    background-color: #fff!important;
+}
+
+.custom-cloud-color {
+    color: #eee!important;
+}
+
+.custom-cloud-background-color {
+    background-color: #eee!important;
+}
+
+.custom-text-dark {
+    color: #343a40!important
+}
+
+[data-theme=dark] .custom-background {
+    background-color: #222!important;
+}
+
+[data-theme=dark] .custom-cloud-color {
+    color: #171717!important;
+}
+
+[data-theme=dark] .custom-cloud-background-color {
+    background-color: #171717!important;
+}
+
+[data-theme=dark] .custom-text-dark {
+    color: #bebebe!important
+}

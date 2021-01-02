@@ -7,10 +7,17 @@
     <base href="/eniac/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="stylesheet" href="styles.19cb8ef16626edfe5ce1.css"></head>
+<link rel="stylesheet" href="styles.d87988f3820ea8fd57a6.css"></head>
 
-<body>
+<body data-theme="light" class="d-none">
+    <script>
+        (function() {
+            let currentTheme = localStorage.getItem('data-theme') || 'light';
+            document.body.setAttribute('data-theme', currentTheme);
+            document.body.removeAttribute('class');
+        })();
+    </script>
     <app-root></app-root>
-<script src="runtime.8aa92715ea38b420fd7c.js" defer></script><script src="polyfills.7855e5285cdcf5c2b579.js" defer></script><script src="main.f6ca5c6bfa6079efcd0b.js" defer></script></body>
+<script src="runtime.7ab3c5cdd264986140fc.js" defer></script><script src="polyfills.7855e5285cdcf5c2b579.js" defer></script><script src="main.9392707dfccbe069c4ce.js" defer></script></body>
 
 </html>
