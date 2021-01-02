@@ -51,8 +51,9 @@ List of the major library that is used in these projects.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Currently, there was no frontend to support this API. We will start supporting for front end once we launched the stable version.
-To build this API, please follow the below steps.
+Currently, We support Web Application developed in angular, To Add/Change Function in WebApplication please refer [front-repo](https://github.com/BalajiDany/eniac-front.git)
+
+For Installation and Development (back-end), please follow the below steps.
 
 ### Prerequisites
 
@@ -81,6 +82,7 @@ For building and running the application you need:
    # For Windows: 
    mvnw spring-boot:run
    ```
+   * Navigate to http://localhost:8080/eniac
 
 <!-- USAGE EXAMPLES -->
 ## Available Search Engines
