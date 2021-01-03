@@ -3,7 +3,6 @@ package com.project.eniac.config.engine;
 import com.project.eniac.engine.impl.kickass.KickassTorrentSearchEngine;
 import com.project.eniac.engine.impl.limetorrent.LimeTorrentSearchEngine;
 import com.project.eniac.engine.impl.piratebay.PirateBay10TorrentSearchEngine;
-import com.project.eniac.engine.impl.piratebay.PirateBayTorrentSearchEngine;
 import com.project.eniac.engine.spec.TorrentSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -1,22 +1,5 @@
-/*
- *  Copyright 2021
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.project.eniac.engine.impl.piratebay;
 
-import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.spec.TorrentSearchEngine;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
@@ -101,7 +84,7 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
                     .searchResults(searchResultEntity)
                     .engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
                     .build();
-        } else if (elements.isEmpty()) {
+        } else if (elements.size() > 0) {
             return resultEntityBuilder
                     .engineResultType(EngineResultType.NO_SEARCH_RESULT)
                     .build();
@@ -125,10 +108,11 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
         if (ObjectUtils.anyNull(titleElement, typeElement, magneticLinkElement)) return null;
         if (ObjectUtils.anyNull(otherDetails, seedersAndLeechers)) return null;
 
-        searchResultEntity.torrentName(titleElement.text());
-        searchResultEntity.torrentUrl(titleElement.attr("href"));
-        searchResultEntity.category(typeElement.text());
-        searchResultEntity.magneticLink(magneticLinkElement.attr("href"));
+        searchResultEntity
+                .torrentName(titleElement.text())
+                .torrentUrl(titleElement.attr("href"))
+                .category(typeElement.text())
+                .magneticLink(magneticLinkElement.attr("href"));
 
         String otherDetail = otherDetails.text();
         if (StringUtils.isBlank(otherDetail)) return null;

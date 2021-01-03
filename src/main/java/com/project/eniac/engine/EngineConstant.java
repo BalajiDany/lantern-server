@@ -28,4 +28,6 @@ public class EngineConstant {
     // Video
     public static final String ENGINE_GOOGLE_VIDEO = "Youtube";
 
+    public static final String ENGINE_BING_VIDEO = "Bing Video";
+
 }

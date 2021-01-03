@@ -1,5 +1,6 @@
 package com.project.eniac.config.engine;
 
+import com.project.eniac.engine.impl.bing.BingVideoSearchEngine;
 import com.project.eniac.engine.impl.google.GoogleVideoSearchEngine;
 import com.project.eniac.engine.spec.VideoSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
@@ -15,6 +16,12 @@ public class VideoSearchEngineConfiguration {
     @ConditionalOnProperty(value = "project.eniac.engine.video.google.enable", havingValue = "true", matchIfMissing = true)
     VideoSearchEngine googleVideoSearchEngine(HttpClientProviderService httpClientService) {
         return new GoogleVideoSearchEngine(httpClientService);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "project.eniac.engine.video.bing.enable", havingValue = "true", matchIfMissing = true)
+    VideoSearchEngine bingVideGeneralSearchEngine(HttpClientProviderService httpClientProviderService) {
+        return new BingVideoSearchEngine(httpClientProviderService);
     }
 
 }
