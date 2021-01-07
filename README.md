@@ -89,14 +89,16 @@ For building and running the application you need:
 
 - General :cookie:
   - [Bing](https://www.bing.com/)
+  - [DuckDuckGo](https://duckduckgo.com/)
   - [Google](https://www.google.com/)
   - [Yahoo](https://yahoo.com/)
-  - [DuckDuckGo](https://duckduckgo.com/)
 - Torrent :beer:
-  - [PirateBay](/#)
   - [kickass](/#)
   - [LimeTorrent](/#)
+  - [PirateBay](/#)
+  - [Torrent Finder](/#) (PirateBay Proxy)
 - Video :popcorn:
+  - [Bing Video](https://www.bing.com/videos)
   - [Google Video](https://www.google.com/videohp)
 - Code :pizza:
   - [Stack Overflow (Powered by Google)](https://stackoverflow.com/)
