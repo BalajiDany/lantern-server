@@ -12,8 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 @SpringBootTest
-@Disabled("Until Api is Up/Implementing Auto proxy")
 public class PirateBayTorrentSearchEngineTest {
 
     @Autowired
@@ -35,6 +36,9 @@ public class PirateBayTorrentSearchEngineTest {
         searchEntity.setLocation(commonLocationService.getDefaultLocation());
 
         SearchResultEntity<TorrentSearchResultEntity> entity = pirateBayTorrentSearchEngine.performSearch(searchEntity);
+//        assertNotEquals(entity.getSearchResults(), null);
+//        assertNotEquals(entity.getSearchResults().size(), 0);
+
         Printer.printTorrentSearchResultEntity(entity);
     }
 

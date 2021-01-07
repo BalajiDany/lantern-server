@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 @SpringBootTest
 public class LimeTorrentSearchEngineTest {
 
@@ -33,6 +35,9 @@ public class LimeTorrentSearchEngineTest {
         searchEntity.setLocation(commonLocationService.getDefaultLocation());
 
         SearchResultEntity<TorrentSearchResultEntity> entity = limeTorrentSearchEngine.performSearch(searchEntity);
+//        assertNotEquals(entity.getSearchResults(), null);
+//        assertNotEquals(entity.getSearchResults().size(), 0);
+
         Printer.printTorrentSearchResultEntity(entity);
     }
 }

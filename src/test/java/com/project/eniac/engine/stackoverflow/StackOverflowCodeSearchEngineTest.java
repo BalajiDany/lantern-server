@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 @SpringBootTest
 public class StackOverflowCodeSearchEngineTest {
 
@@ -34,6 +36,9 @@ public class StackOverflowCodeSearchEngineTest {
         searchEntity.setLocation(commonLocationService.getDefaultLocation());
 
         SearchResultEntity<CodeSearchResultEntity> entity = stackOverflowCodeSearchEngine.performSearch(searchEntity);
+//        assertNotEquals(entity.getSearchResults(), null);
+//        assertNotEquals(entity.getSearchResults().size(), 0);
+
         Printer.printCodeSearchResultEntity(entity);
     }
 

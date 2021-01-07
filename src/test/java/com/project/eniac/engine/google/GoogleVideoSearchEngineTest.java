@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 @SpringBootTest
 public class GoogleVideoSearchEngineTest {
 
@@ -34,6 +36,9 @@ public class GoogleVideoSearchEngineTest {
         searchEntity.setLocation(commonLocationService.getDefaultLocation());
 
         SearchResultEntity<VideoSearchResultEntity> entity = googleVideoSearchEngine.performSearch(searchEntity);
+//        assertNotEquals(entity.getSearchResults(), null);
+//        assertNotEquals(entity.getSearchResults().size(), 0);
+
         Printer.printVideoSearchResultEntity(entity);
     }
 
