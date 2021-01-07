@@ -6,7 +6,6 @@ import java.util.Map;
 public class DuckDuckGoRequestUtil {
     private static final Map<String, String> locationOverrideMap = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
-
         {
             put("US", "us-en");
             put("CN", "cn-zh");

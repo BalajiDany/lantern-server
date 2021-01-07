@@ -11,6 +11,8 @@ public class SearchRequestEntity {
 
     private String location;
 
+    private int pageNo;
+
     private long startFrom;
 
     private long offset;

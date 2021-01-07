@@ -3,6 +3,7 @@ package com.project.eniac.config.engine;
 import com.project.eniac.engine.impl.kickass.KickassTorrentSearchEngine;
 import com.project.eniac.engine.impl.limetorrent.LimeTorrentSearchEngine;
 import com.project.eniac.engine.impl.piratebay.PirateBay10TorrentSearchEngine;
+import com.project.eniac.engine.impl.piratebay.PirateBayTorrentSearchEngine;
 import com.project.eniac.engine.spec.TorrentSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,6 +17,12 @@ public class TorrentSearchEngineConfiguration {
     @Bean
     @ConditionalOnProperty(value = "project.eniac.engine.torrent.piratebay.enable", havingValue = "true", matchIfMissing = true)
     TorrentSearchEngine piratebayTorrentSearchEngine(HttpClientProviderService httpClientService) {
+        return new PirateBayTorrentSearchEngine(httpClientService);
+    }
+
+    @Bean
+    @ConditionalOnProperty(value = "project.eniac.engine.torrent.piratebay10.enable", havingValue = "true", matchIfMissing = true)
+    TorrentSearchEngine piratebay10TorrentSearchEngine(HttpClientProviderService httpClientService) {
         return new PirateBay10TorrentSearchEngine(httpClientService);
     }
 

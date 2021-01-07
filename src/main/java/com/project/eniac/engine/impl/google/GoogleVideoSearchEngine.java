@@ -1,5 +1,6 @@
 package com.project.eniac.engine.impl.google;
 
+import com.project.eniac.constant.CommonRegex;
 import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.impl.google.utils.GoogleRequestUtil;
@@ -7,11 +8,16 @@ import com.project.eniac.engine.spec.VideoSearchEngine;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.entity.EngineResultEntity.VideoSearchResultEntity;
+import com.project.eniac.entity.EngineSpecEntity;
+import com.project.eniac.entity.EngineStateEntity;
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
+import com.project.eniac.types.EngineType;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -22,12 +28,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,13 +41,32 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
 
     private final HttpClientProviderService httpClientService;
 
-    private static final String YOUTUBE_SITE = "site:youtube.com";
-    private static final String THUMBNAIL_PREFIX = "https://i.ytimg.com/vi/";
-    private static final String THUMBNAIL_SUFFIX = "/default.jpg";
+    private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
+            .engineId(UUID.fromString("3f336ebc-862a-4c4f-b540-9bed5bfb8aa0"))
+            .engineName(EngineConstant.ENGINE_GOOGLE_VIDEO)
+            .engineType(EngineType.VIDEO)
+            .hasLocationSupport(true)
+            .hasLanguageSupport(true)
+            .hasPaginationSupport(true)
+            .build();
+
+    private final EngineStateEntity engineState = EngineStateEntity.builder()
+            .isEnabled(true)
+            .continuousTimeoutCount(0)
+            .continuousBreakdownCount(0)
+            .build();
+
+    private static final String YOUTUBE_SITE = "site:.youtube.com";
+    private static final String THUMBNAIL_URL = "https://i.ytimg.com/vi/{0}/default.jpg";
 
     @Override
-    public String getEngineName() {
-        return EngineConstant.ENGINE_GOOGLE_VIDEO;
+    public EngineSpecEntity getEngineSpec() {
+        return this.engineSpec;
+    }
+
+    @Override
+    public EngineStateEntity getEngineState() {
+        return this.engineState;
     }
 
     @Override
@@ -50,132 +75,119 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
     }
 
     @Override
-    public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
-        String searchQuery = new StringBuilder(searchEntity.getQuery())
-                .append(StringUtils.SPACE)
-                .append(YOUTUBE_SITE).toString();
+    @SneakyThrows
+    public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
         String language = GoogleRequestUtil.getLanguage(searchEntity.getLanguage());
         String region = GoogleRequestUtil.getRegion(searchEntity.getLocation());
+        String hostAddress = "www." + GoogleRequestUtil.getDomain(region);
+        String pageNo = String.valueOf(searchEntity.getPageNo() * 10);
+        String searchQuery = searchEntity.getQuery() + StringUtils.SPACE + YOUTUBE_SITE;
 
-        String url = new StringBuilder()
-                .append("https://www.")
-                .append(GoogleRequestUtil.getDomain(region))
-                .append("/search")
-                .toString();
-        try {
+        URI uri = new URIBuilder()
+                .setScheme("https").setHost(hostAddress).setPath("/search")
+                .addParameter("q", searchQuery)
+                .addParameter("hl", language)
+                .addParameter("gl", region)
+                .addParameter("tbm", "vid")
+                .addParameter("start", pageNo)
+                .build();
 
-            URI uri = new URIBuilder(url)
-                    .addParameter("q", searchQuery)
-                    .addParameter("hl", language)
-                    .addParameter("lang", language)
-                    .addParameter("lr", "lang_" + language)
-                    .addParameter("gl", region)
-                    .addParameter("ie", "utf8")
-                    .addParameter("oe", "utf8")
-                    .addParameter("tbm", "vid")
-//					.addParameter("safe", "high")
-                    .build();
+        HttpGet request = new HttpGet(uri);
+        request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
+        request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
 
-            HttpGet request = new HttpGet(uri);
-            request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
-            request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
-
-            return request;
-        } catch (URISyntaxException exception) {
-            log.error("Exception on Creating URL : {}", url);
-            log.error("\t Additional Param Region : {} and Language : {}", region, language);
-            return null;
-        }
+        return request;
     }
 
     @Override
-    public SearchResultEntity<VideoSearchResultEntity> getResponse(String response) {
+    public SearchResultEntity<VideoSearchResultEntity> getResponseEntity(String response) {
         List<VideoSearchResultEntity> searchResultEntity = new ArrayList<>();
 
         Document document = Jsoup.parse(response);
-        Elements elements = document.select("#search > div > div > div.g"); // Select all results
+        Elements elements = document.select("#search div.g");
 
         for (Element element : elements) {
             Set<String> classNames = element.classNames();
 
-            // It is not common search result
+            // It is not proper search result
             if (classNames.size() > 1) continue;
 
-            Element anchorElement = element.selectFirst("div.yuRUbf > a");
-            Element titleElement = element.selectFirst("div.yuRUbf > a > h3 > span");
-            Element contentElement = element.selectFirst("div.IsZvec span.aCOpRe");
-            Element uploadedDateElement = element.selectFirst("div.IsZvec div.fG8Fp");
-            Element durationElement = element.selectFirst("div.ij69rd.UHe5G");
-
-            boolean isInValidElement = anchorElement == null
-                    || titleElement == null
-                    || contentElement == null
-                    || uploadedDateElement == null
-                    || durationElement == null;
-
-            if (isInValidElement) continue;
-
-            String url = anchorElement.attr("href");
-            String title = titleElement.text();
-            String content = contentElement.text();
-            String uploadedDate = uploadedDateElement.ownText();
-            String thumbnailUrl = this.extractThumbnailUrl(url);
-            String duration = durationElement.ownText();
-
-            boolean isInvalidContent = StringUtils.isEmpty(url)
-                    || StringUtils.isEmpty(title)
-                    || StringUtils.isEmpty(content)
-                    || StringUtils.isEmpty(uploadedDate)
-                    || StringUtils.isEmpty(thumbnailUrl)
-                    || StringUtils.isEmpty(duration);
-
-            if (isInvalidContent) continue;
-
-            VideoSearchResultEntity resultEntity = VideoSearchResultEntity.builder()
-                    .url(url).title(title).content(content)
-                    .uploadedDate(uploadedDate).duration(duration).thumbnailUrl(thumbnailUrl).build();
-            searchResultEntity.add(resultEntity);
+            VideoSearchResultEntity resultEntity = this.extractEntity(element);
+            if (ObjectUtils.isNotEmpty(resultEntity)) searchResultEntity.add(resultEntity);
         }
 
         SearchResultEntityBuilder<VideoSearchResultEntity> resultEntityBuilder = SearchResultEntity
                 .<VideoSearchResultEntity>builder()
-                .engineName(this.getEngineName())
-                .engineType(this.getEngineType());
+                .searchResults(searchResultEntity);
 
         // Result Delivery
-        if (searchResultEntity.size() != 0) {
-            return resultEntityBuilder
-                    .searchResults(searchResultEntity)
-                    .engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
-                    .build();
-        } else if (!document.select("#search").isEmpty()) {
-            return resultEntityBuilder
-                    .engineResultType(EngineResultType.NO_SEARCH_RESULT).build();
+        if (ObjectUtils.isNotEmpty(searchResultEntity)) {
+            resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
+        } else if (ObjectUtils.isNotEmpty(document.selectFirst("#search"))) {
+            resultEntityBuilder.engineResultType(EngineResultType.NO_SEARCH_RESULT);
         } else {
-            if (!document.select("#captcha-form").isEmpty()) log.error("Google Captch Required");
-            return resultEntityBuilder
-                    .engineResultType(EngineResultType.ENGINE_BREAK_DOWN).build();
+            resultEntityBuilder.engineResultType(EngineResultType.ENGINE_BREAK_DOWN);
         }
+
+        return  resultEntityBuilder.build();
+    }
+
+    private VideoSearchResultEntity extractEntity(Element element) {
+
+        Element anchorElement = element.selectFirst("div.yuRUbf > a");
+        Element titleElement = element.selectFirst("div.yuRUbf > a > h3 > span");
+        Element contentElement = element.selectFirst("div.IsZvec span.aCOpRe");
+        Element uploadedDateElement = element.selectFirst("div.IsZvec div.fG8Fp");
+        Element durationElement = element.selectFirst("div.ij69rd.UHe5G");
+
+        boolean isInvalidElement = ObjectUtils.anyNull(anchorElement, titleElement, contentElement);
+        isInvalidElement = isInvalidElement || ObjectUtils.anyNull(uploadedDateElement, durationElement);
+        if (isInvalidElement) return null;
+
+        String url = anchorElement.attr("href");
+        String title = titleElement.text();
+        String content = contentElement.text();
+        String uploadedDate = uploadedDateElement.ownText();
+        String thumbnailUrl = this.extractThumbnailUrl(url);
+        String duration = durationElement.ownText();
+
+        boolean isInvalidContent = StringUtils.isAnyEmpty(url, title, content);
+        isInvalidContent = isInvalidContent || StringUtils.isAnyEmpty(uploadedDate, thumbnailUrl, duration);
+        if (isInvalidContent) return null;
+
+        return VideoSearchResultEntity.builder()
+                .url(url).title(title).content(content)
+                .duration(duration)
+                .uploadedDate(uploadedDate)
+                .thumbnailUrl(thumbnailUrl)
+                .build();
     }
 
     private String extractThumbnailUrl(String url) {
         if (StringUtils.isBlank(url)) return url;
-        String videoId = this.getYoutubeId(url);
+        String videoId = this.extractYoutubeId(url);
 
         if (StringUtils.isBlank(videoId)) return url;
-
-        return THUMBNAIL_PREFIX + videoId + THUMBNAIL_SUFFIX;
+        return MessageFormat.format(THUMBNAIL_URL, videoId);
     }
 
-    public String getYoutubeId(String url) {
-        String pattern = "https?:\\/\\/(?:[0-9A-Z-]+\\.)?(?:youtu\\.be\\/|youtube\\.com\\S*[^\\w\\-\\s])([\\w\\-]{11})(?=[^\\w\\-]|$)(?![?=&+%\\w]*(?:['\"][^<>]*>|<\\/a>))[?=&+%\\w]*";
-
-        Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = compiledPattern.matcher(url);
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return null;
+    public String extractYoutubeId(String url) {
+        Matcher matcher = CommonRegex.YOUTUBE_VIDEO_ID_PATTERN.matcher(url);
+        return matcher.find() ? matcher.group(1) : StringUtils.EMPTY;
     }
 
 }
+
+/*
+ * LOG Details
+ * URL: https://www.google.com/search?q=Big+Bang+site:.youtube.com&hl=en&gl=JP&tbm=vid&start=0
+ *      1. +site:.youtube.com in search query to search only in youtube.
+ *      2. for video search &tbm=vid :URL
+ *      3. for language &hl=ja :URL
+ *      4. for location &gl=JP :URL
+ *      5. for pagination &start=0 :URL increment the value by 10
+ *      6. if document has id #captcha-form then engine blocks ip.
+ *
+ * *. If result has junk Response then try adding this param &ie=utf8&oe=utf8
+ *
+ */

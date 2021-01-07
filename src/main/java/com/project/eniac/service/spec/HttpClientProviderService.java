@@ -2,12 +2,14 @@ package com.project.eniac.service.spec;
 
 import org.apache.http.client.methods.HttpUriRequest;
 
+import java.util.UUID;
+
 public interface HttpClientProviderService {
 
-    String makeRequest(HttpUriRequest getRequest, String clientId);
+    String makeRequest(HttpUriRequest getRequest, UUID clientId);
 
-    String makeRequest(HttpUriRequest getRequest, String clientId, boolean resetClient);
+    String makeRequest(HttpUriRequest getRequest, UUID clientId, boolean resetClient);
 
-    void resetClient(String clientId);
+    void resetClient(UUID clientId);
 
 }

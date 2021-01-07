@@ -22,41 +22,41 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/general")
-    public SearchResponseEntity<GeneralSearchResultEntity> generalSearch(String query) {
+    public SearchResponseEntity<GeneralSearchResultEntity> generalSearch(String query, String location) {
         SearchRequestEntity searchEntity = new SearchRequestEntity();
         searchEntity.setQuery(query);
+        searchEntity.setLocation(location);
         searchEntity.setLanguage("en");
-        searchEntity.setLocation("US");
 
         return searchService.generalSearch(searchEntity);
     }
 
     @GetMapping("/video")
-    public SearchResponseEntity<VideoSearchResultEntity> videoSearch(String query) {
+    public SearchResponseEntity<VideoSearchResultEntity> videoSearch(String query, String location) {
         SearchRequestEntity searchEntity = new SearchRequestEntity();
         searchEntity.setQuery(query);
+        searchEntity.setLocation(location);
         searchEntity.setLanguage("en");
-        searchEntity.setLocation("US");
 
         return searchService.videoSearch(searchEntity);
     }
 
     @GetMapping("/torrent")
-    public SearchResponseEntity<TorrentSearchResultEntity> torrentSearch(String query) {
+    public SearchResponseEntity<TorrentSearchResultEntity> torrentSearch(String query, String location) {
         SearchRequestEntity searchEntity = new SearchRequestEntity();
         searchEntity.setQuery(query);
+        searchEntity.setLocation(location);
         searchEntity.setLanguage("en");
-        searchEntity.setLocation("US");
 
         return searchService.torrentSearch(searchEntity);
     }
 
     @GetMapping("/code")
-    public SearchResponseEntity<CodeSearchResultEntity> codeSearch(String query) {
+    public SearchResponseEntity<CodeSearchResultEntity> codeSearch(String query, String location) {
         SearchRequestEntity searchEntity = new SearchRequestEntity();
         searchEntity.setQuery(query);
+        searchEntity.setLocation(location);
         searchEntity.setLanguage("en");
-        searchEntity.setLocation("US");
 
         return searchService.codeSearch(searchEntity);
     }

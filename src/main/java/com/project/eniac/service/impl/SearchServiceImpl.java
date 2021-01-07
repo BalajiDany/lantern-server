@@ -42,7 +42,7 @@ public class SearchServiceImpl implements SearchService {
         this.renovateMainSearchEntity(searchEntity);
 
         List<SearchResultEntity<GeneralSearchResultEntity>> resultEntity = generalSearchEngines.stream().parallel()
-                .filter(BaseSearchEngine::isEnabled)
+                .filter(engine -> engine.getEngineState().isEnabled())
                 .map(engine -> {
                     SearchResultEntity<GeneralSearchResultEntity> response = engine.performSearch(searchEntity);
                     afterSearch(engine, response);
@@ -65,7 +65,7 @@ public class SearchServiceImpl implements SearchService {
         this.renovateMainSearchEntity(searchEntity);
 
         List<SearchResultEntity<VideoSearchResultEntity>> resultEntity = videoSearchEngines.stream().parallel()
-                .filter(BaseSearchEngine::isEnabled)
+                .filter(engine -> engine.getEngineState().isEnabled())
                 .map(engine -> {
                     SearchResultEntity<VideoSearchResultEntity> response = engine.performSearch(searchEntity);
                     afterSearch(engine, response);
@@ -88,7 +88,7 @@ public class SearchServiceImpl implements SearchService {
         this.renovateMainSearchEntity(searchEntity);
 
         List<SearchResultEntity<TorrentSearchResultEntity>> resultEntity = torrentSearchEngines.stream().parallel()
-                .filter(BaseSearchEngine::isEnabled)
+                .filter(engine -> engine.getEngineState().isEnabled())
                 .map(engine -> {
                     SearchResultEntity<TorrentSearchResultEntity> response = engine.performSearch(searchEntity);
                     afterSearch(engine, response);
@@ -111,7 +111,7 @@ public class SearchServiceImpl implements SearchService {
         this.renovateMainSearchEntity(searchEntity);
 
         List<SearchResultEntity<CodeSearchResultEntity>> resultEntity = codeSearchEngines.stream().parallel()
-                .filter(BaseSearchEngine::isEnabled)
+                .filter(engine -> engine.getEngineState().isEnabled())
                 .map(engine -> {
                     SearchResultEntity<CodeSearchResultEntity> response = engine.performSearch(searchEntity);
                     afterSearch(engine, response);

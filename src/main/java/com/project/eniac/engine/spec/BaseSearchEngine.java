@@ -1,67 +1,64 @@
 package com.project.eniac.engine.spec;
 
-import com.project.eniac.constant.RequestHeaders;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
+import com.project.eniac.entity.EngineResultEntity.SearchResultEntity.SearchResultEntityBuilder;
+import com.project.eniac.entity.EngineSpecEntity;
+import com.project.eniac.entity.EngineStateEntity;
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
-import com.project.eniac.types.EngineType;
-import com.project.eniac.utils.UserAgent;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import java.util.Collections;
+
 @Data
 @Slf4j
 public abstract class BaseSearchEngine<T> {
 
-    private boolean enabled = true;
+    abstract public EngineSpecEntity getEngineSpec();
 
-    private int breakdownCountInRow = 0;
-
-    private int timeoutCountInRow = 0;
-
-    abstract public String getEngineName();
-
-    abstract public EngineType getEngineType();
+    abstract public EngineStateEntity getEngineState();
 
     abstract public HttpClientProviderService getHttpClientService();
 
-    abstract public HttpUriRequest getRequest(SearchRequestEntity searchEntity);
+    abstract public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity);
 
-    abstract public SearchResultEntity<T> getResponse(String response);
+    abstract public SearchResultEntity<T> getResponseEntity(String response);
 
     public SearchResultEntity<T> performSearch(SearchRequestEntity searchEntity) {
         long startTime = System.currentTimeMillis();
+        EngineSpecEntity engineSpecEntity = this.getEngineSpec();
 
-        HttpUriRequest getRequest = this.getRequest(searchEntity);
-
-        String userAgent = UserAgent.getRandomUserAgent();
-        getRequest.addHeader(RequestHeaders.KEY_USER_AGENT, userAgent);
+        // Make Request
+        HttpUriRequest searchRequest = this.getSearchRequest(searchEntity);
+        log.debug("URL : {}", searchRequest.getURI().toString());
 
         HttpClientProviderService httpClientService = this.getHttpClientService();
-        log.debug("URL : {}", getRequest.getURI().toString());
-        String response = httpClientService.makeRequest(getRequest, this.getEngineName());
+        String response = httpClientService.makeRequest(searchRequest, engineSpecEntity.getEngineId());
 
-        SearchResultEntity<T> responseEntity;
+        // Prepare Response
+        SearchResultEntityBuilder<T> searchResultEntityBuilder = SearchResultEntity.<T>builder()
+                .engineName(engineSpecEntity.getEngineName())
+                .engineType(engineSpecEntity.getEngineType());
 
-        long stopTime = System.currentTimeMillis();
-        long runTime = stopTime - startTime;
-
-        // Time Out
-        if (StringUtils.isBlank(response)) {
-            responseEntity = SearchResultEntity
-                    .<T>builder()
-                    .engineName(this.getEngineName())
-                    .engineType(this.getEngineType())
-                    .engineResultType(EngineResultType.ENGINE_TIME_OUT)
-                    .build();
+        if (StringUtils.isEmpty(response)) {
+            searchResultEntityBuilder
+                    .searchResults(Collections.emptyList())
+                    .engineResultType(EngineResultType.ENGINE_TIME_OUT);
         } else {
-            responseEntity = this.getResponse(response);
+            SearchResultEntity<T> responseEntity = this.getResponseEntity(response);
+            searchResultEntityBuilder
+                    .searchResults(responseEntity.getSearchResults())
+                    .engineResultType(responseEntity.getEngineResultType());
         }
-        responseEntity.setDuration(runTime);
-        return responseEntity;
+
+        long duration = System.currentTimeMillis() - startTime;
+        return searchResultEntityBuilder
+                .duration(duration)
+                .build();
     }
 
 }

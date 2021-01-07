@@ -5,11 +5,15 @@ import com.project.eniac.engine.EngineConstant;
 import com.project.eniac.engine.spec.TorrentSearchEngine;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity;
+import com.project.eniac.entity.EngineSpecEntity;
+import com.project.eniac.entity.EngineStateEntity;
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
+import com.project.eniac.types.EngineType;
 import com.project.eniac.utils.ConversionUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +26,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,11 +36,29 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
 
     private final HttpClientProviderService httpClientProviderService;
 
-    private static final String BASE_URL = "https://limetorrents.unblockninja.com/";
+    private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
+            .engineId(UUID.fromString("5759f1f4-4a7d-499f-9ce3-84fab3a607e2"))
+            .engineName(EngineConstant.ENGINE_LIME_TORRENT)
+            .engineType(EngineType.TORRENT)
+            .hasLocationSupport(false)
+            .hasLanguageSupport(false)
+            .hasPaginationSupport(true)
+            .build();
+
+    private final EngineStateEntity engineState = EngineStateEntity.builder()
+            .isEnabled(true)
+            .continuousTimeoutCount(0)
+            .continuousBreakdownCount(0)
+            .build();
 
     @Override
-    public String getEngineName() {
-        return EngineConstant.ENGINE_LIME_TORRENT;
+    public EngineSpecEntity getEngineSpec() {
+        return this.engineSpec;
+    }
+
+    @Override
+    public EngineStateEntity getEngineState() {
+        return this.engineState;
     }
 
     @Override
@@ -45,64 +67,54 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
     }
 
     @Override
-    public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
-        String url = new StringBuilder(BASE_URL)
-                .append("search/all/")
-                .append(ConversionUtil.encodeURL(searchEntity.getQuery()))
-                .append("/seeds/1/").toString();
-        try {
+    @SneakyThrows
+    public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
+        String pathWithQuery = "/search/all/" + ConversionUtil.encodeURL(searchEntity.getQuery()) +
+                "/seeds/" + (searchEntity.getPageNo() + 1) + "/";
 
-            URI uri = new URIBuilder(url).build();
+        URI uri = new URIBuilder()
+                .setScheme("https").setHost("limetorrents.unblockninja.com")
+                .setPath(pathWithQuery)
+                .build();
 
-            HttpGet request = new HttpGet(uri);
-            request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
-            request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
+        HttpGet request = new HttpGet(uri);
+        request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
+        request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
 
-            return request;
-        } catch (URISyntaxException exception) {
-            log.error("Exception on Creating URL : {}", url);
-            return null;
-        }
+        return request;
     }
 
     @Override
-    public SearchResultEntity<TorrentSearchResultEntity> getResponse(String response) {
+    public SearchResultEntity<TorrentSearchResultEntity> getResponseEntity(String response) {
         List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<>();
 
         Document document = Jsoup.parse(response);
-        Elements elements = document.select("table.table2 > tbody > tr"); // Select all results
+        Elements elements = document.select("table.table2 > tbody > tr");
 
         for (Element element : elements) {
-            if (!element.hasAttr("bgcolor")) continue;
+            boolean isValidRow = element.hasAttr("bgcolor");
+            if (!isValidRow) continue;
 
-            TorrentSearchResultEntity torrentSearchResultEntity = this.extractEntity(element);
-            if (ObjectUtils.isNotEmpty(torrentSearchResultEntity)) searchResultEntity.add(torrentSearchResultEntity);
+            TorrentSearchResultEntity resultEntity = this.extractEntity(element);
+            if (ObjectUtils.isNotEmpty(resultEntity)) searchResultEntity.add(resultEntity);
         }
 
         SearchResultEntity.SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
                 .<TorrentSearchResultEntity>builder()
-                .engineName(this.getEngineName())
-                .engineType(this.getEngineType());
+                .searchResults(searchResultEntity);
 
-        // Result Delivery
-        if (searchResultEntity.size() > 0) {
-            return resultEntityBuilder
-                    .searchResults(searchResultEntity)
-                    .engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
-                    .build();
-        } else if (elements.size() > 0) {
-            return resultEntityBuilder
-                    .engineResultType(EngineResultType.NO_SEARCH_RESULT)
-                    .build();
+        if (ObjectUtils.isNotEmpty(searchResultEntity)) {
+            resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
+        } else if (ObjectUtils.isNotEmpty(elements)) {
+            resultEntityBuilder.engineResultType(EngineResultType.NO_SEARCH_RESULT);
         } else {
-            return resultEntityBuilder
-                    .engineResultType(EngineResultType.ENGINE_BREAK_DOWN)
-                    .build();
+            resultEntityBuilder.engineResultType(EngineResultType.ENGINE_BREAK_DOWN);
         }
+
+        return resultEntityBuilder.build();
     }
 
     private TorrentSearchResultEntity extractEntity(Element element) {
-        if (ObjectUtils.isEmpty(element)) return null;
         TorrentSearchResultEntity.TorrentSearchResultEntityBuilder searchResultEntity = TorrentSearchResultEntity.builder();
 
         Element seederElement = element.selectFirst("td.tdseed");
@@ -110,8 +122,10 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
         Elements anchorElements = element.select("div.tt-name > a");
         Elements dateTypeAndSizeElements = element.select("td.tdnormal");
 
-        if (ObjectUtils.anyNull(seederElement, leechElement)) return null;
-        if (ObjectUtils.anyNull(anchorElements, dateTypeAndSizeElements)) return null;
+        boolean isInvalidElement = ObjectUtils.anyNull(seederElement, leechElement, anchorElements);
+        isInvalidElement = isInvalidElement || ObjectUtils.anyNull(dateTypeAndSizeElements);
+
+        if (isInvalidElement) return null;
 
         String seedCount = seederElement.text().replace(",", "");
         String leechCount = leechElement.text().replace(",", "");
@@ -120,7 +134,7 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
                 .leechers(ConversionUtil.parseInt(leechCount));
 
         for (Element anchorElement : anchorElements) {
-            if (anchorElement.hasClass("csprite_dl14")) {
+            if (anchorElement.hasAttr("rel")) {
                 String url = anchorElement.attr("href");
                 String magneticLink = this.extractMagneticLink(url);
                 searchResultEntity
@@ -152,10 +166,17 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
         String domainRemoved = url.replace("http://itorrents.org/torrent/", "");
         String[] splittedUrl = domainRemoved.split(".torrent");
 
-        if (ObjectUtils.isEmpty(splittedUrl)) return null;
-        return new StringBuilder("magnet:?xt=urn:btih:")
-                .append(splittedUrl[0])
-                .toString();
+        return "magnet:?xt=urn:btih:" + splittedUrl[0];
     }
 
 }
+
+/*
+ * LOG DETAILS
+ * URL: https://limetorrents.unblockninja.com/search/all/The+Big+Bang/seeds/1/
+ *      1. for order use [seeds] (path variable) :URL for date use [date]
+ *      2. for pagination it is in path variable.
+ *
+ * * It will return only the core magnetic links, Trackers need to be added if need.
+ *
+ */

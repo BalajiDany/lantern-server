@@ -7,14 +7,19 @@ import com.project.eniac.entity.EngineResultEntity.SearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.SearchResultEntity.SearchResultEntityBuilder;
 import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity;
 import com.project.eniac.entity.EngineResultEntity.TorrentSearchResultEntity.TorrentSearchResultEntityBuilder;
+import com.project.eniac.entity.EngineSpecEntity;
+import com.project.eniac.entity.EngineStateEntity;
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineResultType;
+import com.project.eniac.types.EngineType;
 import com.project.eniac.utils.ConversionUtil;
 import com.project.eniac.utils.TorrentUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
@@ -23,9 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,116 +38,121 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 
     private final HttpClientProviderService httpClientService;
 
+    private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
+            .engineId(UUID.fromString("0a8758ad-980c-41a6-8e2d-5dbdf8c61efe"))
+            .engineName(EngineConstant.ENGINE_PIRATEBAY)
+            .engineType(EngineType.TORRENT)
+            .hasLocationSupport(false)
+            .hasLanguageSupport(false)
+            .hasPaginationSupport(false)
+            .build();
+
+    private final EngineStateEntity engineState = EngineStateEntity.builder()
+            .isEnabled(true)
+            .continuousTimeoutCount(0)
+            .continuousBreakdownCount(0)
+            .build();
+
+    @Override
+    public EngineSpecEntity getEngineSpec() {
+        return this.engineSpec;
+    }
+
+    @Override
+    public EngineStateEntity getEngineState() {
+        return this.engineState;
+    }
+
     @Override
     public HttpClientProviderService getHttpClientService() {
         return this.httpClientService;
     }
 
     @Override
-    public String getEngineName() {
-        return EngineConstant.ENGINE_PIRATEBAY;
+    @SneakyThrows
+    public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
+        URI uri = new URIBuilder()
+                .setScheme("https").setHost("apibay.org").setPath("/q.php")
+                .addParameter("q", searchEntity.getQuery())
+                .addParameter("cat", "0")
+                .build();
+
+        HttpGet request = new HttpGet(uri);
+        request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
+        request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
+
+        return request;
     }
 
     @Override
-    public HttpUriRequest getRequest(SearchRequestEntity searchEntity) {
-        String url = "https://apibay.org/q.php";
-        try {
-
-            URI uri = new URIBuilder(url)
-                    .addParameter("q", searchEntity.getQuery())
-                    .addParameter("cat", "0")
-                    .build();
-
-            HttpGet request = new HttpGet(uri);
-            request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
-            request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
-
-            return request;
-        } catch (URISyntaxException exception) {
-            log.error("Exception on Creating URL : {}", url);
-            return null;
-        }
-    }
-
-    @Override
-    public SearchResultEntity<TorrentSearchResultEntity> getResponse(String response) {
+    public SearchResultEntity<TorrentSearchResultEntity> getResponseEntity(String response) {
 
         List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<>();
         JSONArray resultArray = null;
-        try {
-            resultArray = new JSONArray(response);
-            int size = resultArray.length();
-
-            for (int count = 0; count < size; count++) {
-                JSONObject resultObject = resultArray.getJSONObject(count);
-
-                long id = resultObject.getLong("id");
-                if (id == 0) break;
-
-                // Extract Data
-                TorrentSearchResultEntity entity = this.formEntity(resultObject);
-
-                if (ObjectUtils.isEmpty(entity) || ObjectUtils.isEmpty(entity.getTorrentName())) continue;
-
-                searchResultEntity.add(entity);
-            }
-        } catch (JSONException exception) {
+        try { resultArray = new JSONArray(response); }
+        catch (JSONException ignored) {
             log.error("Exception on Parsing the Response : {}", response);
+        }
+
+        int size = ObjectUtils.isEmpty(resultArray) ? 0 : resultArray.length();
+        for (int count = 0; count < size; count++) {
+            JSONObject resultObject = resultArray.getJSONObject(count);
+            if (resultObject.getLong("id") == 0) break;
+
+            TorrentSearchResultEntity resultEntity = this.extractEntity(resultObject);
+            if (ObjectUtils.isNotEmpty(resultEntity)) searchResultEntity.add(resultEntity);
         }
 
         SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
                 .<TorrentSearchResultEntity>builder()
-                .engineName(this.getEngineName())
-                .engineType(this.getEngineType());
+                .searchResults(searchResultEntity);
 
-        // Result Delivery
-        if (searchResultEntity.size() > 0) {
-            return resultEntityBuilder
-                    .searchResults(searchResultEntity)
-                    .engineResultType(EngineResultType.FOUND_SEARCH_RESULT)
-                    .build();
+        if (ObjectUtils.isNotEmpty(searchResultEntity)) {
+            resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
         } else if (ObjectUtils.isNotEmpty(resultArray)) {
-            return resultEntityBuilder
-                    .engineResultType(EngineResultType.NO_SEARCH_RESULT)
-                    .build();
+            resultEntityBuilder.engineResultType(EngineResultType.NO_SEARCH_RESULT);
         } else {
-            return resultEntityBuilder
-                    .engineResultType(EngineResultType.ENGINE_BREAK_DOWN)
-                    .build();
+            resultEntityBuilder.engineResultType(EngineResultType.ENGINE_BREAK_DOWN);
         }
+
+        return resultEntityBuilder.build();
     }
 
-    private TorrentSearchResultEntity formEntity(JSONObject jsonObject) {
-        if (ObjectUtils.isEmpty(jsonObject)) return null;
+    private TorrentSearchResultEntity extractEntity(JSONObject jsonObject) {
 
         TorrentSearchResultEntityBuilder searchResultEntityBuilder = TorrentSearchResultEntity.builder();
 
         String torrentName = jsonObject.getString("name");
-        searchResultEntityBuilder.torrentName(torrentName);
-
-        long torrentSize = jsonObject.getLong("size");
-        searchResultEntityBuilder.torrentSize(ConversionUtil.convertBytesToReadable(torrentSize));
-
-        long torrentId = jsonObject.getLong("id");
-        searchResultEntityBuilder.torrentUrl("https://thepiratebay.org/description.php?id=" + torrentId);
+        if (StringUtils.isBlank(torrentName)) return null;
 
         String infoHash = jsonObject.getString("info_hash");
-        // https://github.com/JimmyLaurent/torrent-search-api/blob/master/lib/providers/thepiratebay.js#L28
-        searchResultEntityBuilder.magneticLink("magnet:?xt=urn:btih:" + infoHash);
-
+        long torrentSize = jsonObject.getLong("size");
+        long torrentId = jsonObject.getLong("id");
         long uploadedDate = jsonObject.getLong("added");
-        searchResultEntityBuilder.uploadedDate(ConversionUtil.parseDate(uploadedDate));
-
         int category = jsonObject.getInt("category");
-        searchResultEntityBuilder.category(TorrentUtil.getCategory(category));
-
         int seeders = jsonObject.getInt("seeders");
-        searchResultEntityBuilder.seeders(seeders);
-
         int leechers = jsonObject.getInt("leechers");
-        searchResultEntityBuilder.leechers(leechers);
 
-        return searchResultEntityBuilder.build();
+        return searchResultEntityBuilder
+                .torrentName(torrentName)
+                .torrentSize(ConversionUtil.convertBytesToReadable(torrentSize))
+                .torrentUrl("https://thepiratebay.org/description.php?id=" + torrentId)
+                .magneticLink("magnet:?xt=urn:btih:" + infoHash)
+                .uploadedDate(ConversionUtil.parseDate(uploadedDate))
+                .category(TorrentUtil.getCategory(category))
+                .seeders(seeders)
+                .leechers(leechers)
+                .build();
     }
 
 }
+
+/*
+ * LOG DETAILS
+ * URL: https://apibay.org/q.php?q=The+Big+Bang+Theory&cat=0
+ *      1.
+ * * No Pagination or sort support As of Now.
+ * * It will return only the core magnetic links, Trackers need to be added if need.
+ * * For Trackers Ref: https://github.com/JimmyLaurent/torrent-search-api/blob/master/lib/providers/thepiratebay.js#L28
+ *
+ */

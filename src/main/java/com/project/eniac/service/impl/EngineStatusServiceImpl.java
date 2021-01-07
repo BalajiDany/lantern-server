@@ -1,6 +1,8 @@
 package com.project.eniac.service.impl;
 
 import com.project.eniac.engine.spec.BaseSearchEngine;
+import com.project.eniac.entity.EngineSpecEntity;
+import com.project.eniac.entity.EngineStateEntity;
 import com.project.eniac.entity.EngineStatusResponseEntity;
 import com.project.eniac.entity.EngineStatusResponseEntity.EngineStatusResponseEntityBuilder;
 import com.project.eniac.service.spec.EngineStatusService;
@@ -18,7 +20,7 @@ public class EngineStatusServiceImpl implements EngineStatusService {
     @Override
     public List<EngineStatusResponseEntity> getEngineStatus(EngineType engineType) {
         return searchEngines.stream()
-                .filter(searchEngine -> searchEngine.getEngineType() == engineType)
+                .filter(searchEngine -> searchEngine.getEngineSpec().getEngineType() == engineType)
                 .map(this::formResponseEntity)
                 .collect(Collectors.toList());
     }
@@ -32,10 +34,11 @@ public class EngineStatusServiceImpl implements EngineStatusService {
 
     private EngineStatusResponseEntity formResponseEntity(BaseSearchEngine<?> searchEngine) {
         EngineStatusResponseEntityBuilder statusResponseEntity = EngineStatusResponseEntity.builder();
-
-        statusResponseEntity.engineName(searchEngine.getEngineName());
-        statusResponseEntity.engineType(searchEngine.getEngineType());
-        statusResponseEntity.isEnabled(searchEngine.isEnabled());
+        EngineSpecEntity engineSpecEntity = searchEngine.getEngineSpec();
+        EngineStateEntity engineStateEntity = searchEngine.getEngineState();
+        statusResponseEntity.engineName(engineSpecEntity.getEngineName());
+        statusResponseEntity.engineType(engineSpecEntity.getEngineType());
+        statusResponseEntity.isEnabled(engineStateEntity.isEnabled());
 
         return statusResponseEntity.build();
     }

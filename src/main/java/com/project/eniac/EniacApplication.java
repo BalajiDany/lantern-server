@@ -16,14 +16,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
 
-//Run this command
+// To Build project in eclipse
 // mvn clean install eclipse:clean eclipse:eclipse -DdownloadJavadocs=true
 // To test the each Search Engine run the corresponding Test files.
-
-// API
-// http://localhost:8080/eniac/api/v1/search/general?query=spring%20boot
-// http://localhost:8080/eniac/api/v1/search/torrent?query=spring%20boot
-// http://localhost:8080/eniac/api/v1/search/video?query=spring%20boot
 
 @Slf4j
 @SpringBootApplication

@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +26,8 @@ public class NetworkStatusServiceImpl implements NetworkStatusService {
     private String currentIp;
 
     private boolean isNetworkAlive;
+
+    private UUID engineId = UUID.fromString("46677eaf-bb61-4061-af9e-ce29fb6fcc7a");
 
     @PostConstruct
     public void init() {
@@ -55,7 +58,7 @@ public class NetworkStatusServiceImpl implements NetworkStatusService {
             request.addHeader(RequestHeaders.KEY_ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
             request.addHeader(RequestHeaders.KEY_ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);
 
-            String response = httpClientProviderService.makeRequest(request, "utils", true);
+            String response = httpClientProviderService.makeRequest(request, engineId, true);
             isNetworkAlive = StringUtils.isNotBlank(response);
             currentIp = isNetworkAlive ? response : "NA";
 
