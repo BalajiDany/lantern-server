@@ -17,10 +17,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
 
-    private static final int MAX_ALLOWED_BREAKDOWN_COUNT_IN_ROW = 5;
-
-    private static final int MAX_ALLOWED_TIMEOUT_COUNT_IN_ROW = 5;
-
     private static final int ENGINE_HALT_TIME = 6000;
 
     private final TaskScheduler taskScheduler;
@@ -67,11 +63,12 @@ public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
     private void performEngineBreakdownDiagnosis(BaseSearchEngine<?> searchEngine) {
         EngineStateEntity engineState = searchEngine.getEngineState();
         EngineSpecEntity engineSpec = searchEngine.getEngineSpec();
+
         int breakdownCount = engineState.getContinuousBreakdownCount();
         engineState.setContinuousBreakdownCount(++breakdownCount);
         disableEngine(searchEngine);
 
-        if (breakdownCount > MAX_ALLOWED_BREAKDOWN_COUNT_IN_ROW) {
+        if (breakdownCount > engineSpec.getMaxAllowdedContinousBreakdownCount()) {
             log.error("Shutting down the engine : {} type : {} Reason: Reached Max allowed breakdown",
                     engineSpec.getEngineName(), engineSpec.getEngineType());
         } else {
@@ -83,10 +80,11 @@ public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
     private void performEngineTimeoutDiagnosis(BaseSearchEngine<?> searchEngine) {
         EngineStateEntity engineState = searchEngine.getEngineState();
         EngineSpecEntity engineSpec = searchEngine.getEngineSpec();
+
         int timeoutCount = engineState.getContinuousTimeoutCount();
         engineState.setContinuousTimeoutCount(++timeoutCount);
 
-        if (timeoutCount > MAX_ALLOWED_TIMEOUT_COUNT_IN_ROW) {
+        if (timeoutCount > engineSpec.getMaxAllowdedContinousTimeoutCount()) {
             disableEngine(searchEngine);
             log.error("Shutting down the engine : {} type : {} Reason: Reached Max allowed timeout",
                     engineSpec.getEngineName(), engineSpec.getEngineType());

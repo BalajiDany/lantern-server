@@ -14,6 +14,12 @@ public class EngineStatusResponseEntity {
 
     private boolean isEnabled;
 
+    private boolean hasLocationSupport;
+
+    private boolean hasLanguageSupport;
+
+    private boolean hasPaginationSupport;
+
     private long lastSearchDuration;
 
 }

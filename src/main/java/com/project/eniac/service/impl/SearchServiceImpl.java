@@ -25,7 +25,7 @@ public class SearchServiceImpl implements SearchService {
     private final EngineDiagnosisService engineDiagnosisService;
 
     @Autowired(required = false)
-    private List<GeneralSearchEngine> generalSearchEngines;
+    private final List<GeneralSearchEngine> generalSearchEngines = new ArrayList<>();
 
     @Autowired(required = false)
     private final List<VideoSearchEngine> videoSearchEngines = new ArrayList<>();
@@ -38,94 +38,49 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public SearchResponseEntity<GeneralSearchResultEntity> generalSearch(SearchRequestEntity searchEntity) {
-        long startTime = System.currentTimeMillis();
-        this.renovateMainSearchEntity(searchEntity);
-
-        List<SearchResultEntity<GeneralSearchResultEntity>> resultEntity = generalSearchEngines.stream().parallel()
-                .filter(engine -> engine.getEngineState().isEnabled())
-                .map(engine -> {
-                    SearchResultEntity<GeneralSearchResultEntity> response = engine.performSearch(searchEntity);
-                    afterSearch(engine, response);
-                    return response;
-                })
-                .filter(this::isValidResponse)
-                .collect(Collectors.toList());
-
-        long stopTime = System.currentTimeMillis();
-        long runTime = stopTime - startTime;
-        return SearchResponseEntity.<GeneralSearchResultEntity>builder()
-                .searchResults(resultEntity)
-                .duration(runTime)
-                .build();
+        return coreSearch(generalSearchEngines, searchEntity);
     }
 
     @Override
     public SearchResponseEntity<VideoSearchResultEntity> videoSearch(SearchRequestEntity searchEntity) {
-        long startTime = System.currentTimeMillis();
-        this.renovateMainSearchEntity(searchEntity);
-
-        List<SearchResultEntity<VideoSearchResultEntity>> resultEntity = videoSearchEngines.stream().parallel()
-                .filter(engine -> engine.getEngineState().isEnabled())
-                .map(engine -> {
-                    SearchResultEntity<VideoSearchResultEntity> response = engine.performSearch(searchEntity);
-                    afterSearch(engine, response);
-                    return response;
-                })
-                .filter(this::isValidResponse)
-                .collect(Collectors.toList());
-
-        long stopTime = System.currentTimeMillis();
-        long runTime = stopTime - startTime;
-        return SearchResponseEntity.<VideoSearchResultEntity>builder()
-                .searchResults(resultEntity)
-                .duration(runTime)
-                .build();
+        return coreSearch(videoSearchEngines, searchEntity);
     }
 
     @Override
     public SearchResponseEntity<TorrentSearchResultEntity> torrentSearch(SearchRequestEntity searchEntity) {
-        long startTime = System.currentTimeMillis();
-        this.renovateMainSearchEntity(searchEntity);
+        return coreSearch(torrentSearchEngines, searchEntity);
+    }
 
-        List<SearchResultEntity<TorrentSearchResultEntity>> resultEntity = torrentSearchEngines.stream().parallel()
+    @Override
+    public SearchResponseEntity<CodeSearchResultEntity> codeSearch(SearchRequestEntity searchEntity) {
+        return coreSearch(codeSearchEngines, searchEntity);
+    }
+
+    private <T, E extends  BaseSearchEngine<T>> SearchResponseEntity<T> coreSearch(
+            List<E> searchEngine, SearchRequestEntity searchEntity) {
+
+        long startTime = System.currentTimeMillis();
+        this.cleanRequestEntity(searchEntity);
+
+        List<SearchResultEntity<T>> resultEntity = searchEngine.stream().parallel()
                 .filter(engine -> engine.getEngineState().isEnabled())
-                .map(engine -> {
-                    SearchResultEntity<TorrentSearchResultEntity> response = engine.performSearch(searchEntity);
-                    afterSearch(engine, response);
-                    return response;
-                })
+                .map(engine -> this.searchAndDiagnosis(engine, searchEntity))
                 .filter(this::isValidResponse)
                 .collect(Collectors.toList());
 
         long stopTime = System.currentTimeMillis();
         long runTime = stopTime - startTime;
-        return SearchResponseEntity.<TorrentSearchResultEntity>builder()
+        return SearchResponseEntity.<T>builder()
                 .searchResults(resultEntity)
                 .duration(runTime)
                 .build();
     }
 
-    @Override
-    public SearchResponseEntity<CodeSearchResultEntity> codeSearch(SearchRequestEntity searchEntity) {
-        long startTime = System.currentTimeMillis();
-        this.renovateMainSearchEntity(searchEntity);
-
-        List<SearchResultEntity<CodeSearchResultEntity>> resultEntity = codeSearchEngines.stream().parallel()
-                .filter(engine -> engine.getEngineState().isEnabled())
-                .map(engine -> {
-                    SearchResultEntity<CodeSearchResultEntity> response = engine.performSearch(searchEntity);
-                    afterSearch(engine, response);
-                    return response;
-                })
-                .filter(this::isValidResponse)
-                .collect(Collectors.toList());
-
-        long stopTime = System.currentTimeMillis();
-        long runTime = stopTime - startTime;
-        return SearchResponseEntity.<CodeSearchResultEntity>builder()
-                .searchResults(resultEntity)
-                .duration(runTime)
-                .build();
+    private <T> SearchResultEntity<T> searchAndDiagnosis(
+            BaseSearchEngine<T> searchEngine, SearchRequestEntity searchEntity) {
+        SearchResultEntity<T> response = searchEngine.performSearch(searchEntity);
+        afterSearch(searchEngine, response);
+        return response;
     }
 
     private void afterSearch(BaseSearchEngine<?> searchEngine, SearchResultEntity<?> response) {
@@ -136,7 +91,7 @@ public class SearchServiceImpl implements SearchService {
         return true;
     }
 
-    private void renovateMainSearchEntity(SearchRequestEntity entity) {
+    private void cleanRequestEntity(SearchRequestEntity entity) {
         String language = entity.getLanguage();
         String location = entity.getLocation();
 
