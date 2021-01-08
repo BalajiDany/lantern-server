@@ -130,7 +130,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
             resultEntityBuilder.engineResultType(EngineResultType.ENGINE_BREAK_DOWN);
         }
 
-        return  resultEntityBuilder.build();
+        return resultEntityBuilder.build();
     }
 
     private VideoSearchResultEntity extractEntity(Element element) {

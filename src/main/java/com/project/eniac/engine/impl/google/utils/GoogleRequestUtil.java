@@ -9,6 +9,7 @@ public class GoogleRequestUtil {
 
     private static final Map<String, String> domainMap = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             put("US", "google.com");
             put("CN", "google.com.kh");
@@ -25,6 +26,7 @@ public class GoogleRequestUtil {
 
     private static final Map<String, String> locationOverrideMap = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             put("GB", "UK");
         }
@@ -32,6 +34,7 @@ public class GoogleRequestUtil {
 
     private static final Map<String, String> languageOverrideMap = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             put("de", "en");
         }

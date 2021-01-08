@@ -1,13 +1,12 @@
 package com.project.eniac.utils;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class TorrentUtil {
 
     public static String extractCoreMagneticLink(String magneticLink) {
         if (StringUtils.isBlank(magneticLink)) return StringUtils.EMPTY;
-        return  magneticLink.split("&")[0];
+        return magneticLink.split("&")[0];
     }
 
     public static String getCategory(int category) {

@@ -7,11 +7,15 @@ import java.io.IOException;
 
 public class IOUtils {
 
-    private IOUtils() {}
+    private IOUtils() {
+    }
 
     public static void closeQuietly(Closeable closeable) {
         if (ObjectUtils.isEmpty(closeable)) return;
-        try { closeable.close(); } catch (IOException ignored) { }
+        try {
+            closeable.close();
+        } catch (IOException ignored) {
+        }
     }
 
 }

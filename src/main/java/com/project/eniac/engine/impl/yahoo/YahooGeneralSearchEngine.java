@@ -115,7 +115,7 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
             resultEntityBuilder.engineResultType(EngineResultType.ENGINE_BREAK_DOWN);
         }
 
-        return  resultEntityBuilder.build();
+        return resultEntityBuilder.build();
     }
 
     private GeneralSearchResultEntity extractEntity(Element element) {

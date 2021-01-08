@@ -16,7 +16,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.PostConstruct;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 @Slf4j

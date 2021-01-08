@@ -90,8 +90,9 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
 
         List<TorrentSearchResultEntity> searchResultEntity = new ArrayList<>();
         JSONArray resultArray = null;
-        try { resultArray = new JSONArray(response); }
-        catch (JSONException ignored) {
+        try {
+            resultArray = new JSONArray(response);
+        } catch (JSONException ignored) {
             log.error("Exception on Parsing the Response : {}", response);
         }
 

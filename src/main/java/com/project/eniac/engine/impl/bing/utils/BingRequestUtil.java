@@ -7,6 +7,7 @@ public class BingRequestUtil {
 
     private static final Map<String, String> locationOverrideMap = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             // put("US", "en-us");
             // put("CN", "zh-cn");
@@ -22,6 +23,7 @@ public class BingRequestUtil {
 
     private static final Map<String, String> languageOverrideMap = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             put("pt", "pt-pt");
             put("zh", "zh-hans");

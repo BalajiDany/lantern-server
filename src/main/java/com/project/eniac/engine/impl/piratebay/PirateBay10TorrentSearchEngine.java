@@ -95,7 +95,7 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
 
         for (Element element : elements) {
             TorrentSearchResultEntity resultEntity = this.extractEntity(element);
-            if (ObjectUtils.isNotEmpty(resultEntity))searchResultEntity.add(resultEntity);
+            if (ObjectUtils.isNotEmpty(resultEntity)) searchResultEntity.add(resultEntity);
         }
 
         SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity

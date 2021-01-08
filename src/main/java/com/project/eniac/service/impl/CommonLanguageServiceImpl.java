@@ -15,6 +15,7 @@ public class CommonLanguageServiceImpl implements CommonLanguageService {
 
     private static final Map<String, String> SUPPORTED_LANGUAGE = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             put("en", "English");
             put("de", "German");

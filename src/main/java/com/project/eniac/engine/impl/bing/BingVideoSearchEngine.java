@@ -121,7 +121,7 @@ public class BingVideoSearchEngine extends VideoSearchEngine {
             resultEntityBuilder.engineResultType(EngineResultType.ENGINE_BREAK_DOWN);
         }
 
-        return  resultEntityBuilder.build();
+        return resultEntityBuilder.build();
     }
 
     private VideoSearchResultEntity extractEntity(Element result) {
@@ -136,8 +136,11 @@ public class BingVideoSearchEngine extends VideoSearchEngine {
         if (StringUtils.isBlank(videoHeaderData)) return null;
 
         JSONObject jsonObject;
-        try { jsonObject = new JSONObject(videoHeaderData); }
-        catch (JSONException ignored) { return null; }
+        try {
+            jsonObject = new JSONObject(videoHeaderData);
+        } catch (JSONException ignored) {
+            return null;
+        }
 
         String title = jsonObject.getString("vt");
         String duration = jsonObject.getString("du");

@@ -14,6 +14,7 @@ public class CommonLocationServiceImpl implements CommonLocationService {
 
     private static final Map<String, String> SUPPORTED_LOCATION = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             put("US", "United States");
             put("CN", "China");

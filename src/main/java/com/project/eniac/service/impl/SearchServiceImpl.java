@@ -56,7 +56,7 @@ public class SearchServiceImpl implements SearchService {
         return coreSearch(codeSearchEngines, searchEntity);
     }
 
-    private <T, E extends  BaseSearchEngine<T>> SearchResponseEntity<T> coreSearch(
+    private <T, E extends BaseSearchEngine<T>> SearchResponseEntity<T> coreSearch(
             List<E> searchEngine, SearchRequestEntity searchEntity) {
 
         long startTime = System.currentTimeMillis();
