@@ -14,7 +14,6 @@ public class CommonLocationServiceImpl implements CommonLocationService {
 
     private static final Map<String, String> SUPPORTED_LOCATION = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
-
         {
             put("US", "United States");
             put("CN", "China");
@@ -29,7 +28,7 @@ public class CommonLocationServiceImpl implements CommonLocationService {
         }
     };
 
-    @Value("${project.eniac.configuration.location:US}")
+    @Value("${project.eniac.configuration.location}")
     private String defaultLocation;
 
     @PostConstruct
@@ -43,7 +42,7 @@ public class CommonLocationServiceImpl implements CommonLocationService {
         // To ensure configured location is correct.
         boolean invalidLanguage = !this.isValidLocation(defaultLocation);
         if (invalidLanguage) {
-            log.error("Default Location mentioned in properties is not supported - {}", defaultLocation);
+            log.warn("Default Location mentioned in properties is not supported - {}", defaultLocation);
             this.defaultLocation = "US";
         }
         log.info("Enabling default location - {}", SUPPORTED_LOCATION.get(this.defaultLocation));

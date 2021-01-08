@@ -14,9 +14,11 @@ import com.project.eniac.service.spec.HttpClientProviderService;
 import com.project.eniac.types.EngineType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpUriRequest;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -45,6 +47,11 @@ public class StackOverflowCodeSearchEngine extends CodeSearchEngine {
             .continuousTimeoutCount(0)
             .continuousBreakdownCount(0)
             .build();
+
+    @PostConstruct
+    public void init() {
+        if (ObjectUtils.isEmpty(googleGeneralSearchEngine)) engineState.setEnabled(false);
+    }
 
     @Override
     public EngineSpecEntity getEngineSpec() {

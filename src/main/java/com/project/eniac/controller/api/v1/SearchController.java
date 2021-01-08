@@ -7,11 +7,9 @@ import com.project.eniac.entity.EngineResultEntity.VideoSearchResultEntity;
 import com.project.eniac.entity.SearchRequestEntity;
 import com.project.eniac.entity.SearchResponseEntity;
 import com.project.eniac.service.spec.SearchService;
+import com.project.eniac.types.EngineType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @RequiredArgsConstructor
@@ -21,44 +19,24 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @GetMapping("/general")
-    public SearchResponseEntity<GeneralSearchResultEntity> generalSearch(String query, String location) {
+    @GetMapping("/{searchType}")
+    public SearchResponseEntity<?> search(
+            @PathVariable("searchType") String searchType,
+            @RequestParam String query,
+            @RequestParam(required = false) String location) {
         SearchRequestEntity searchEntity = new SearchRequestEntity();
         searchEntity.setQuery(query);
         searchEntity.setLocation(location);
-        searchEntity.setLanguage("en");
 
-        return searchService.generalSearch(searchEntity);
-    }
+        EngineType engineType = EngineType.fromString(searchType);
 
-    @GetMapping("/video")
-    public SearchResponseEntity<VideoSearchResultEntity> videoSearch(String query, String location) {
-        SearchRequestEntity searchEntity = new SearchRequestEntity();
-        searchEntity.setQuery(query);
-        searchEntity.setLocation(location);
-        searchEntity.setLanguage("en");
-
-        return searchService.videoSearch(searchEntity);
-    }
-
-    @GetMapping("/torrent")
-    public SearchResponseEntity<TorrentSearchResultEntity> torrentSearch(String query, String location) {
-        SearchRequestEntity searchEntity = new SearchRequestEntity();
-        searchEntity.setQuery(query);
-        searchEntity.setLocation(location);
-        searchEntity.setLanguage("en");
-
-        return searchService.torrentSearch(searchEntity);
-    }
-
-    @GetMapping("/code")
-    public SearchResponseEntity<CodeSearchResultEntity> codeSearch(String query, String location) {
-        SearchRequestEntity searchEntity = new SearchRequestEntity();
-        searchEntity.setQuery(query);
-        searchEntity.setLocation(location);
-        searchEntity.setLanguage("en");
-
-        return searchService.codeSearch(searchEntity);
+        switch (engineType){
+            case GENERAL: return searchService.generalSearch(searchEntity);
+            case TORRENT: return searchService.torrentSearch(searchEntity);
+            case VIDEO: return searchService.videoSearch(searchEntity);
+            case CODE: return searchService.codeSearch(searchEntity);
+            default: return null;
+        }
     }
 
 }

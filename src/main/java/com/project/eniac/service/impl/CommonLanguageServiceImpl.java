@@ -15,7 +15,6 @@ public class CommonLanguageServiceImpl implements CommonLanguageService {
 
     private static final Map<String, String> SUPPORTED_LANGUAGE = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
-
         {
             put("en", "English");
             put("de", "German");
@@ -26,11 +25,11 @@ public class CommonLanguageServiceImpl implements CommonLanguageService {
             put("pt", "Portuguese");
             put("it", "Italian");
             put("fa", "Persian");
-            put("zh", "Chinese"); // TODO confirm the Chinese code
+            put("zh", "Chinese");
         }
     };
 
-    @Value("${project.eniac.configuration.language:en}")
+    @Value("${project.eniac.configuration.language}")
     private String defaultLanguage;
 
     @PostConstruct
@@ -38,7 +37,7 @@ public class CommonLanguageServiceImpl implements CommonLanguageService {
         // To ensure configured language is correct.
         boolean invalidLanguage = !this.isValidLanguage(defaultLanguage);
         if (invalidLanguage) {
-            log.error("Default Language mentioned in properties is not supported - {}", defaultLanguage);
+            log.warn("Default Language mentioned in properties is not supported - {}", defaultLanguage);
             this.defaultLanguage = "en";
         }
         log.info("Enabling default language - {}", SUPPORTED_LANGUAGE.get(this.defaultLanguage));

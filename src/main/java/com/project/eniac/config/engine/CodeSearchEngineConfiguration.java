@@ -8,17 +8,18 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.lang.Nullable;
 
 @Configuration
+@Import(GeneralSearchEngineConfiguration.class)
 @ConditionalOnProperty(value = "project.eniac.engine.code.enable", havingValue = "true", matchIfMissing = true)
-@Import({GeneralSearchEngineConfiguration.class})
 public class CodeSearchEngineConfiguration {
 
     @Bean
-    @ConditionalOnProperty(value = "project.eniac.engine.code.stackoverflow", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(value = "project.eniac.engine.code.stackoverflow.enable", havingValue = "true", matchIfMissing = true)
     CodeSearchEngine stackOverflowCodeSearchEngine(
             HttpClientProviderService httpClientService,
-            GoogleGeneralSearchEngine googleGeneralSearchEngine) {
+            @Nullable GoogleGeneralSearchEngine googleGeneralSearchEngine) {
         return new StackOverflowCodeSearchEngine(httpClientService, googleGeneralSearchEngine);
     }
 

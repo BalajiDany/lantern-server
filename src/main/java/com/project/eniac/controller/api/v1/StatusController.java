@@ -24,7 +24,9 @@ public class StatusController {
     }
 
     @GetMapping("/{engineCategory}")
-    public List<EngineStatusResponseEntity> engineHealth(@PathVariable("engineCategory") String engineCategory) {
+    public List<EngineStatusResponseEntity> engineHealth(
+            @PathVariable("engineCategory") String engineCategory) {
+
         EngineType engineType = EngineType.fromString(engineCategory);
         return engineStatusService.getEngineStatus(engineType);
     }
