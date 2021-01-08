@@ -69,8 +69,9 @@ public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
         disableEngine(searchEngine);
 
         if (breakdownCount > engineSpec.getMaxAllowdedContinousBreakdownCount()) {
-            log.error("Shutting down the engine : {} type : {} Reason: Reached Max allowed breakdown",
+            log.error("Shutting down the engine : {} - {} Type",
                     engineSpec.getEngineName(), engineSpec.getEngineType());
+            log.error("\t Reason: Reached Max allowed breakdown");
         } else {
             Date enableDate = new Date(System.currentTimeMillis() + ENGINE_HALT_TIME);
             taskScheduler.schedule(() -> enableEngine(searchEngine), enableDate);

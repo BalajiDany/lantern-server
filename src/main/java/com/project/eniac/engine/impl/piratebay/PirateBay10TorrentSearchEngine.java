@@ -47,6 +47,8 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
             .hasLocationSupport(false)
             .hasLanguageSupport(false)
             .hasPaginationSupport(false)
+            .maxAllowdedContinousTimeoutCount(5)
+            .maxAllowdedContinousBreakdownCount(5)
             .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()

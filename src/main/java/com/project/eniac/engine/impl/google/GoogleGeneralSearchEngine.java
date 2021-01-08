@@ -46,6 +46,8 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
             .hasLocationSupport(true)
             .hasLanguageSupport(true)
             .hasPaginationSupport(true)
+            .maxAllowdedContinousTimeoutCount(5)
+            .maxAllowdedContinousBreakdownCount(5)
             .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()

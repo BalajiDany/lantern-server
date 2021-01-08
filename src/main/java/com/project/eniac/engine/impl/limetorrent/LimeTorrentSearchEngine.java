@@ -44,6 +44,8 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
             .hasLocationSupport(false)
             .hasLanguageSupport(false)
             .hasPaginationSupport(true)
+            .maxAllowdedContinousTimeoutCount(5)
+            .maxAllowdedContinousBreakdownCount(5)
             .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()

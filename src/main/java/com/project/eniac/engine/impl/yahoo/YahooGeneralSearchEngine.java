@@ -46,6 +46,8 @@ public class YahooGeneralSearchEngine extends GeneralSearchEngine {
             .hasLocationSupport(true)
             .hasLanguageSupport(false)
             .hasPaginationSupport(true)
+            .maxAllowdedContinousTimeoutCount(5)
+            .maxAllowdedContinousBreakdownCount(5)
             .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
