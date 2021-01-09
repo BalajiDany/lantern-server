@@ -9,12 +9,14 @@ import com.project.eniac.service.spec.CommonLocationService;
 import com.project.eniac.service.spec.EngineDiagnosisService;
 import com.project.eniac.service.spec.SearchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
 
@@ -57,14 +59,13 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private <T, E extends BaseSearchEngine<T>> SearchResponseEntity<T> coreSearch(
-            List<E> searchEngine, SearchRequestEntity searchEntity) {
-
+            List<E> searchEngine, SearchRequestEntity requestEntity) {
         long startTime = System.currentTimeMillis();
-        this.cleanRequestEntity(searchEntity);
+        this.cleanRequestEntity(requestEntity);
 
         List<SearchResultEntity<T>> resultEntity = searchEngine.stream().parallel()
                 .filter(engine -> engine.getEngineState().isEnabled())
-                .map(engine -> this.searchAndDiagnosis(engine, searchEntity))
+                .map(engine -> this.searchAndDiagnosis(engine, requestEntity))
                 .filter(this::isValidResponse)
                 .collect(Collectors.toList());
 

@@ -16,7 +16,7 @@ public class EngineSpecEntity {
 
     private EngineType engineType;
 
-    private String requestScheme;
+    private String scheme;
 
     private String host;
 

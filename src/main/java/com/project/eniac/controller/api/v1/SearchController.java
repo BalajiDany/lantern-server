@@ -5,8 +5,10 @@ import com.project.eniac.entity.SearchResponseEntity;
 import com.project.eniac.service.spec.SearchService;
 import com.project.eniac.types.EngineType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController()
 @RequiredArgsConstructor
 @RequestMapping("api/v1/search")
@@ -27,6 +29,7 @@ public class SearchController {
         searchEntity.setLanguage(language);
 
         EngineType engineType = EngineType.fromString(searchType);
+        log.info("Searching: {} [{}]", query, engineType);
 
         switch (engineType) {
             case GENERAL:

@@ -21,7 +21,7 @@ public class TorrentUtil {
         } else if (category < 500) {
             return "Games";
         } else if (category < 600) {
-            return "AO";
+            return "Adults Only";
         } else {
             return "Others";
         }
