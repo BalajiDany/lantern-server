@@ -1,13 +1,7 @@
 package com.project.eniac.config;
 
-import com.project.eniac.service.impl.CommonLanguageServiceImpl;
-import com.project.eniac.service.impl.CommonLocationServiceImpl;
-import com.project.eniac.service.impl.EngineDiagnosisServiceImpl;
-import com.project.eniac.service.impl.HttpClientProviderServiceImpl;
-import com.project.eniac.service.spec.CommonLanguageService;
-import com.project.eniac.service.spec.CommonLocationService;
-import com.project.eniac.service.spec.EngineDiagnosisService;
-import com.project.eniac.service.spec.HttpClientProviderService;
+import com.project.eniac.service.impl.*;
+import com.project.eniac.service.spec.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +26,11 @@ public class BaseConfiguration {
     @Bean
     HttpClientProviderService httpClientService() {
         return new HttpClientProviderServiceImpl();
+    }
+
+    @Bean
+    EngineConfigurationService engineConfigurationService() {
+        return new EngineConfigurationServiceImpl();
     }
 
     @Bean

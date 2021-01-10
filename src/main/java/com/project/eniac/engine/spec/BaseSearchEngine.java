@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.HttpUriRequest;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Data
 @Slf4j
@@ -27,6 +28,11 @@ public abstract class BaseSearchEngine<T> {
     abstract public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity);
 
     abstract public SearchResultEntity<T> getResponseEntity(String response);
+
+    public void resetEngine() {
+        UUID engineId = getEngineSpec().getEngineId();
+        getHttpClientService().resetClient(engineId);
+    }
 
     public SearchResultEntity<T> performSearch(SearchRequestEntity searchEntity) {
         long startTime = System.currentTimeMillis();
