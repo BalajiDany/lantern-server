@@ -1,16 +1,15 @@
 package com.project.eniac.config;
 
+import com.project.eniac.service.impl.EngineConfigurationServiceImpl;
 import com.project.eniac.service.impl.EngineStatusServiceImpl;
 import com.project.eniac.service.impl.NetworkStatusServiceImpl;
 import com.project.eniac.service.impl.SearchServiceImpl;
 import com.project.eniac.service.spec.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @RequiredArgsConstructor
-public class CommonServiceConfiguration {
+public class ServiceConfiguration {
 
     private final CommonLanguageService commonLanguageService;
 
@@ -35,4 +34,8 @@ public class CommonServiceConfiguration {
         return new EngineStatusServiceImpl();
     }
 
+    @Bean
+    EngineConfigurationService engineConfigurationService() {
+        return new EngineConfigurationServiceImpl();
+    }
 }

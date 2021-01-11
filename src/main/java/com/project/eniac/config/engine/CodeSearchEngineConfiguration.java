@@ -6,12 +6,8 @@ import com.project.eniac.engine.spec.CodeSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.lang.Nullable;
 
-@Configuration
-@Import(GeneralSearchEngineConfiguration.class)
 @ConditionalOnProperty(value = "project.eniac.engine.code.enable", havingValue = "true", matchIfMissing = true)
 public class CodeSearchEngineConfiguration {
 

@@ -6,9 +6,7 @@ import com.project.eniac.engine.spec.VideoSearchEngine;
 import com.project.eniac.service.spec.HttpClientProviderService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @ConditionalOnProperty(value = "project.eniac.engine.video.enable", havingValue = "true", matchIfMissing = true)
 public class VideoSearchEngineConfiguration {
 
