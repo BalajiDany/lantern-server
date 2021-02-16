@@ -93,10 +93,10 @@ For building and running the application you need:
   - [Google](https://www.google.com/)
   - [Yahoo](https://yahoo.com/)
 - Torrent :beer:
-  - [kickass](/#)
-  - [LimeTorrent](/#)
-  - [PirateBay](/#)
-  - [Torrent Finder](/#) (PirateBay Proxy)
+  - [kickass](/)
+  - [LimeTorrent](/)
+  - [PirateBay](/)
+  - [Torrent Finder](/) (PirateBay Proxy)
 - Video :popcorn:
   - [Bing Video](https://www.bing.com/videos)
   - [Google Video](https://www.google.com/videohp)
@@ -117,7 +117,7 @@ Contributions are what make the open-source community such an amazing place to l
 <!-- LICENSE -->
 ## License
 
-Apache-2.0 License - Please have a look at the [LICENSE.md](LICENSE.md) for more details.
+Apache-2.0 License - Please have a look at the [LICENSE.md](LICENSE) for more details.
 
 
 <!-- CONTACT -->
