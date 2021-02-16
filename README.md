@@ -117,7 +117,7 @@ Contributions are what make the open-source community such an amazing place to l
 <!-- LICENSE -->
 ## License
 
-Apache-2.0 License - Please have a look at the [LICENSE.md](LICENSE) for more details.
+Apache-2.0 License - Please have a look at the [LICENSE](LICENSE) for more details.
 
 
 <!-- CONTACT -->
