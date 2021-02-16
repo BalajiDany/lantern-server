@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.project</groupId>
-    <artifactId>eniac</artifactId>
+    <artifactId>lantern-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>eniac</name>
+    <name>lantern-server</name>
     <description>A Meta-search Engine</description>
 
     <properties>

@@ -17,12 +17,12 @@
 -->
 ## Project Title
 
-[![Build Status](https://travis-ci.com/BalajiDany/eniac.svg?token=pqdDDYcKAzzpYPLgX2BL&branch=main)](https://travis-ci.com/BalajiDany/eniac)
-[![GitHub contributors](https://img.shields.io/github/contributors/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/graphs/contributors)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/BalajiDany/eniac/blob/main/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/issues)
-[![GitHub forks](https://img.shields.io/github/forks/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/network)
-[![GitHub stars](https://img.shields.io/github/stars/BalajiDany/eniac.svg)](https://github.com/BalajiDany/eniac/stargazers)
+[![Build Status](https://travis-ci.com/BalajiDany/lantern-server.svg?token=pqdDDYcKAzzpYPLgX2BL&branch=main)](https://travis-ci.com/BalajiDany/lantern-server)
+[![GitHub contributors](https://img.shields.io/github/contributors/BalajiDany/lantern-server.svg)](https://github.com/BalajiDany/lantern-server/graphs/contributors)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/BalajiDany/lantern-server/blob/main/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/BalajiDany/lantern-server.svg)](https://github.com/BalajiDany/lantern-server/issues)
+[![GitHub forks](https://img.shields.io/github/forks/BalajiDany/lantern-server.svg)](https://github.com/BalajiDany/lantern-server/network)
+[![GitHub stars](https://img.shields.io/github/stars/BalajiDany/lantern-server.svg)](https://github.com/BalajiDany/lantern-server/stargazers)
 
 <!-- ABOUT THE PROJECT -->
 ### A Meta Search Engine
@@ -37,7 +37,7 @@ Here's why:
 you can also deploy, and create your personal instance. We highly recommend not to share the instance. Most of the search engines will block the IP if it identifies unusual traffic.
 To know more about MetaSearch Engine refer [ryte-wiki](https://en.ryte.com/wiki/Meta_Search_Engine)
 
-A list of commonly used resources that I find helpful are listed in the [acknowledgments](https://github.com/BalajiDany/eniac#acknowledgements).
+A list of commonly used resources that I find helpful are listed in the [acknowledgments](https://github.com/BalajiDany/lantern-server#acknowledgements).
 
 ### Built With
 
@@ -51,7 +51,7 @@ List of the major library that is used in these projects.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Currently, We support Web Application developed in angular, To Add/Change Function in WebApplication please refer [front-repo](https://github.com/BalajiDany/eniac-front.git)
+Currently, We support Web Application developed in angular, To Add/Change Function in WebApplication please refer [front-repo](https://github.com/BalajiDany/lantern-server-front.git)
 
 For Installation and Development (back-end), please follow the below steps.
 
@@ -67,11 +67,11 @@ For building and running the application you need:
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/BalajiDany/eniac.git
+   git clone https://github.com/BalajiDany/lantern-server.git
    ```
 2. Navigate to the folder
    ```sh
-   cd enaic
+   cd lantern-server
    ```
 3. Start the application using maven
    ```sh
@@ -82,7 +82,7 @@ For building and running the application you need:
    # For Windows: 
    mvnw spring-boot:run
    ```
-   * Navigate to http://localhost:8080/eniac
+   * Navigate to http://localhost:8080/lantern-server
 
 <!-- USAGE EXAMPLES -->
 ## Available Search Engines
@@ -127,7 +127,7 @@ Balaji Dhanapal - d.balaji.mc@gmail.com
 
 Pavithra Palanisamy - pavithrakowsika@gmail.com
 
-Project Link: [https://github.com/BalajiDany/eniac](https://github.com/BalajiDany/eniac)
+Project Link: [https://github.com/BalajiDany/lantern-server](https://github.com/BalajiDany/lantern-server)
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
