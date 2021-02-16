@@ -51,7 +51,7 @@ List of the major library that is used in these projects.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Currently, We support Web Application developed in angular, To Add/Change Function in WebApplication please refer [front-repo](https://github.com/BalajiDany/lantern-server-front.git)
+Currently, We support Web Application developed in angular, To Add/Change Function in WebApplication please refer [front-repo](https://github.com/BalajiDany/lantern-web-client.git)
 
 For Installation and Development (back-end), please follow the below steps.
 
