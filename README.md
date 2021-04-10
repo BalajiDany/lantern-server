@@ -39,6 +39,12 @@ To know more about MetaSearch Engine refer [ryte-wiki](https://en.ryte.com/wiki/
 
 A list of commonly used resources that I find helpful are listed in the [acknowledgments](https://github.com/BalajiDany/lantern-server#acknowledgements).
 
+### Instance
+For Demo purpose, we deployed this in heroku app : [lantern-engine](https://lantern-engine.herokuapp.com/lantern/search).
+<br>As of now we used free plan/tier (since ONLY for **DEMO PURPOSE**).
+<br>**For Usage please create your own personal instance.**
+
+
 ### Built With
 
 List of the major library that is used in these projects. 
