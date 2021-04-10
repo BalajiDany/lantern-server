@@ -82,7 +82,7 @@ For building and running the application you need:
    # For Windows: 
    mvnw spring-boot:run
    ```
-   * Navigate to http://localhost:8080/lantern-server
+   * Navigate to http://localhost:8080/lantern
 
 <!-- USAGE EXAMPLES -->
 ## Available Search Engines
