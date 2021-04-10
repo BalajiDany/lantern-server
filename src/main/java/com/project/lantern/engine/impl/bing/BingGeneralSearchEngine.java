@@ -38,21 +38,21 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
     private final HttpClientProviderService httpClientService;
 
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("124218e8-1e66-41cc-9ff4-c68c6e01c2c4"))
-            .engineName(EngineConstant.ENGINE_BING)
-            .engineType(EngineType.GENERAL)
-            .hasLocationSupport(false)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(false)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("124218e8-1e66-41cc-9ff4-c68c6e01c2c4"))
+        .engineName(EngineConstant.ENGINE_BING)
+        .engineType(EngineType.GENERAL)
+        .hasLocationSupport(false)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(false)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -79,12 +79,12 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
         offset = Math.max(offset, 0);
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("www.bing.com").setPath("/search")
-                .addParameter("q", searchEntity.getQuery())
-                .addParameter("setlang", language)
-                .addParameter("setmkt", region)
-                .addParameter("first", Integer.toString(offset))
-                .build();
+            .setScheme("https").setHost("www.bing.com").setPath("/search")
+            .addParameter("q", searchEntity.getQuery())
+            .addParameter("setlang", language)
+            .addParameter("setmkt", region)
+            .addParameter("first", Integer.toString(offset))
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -107,8 +107,8 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
         }
 
         SearchResultEntityBuilder<GeneralSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<GeneralSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<GeneralSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (ObjectUtils.isNotEmpty(searchResultEntity)) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -140,8 +140,8 @@ public class BingGeneralSearchEngine extends GeneralSearchEngine {
         if (isInvalidContent) return null;
 
         return GeneralSearchResultEntity.builder()
-                .url(url).title(title).content(content)
-                .build();
+            .url(url).title(title).content(content)
+            .build();
     }
 
 }

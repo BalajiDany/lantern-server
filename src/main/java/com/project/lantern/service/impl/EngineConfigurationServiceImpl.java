@@ -18,21 +18,21 @@ public class EngineConfigurationServiceImpl implements EngineConfigurationServic
     @Override
     public void resetAllEngines() {
         searchEngines.stream()
-                .forEach(searchEngine -> searchEngine.resetEngine());
+            .forEach(searchEngine -> searchEngine.resetEngine());
     }
 
     @Override
     public void resetByEngineType(EngineType engineType) {
         searchEngines.stream()
-                .filter(searchEngines -> searchEngines.getEngineSpec().getEngineType() == engineType)
-                .forEach(searchEngine -> searchEngine.resetEngine());
+            .filter(searchEngines -> searchEngines.getEngineSpec().getEngineType() == engineType)
+            .forEach(searchEngine -> searchEngine.resetEngine());
     }
 
     @Override
     public void resetLocationBasedEngines() {
         searchEngines.stream()
-                .filter(searchEngines -> searchEngines.getEngineSpec().isHasLocationSupport())
-                .forEach(searchEngine -> searchEngine.resetEngine());
+            .filter(searchEngines -> searchEngines.getEngineSpec().isHasLocationSupport())
+            .forEach(searchEngine -> searchEngine.resetEngine());
     }
 
 }

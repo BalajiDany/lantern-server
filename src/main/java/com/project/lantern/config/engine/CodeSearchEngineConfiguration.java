@@ -14,8 +14,8 @@ public class CodeSearchEngineConfiguration {
     @Bean
     @ConditionalOnProperty(value = "project.lantern.engine.code.stackoverflow.enable", havingValue = "true", matchIfMissing = true)
     CodeSearchEngine stackOverflowCodeSearchEngine(
-            HttpClientProviderService httpClientService,
-            @Nullable GoogleGeneralSearchEngine googleGeneralSearchEngine) {
+        HttpClientProviderService httpClientService,
+        @Nullable GoogleGeneralSearchEngine googleGeneralSearchEngine) {
         return new StackOverflowCodeSearchEngine(httpClientService, googleGeneralSearchEngine);
     }
 

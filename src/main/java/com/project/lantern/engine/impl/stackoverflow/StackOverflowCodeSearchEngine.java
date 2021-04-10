@@ -27,28 +27,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StackOverflowCodeSearchEngine extends CodeSearchEngine {
 
-    private final HttpClientProviderService httpClientProviderService;
-
-    private final GoogleGeneralSearchEngine googleGeneralSearchEngine;
-
     private static final String STACK_OVERFLOW_SITE = "site:stackoverflow.com";
-
+    private final HttpClientProviderService httpClientProviderService;
+    private final GoogleGeneralSearchEngine googleGeneralSearchEngine;
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("fb385a4e-ca0a-4e87-ba42-d7472dbf99f5"))
-            .engineName(EngineConstant.ENGINE_STACK_OVERFLOW)
-            .engineType(EngineType.CODE)
-            .hasLocationSupport(true)
-            .hasLanguageSupport(true)
-            .hasPaginationSupport(true)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("fb385a4e-ca0a-4e87-ba42-d7472dbf99f5"))
+        .engineName(EngineConstant.ENGINE_STACK_OVERFLOW)
+        .engineType(EngineType.CODE)
+        .hasLocationSupport(true)
+        .hasLanguageSupport(true)
+        .hasPaginationSupport(true)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @PostConstruct
     public void init() {
@@ -73,7 +70,7 @@ public class StackOverflowCodeSearchEngine extends CodeSearchEngine {
     @Override
     public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
         String searchQuery = searchEntity.getQuery() +
-                StringUtils.SPACE + STACK_OVERFLOW_SITE;
+            StringUtils.SPACE + STACK_OVERFLOW_SITE;
         searchEntity.setQuery(searchQuery);
         return googleGeneralSearchEngine.getSearchRequest(searchEntity);
     }
@@ -81,26 +78,26 @@ public class StackOverflowCodeSearchEngine extends CodeSearchEngine {
     @Override
     public SearchResultEntity<CodeSearchResultEntity> getResponseEntity(String response) {
         SearchResultEntity<GeneralSearchResultEntity> googleSearchResult = googleGeneralSearchEngine
-                .getResponseEntity(response);
+            .getResponseEntity(response);
 
         List<GeneralSearchResultEntity> searchResults = googleSearchResult.getSearchResults();
         List<CodeSearchResultEntity> codeSearchResults = searchResults.stream()
-                .map(this::formResultEntity)
-                .collect(Collectors.toList());
+            .map(this::formResultEntity)
+            .collect(Collectors.toList());
 
         SearchResultEntityBuilder<CodeSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<CodeSearchResultEntity>builder()
-                .searchResults(codeSearchResults)
-                .engineResultType(googleSearchResult.getEngineResultType());
+            .<CodeSearchResultEntity>builder()
+            .searchResults(codeSearchResults)
+            .engineResultType(googleSearchResult.getEngineResultType());
 
         return resultEntityBuilder.build();
     }
 
     private CodeSearchResultEntity formResultEntity(GeneralSearchResultEntity resultEntity) {
         return CodeSearchResultEntity.builder()
-                .url(resultEntity.getUrl())
-                .title(resultEntity.getTitle())
-                .content(resultEntity.getContent()).build();
+            .url(resultEntity.getUrl())
+            .title(resultEntity.getTitle())
+            .content(resultEntity.getContent()).build();
     }
 
 }

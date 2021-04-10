@@ -40,21 +40,21 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
     private final HttpClientProviderService httpClientService;
 
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("8a1cbe20-5591-44d8-a945-56074a21fd73"))
-            .engineName(EngineConstant.ENGINE_GOOGLE)
-            .engineType(EngineType.GENERAL)
-            .hasLocationSupport(true)
-            .hasLanguageSupport(true)
-            .hasPaginationSupport(true)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("8a1cbe20-5591-44d8-a945-56074a21fd73"))
+        .engineName(EngineConstant.ENGINE_GOOGLE)
+        .engineType(EngineType.GENERAL)
+        .hasLocationSupport(true)
+        .hasLanguageSupport(true)
+        .hasPaginationSupport(true)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -80,12 +80,12 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
         String pageNo = String.valueOf(searchEntity.getPageNo() * 10);
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost(hostAddress).setPath("/search")
-                .addParameter("q", searchEntity.getQuery())
-                .addParameter("hl", language)
-                .addParameter("gl", region)
-                .addParameter("start", pageNo)
-                .build();
+            .setScheme("https").setHost(hostAddress).setPath("/search")
+            .addParameter("q", searchEntity.getQuery())
+            .addParameter("hl", language)
+            .addParameter("gl", region)
+            .addParameter("start", pageNo)
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -113,8 +113,8 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
         }
 
         SearchResultEntityBuilder<GeneralSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<GeneralSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<GeneralSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (ObjectUtils.isNotEmpty(searchResultEntity)) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -130,7 +130,7 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
     private GeneralSearchResultEntity extractEntity(Element element) {
 
         Element anchorElement = element.selectFirst("div.yuRUbf > a");
-        Element titleElement = element.selectFirst("div.yuRUbf > a > h3 > span");
+        Element titleElement = element.selectFirst("div.yuRUbf > a > h3");
         Element contentElement = element.selectFirst("div.IsZvec span.aCOpRe");
 
         boolean isInvalidElement = ObjectUtils.anyNull(anchorElement, titleElement, contentElement);
@@ -144,8 +144,8 @@ public class GoogleGeneralSearchEngine extends GeneralSearchEngine {
         if (isInvalidContent) return null;
 
         return GeneralSearchResultEntity.builder()
-                .url(url).title(title).content(content)
-                .build();
+            .url(url).title(title).content(content)
+            .build();
     }
 
 }

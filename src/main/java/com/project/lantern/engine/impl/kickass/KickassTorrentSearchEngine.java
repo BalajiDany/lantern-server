@@ -38,26 +38,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KickassTorrentSearchEngine extends TorrentSearchEngine {
 
-    private final HttpClientProviderService httpClientProviderService;
-
     private static final String BASE_URL = "https://kickass.onl";
-
+    private final HttpClientProviderService httpClientProviderService;
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("09f3237b-c0a9-449a-8205-a5cbcfb11fbc"))
-            .engineName(EngineConstant.ENGINE_KICKASS)
-            .engineType(EngineType.TORRENT)
-            .hasLocationSupport(false)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(true)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("09f3237b-c0a9-449a-8205-a5cbcfb11fbc"))
+        .engineName(EngineConstant.ENGINE_KICKASS)
+        .engineType(EngineType.TORRENT)
+        .hasLocationSupport(false)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(true)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -79,13 +77,13 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
     public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
 
         String pathWithQuery = "/usearch/" + ConversionUtil.encodeURL(searchEntity.getQuery()) +
-                "/" + (searchEntity.getPageNo() + 1) + "/";
+            "/" + (searchEntity.getPageNo() + 1) + "/";
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("kickass.onl").setPath(pathWithQuery)
-                .addParameter("field", "seeders")
-                .addParameter("sorder", "desc")
-                .build();
+            .setScheme("https").setHost("kickass.onl").setPath(pathWithQuery)
+            .addParameter("field", "seeders")
+            .addParameter("sorder", "desc")
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -108,8 +106,8 @@ public class KickassTorrentSearchEngine extends TorrentSearchEngine {
         }
 
         SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<TorrentSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<TorrentSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (ObjectUtils.isNotEmpty(searchResultEntity)) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);

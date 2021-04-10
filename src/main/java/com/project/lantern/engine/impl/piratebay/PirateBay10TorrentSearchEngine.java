@@ -41,21 +41,21 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
     private final HttpClientProviderService httpClientProviderService;
 
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("4911ca35-a762-468c-8879-08981982da0d"))
-            .engineName(EngineConstant.ENGINE_PIRATEBAY_PROXY)
-            .engineType(EngineType.TORRENT)
-            .hasLocationSupport(false)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(false)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("4911ca35-a762-468c-8879-08981982da0d"))
+        .engineName(EngineConstant.ENGINE_PIRATEBAY_PROXY)
+        .engineType(EngineType.TORRENT)
+        .hasLocationSupport(false)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(false)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(false)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(false)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -77,9 +77,9 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
     public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("torrent-finder.com").setPath("/tpb")
-                .addParameter("q", searchEntity.getQuery())
-                .build();
+            .setScheme("https").setHost("torrent-finder.com").setPath("/tpb")
+            .addParameter("q", searchEntity.getQuery())
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -101,8 +101,8 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
         }
 
         SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<TorrentSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<TorrentSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (ObjectUtils.isNotEmpty(searchResultEntity.size())) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -137,12 +137,12 @@ public class PirateBay10TorrentSearchEngine extends TorrentSearchEngine {
         if (StringUtils.isBlank(otherDetail)) return null;
 
         searchResultEntity
-                .torrentName(titleElement.text())
-                .torrentUrl(titleElement.attr("href"))
-                .category(typeElement.text())
-                .magneticLink(TorrentUtil.extractCoreMagneticLink(magneticLink))
-                .seeders(ConversionUtil.parseInt(seederElement.text()))
-                .leechers(ConversionUtil.parseInt(leecherElement.text()));
+            .torrentName(titleElement.text())
+            .torrentUrl(titleElement.attr("href"))
+            .category(typeElement.text())
+            .magneticLink(TorrentUtil.extractCoreMagneticLink(magneticLink))
+            .seeders(ConversionUtil.parseInt(seederElement.text()))
+            .leechers(ConversionUtil.parseInt(leecherElement.text()));
 
         for (String detail : otherDetail.split(",")) {
             if (detail.contains("Uploaded")) {

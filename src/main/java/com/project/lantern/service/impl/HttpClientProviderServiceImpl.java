@@ -77,9 +77,9 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
     private CloseableHttpClient createHttpClient() {
 
         RequestConfig configuration = RequestConfig.custom()
-                .setConnectTimeout(networkTimeOut)
-                .setCookieSpec(CookieSpecs.STANDARD)
-                .build();
+            .setConnectTimeout(networkTimeOut)
+            .setCookieSpec(CookieSpecs.STANDARD)
+            .build();
 
         String randomUserAgent = UserAgent.pickRandomUserAgent();
         Header userAgent = new BasicHeader(HttpHeaders.USER_AGENT, randomUserAgent);
@@ -88,10 +88,10 @@ public class HttpClientProviderServiceImpl implements HttpClientProviderService 
         CookieStore cookieStore = new BasicCookieStore();
 
         return HttpClientBuilder.create()
-                .setDefaultRequestConfig(configuration)
-                .setDefaultCookieStore(cookieStore)
-                .setDefaultHeaders(defaultHeaderList)
-                .build();
+            .setDefaultRequestConfig(configuration)
+            .setDefaultCookieStore(cookieStore)
+            .setDefaultHeaders(defaultHeaderList)
+            .build();
     }
 
 }

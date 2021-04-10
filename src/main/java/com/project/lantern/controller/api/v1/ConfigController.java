@@ -26,7 +26,7 @@ public class ConfigController {
 
     @GetMapping("/reset/{engineCategory}")
     public void reset(
-            @PathVariable("engineCategory") String engineCategory) {
+        @PathVariable("engineCategory") String engineCategory) {
         EngineType engineType = EngineType.fromString(engineCategory);
         engineConfigurationService.resetByEngineType(engineType);
     }

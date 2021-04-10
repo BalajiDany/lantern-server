@@ -47,24 +47,24 @@ public abstract class BaseSearchEngine<T> {
 
         // Prepare Response
         SearchResultEntityBuilder<T> searchResultEntityBuilder = SearchResultEntity.<T>builder()
-                .engineName(engineSpecEntity.getEngineName())
-                .engineType(engineSpecEntity.getEngineType());
+            .engineName(engineSpecEntity.getEngineName())
+            .engineType(engineSpecEntity.getEngineType());
 
         if (StringUtils.isEmpty(response)) {
             searchResultEntityBuilder
-                    .searchResults(Collections.emptyList())
-                    .engineResultType(EngineResultType.ENGINE_TIME_OUT);
+                .searchResults(Collections.emptyList())
+                .engineResultType(EngineResultType.ENGINE_TIME_OUT);
         } else {
             SearchResultEntity<T> responseEntity = this.getResponseEntity(response);
             searchResultEntityBuilder
-                    .searchResults(responseEntity.getSearchResults())
-                    .engineResultType(responseEntity.getEngineResultType());
+                .searchResults(responseEntity.getSearchResults())
+                .engineResultType(responseEntity.getEngineResultType());
         }
 
         long duration = System.currentTimeMillis() - startTime;
         return searchResultEntityBuilder
-                .duration(duration)
-                .build();
+            .duration(duration)
+            .build();
     }
 
 }

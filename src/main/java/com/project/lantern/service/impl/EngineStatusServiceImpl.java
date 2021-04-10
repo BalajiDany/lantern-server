@@ -21,16 +21,16 @@ public class EngineStatusServiceImpl implements EngineStatusService {
     @Override
     public List<EngineStatusResponseEntity> getEngineStatus(EngineType engineType) {
         return searchEngines.stream()
-                .filter(searchEngine -> searchEngine.getEngineSpec().getEngineType() == engineType)
-                .map(this::formResponseEntity)
-                .collect(Collectors.toList());
+            .filter(searchEngine -> searchEngine.getEngineSpec().getEngineType() == engineType)
+            .map(this::formResponseEntity)
+            .collect(Collectors.toList());
     }
 
     @Override
     public List<EngineStatusResponseEntity> getEngineStatus() {
         return searchEngines.stream()
-                .map(this::formResponseEntity)
-                .collect(Collectors.toList());
+            .map(this::formResponseEntity)
+            .collect(Collectors.toList());
     }
 
     private EngineStatusResponseEntity formResponseEntity(BaseSearchEngine<?> searchEngine) {

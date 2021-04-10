@@ -39,27 +39,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BingVideoSearchEngine extends VideoSearchEngine {
 
-    private final HttpClientProviderService httpClientProviderService;
-
-    private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("5458d198-7474-454a-8add-b5a1ebfd2d30"))
-            .engineName(EngineConstant.ENGINE_BING_VIDEO)
-            .engineType(EngineType.VIDEO)
-            .hasLocationSupport(false)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(false)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
-
-    private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
-
     private static final int SEARCH_COUNT = 10;
     private static final String THUMBNAIL_URL = "https://th.bing.com/th?id={0}&w=249&h=140&c=7&rs=1&pid=2.1";
+    private final HttpClientProviderService httpClientProviderService;
+    private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
+        .engineId(UUID.fromString("5458d198-7474-454a-8add-b5a1ebfd2d30"))
+        .engineName(EngineConstant.ENGINE_BING_VIDEO)
+        .engineType(EngineType.VIDEO)
+        .hasLocationSupport(false)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(false)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
+    private final EngineStateEntity engineState = EngineStateEntity.builder()
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -84,13 +81,13 @@ public class BingVideoSearchEngine extends VideoSearchEngine {
         int startCount = searchEntity.getPageNo() * SEARCH_COUNT;
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("www.bing.com").setPath("/videos/asyncv2")
-                .addParameter("q", searchEntity.getQuery())
-                .addParameter("setlang", language)
-                .addParameter("setmkt", region)
-                .addParameter("first", Integer.toString(startCount))
-                .addParameter("count", Integer.toString(SEARCH_COUNT))
-                .build();
+            .setScheme("https").setHost("www.bing.com").setPath("/videos/asyncv2")
+            .addParameter("q", searchEntity.getQuery())
+            .addParameter("setlang", language)
+            .addParameter("setmkt", region)
+            .addParameter("first", Integer.toString(startCount))
+            .addParameter("count", Integer.toString(SEARCH_COUNT))
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -112,8 +109,8 @@ public class BingVideoSearchEngine extends VideoSearchEngine {
         }
 
         SearchResultEntityBuilder<VideoSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<VideoSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<VideoSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (searchResultEntity.size() != 0) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -159,13 +156,13 @@ public class BingVideoSearchEngine extends VideoSearchEngine {
         }
 
         return VideoSearchResultEntity.builder()
-                .title(title)
-                .content(title)
-                .url(videoUrl)
-                .uploadedDate(uploadedDate)
-                .duration(duration)
-                .thumbnailUrl(MessageFormat.format(THUMBNAIL_URL, thumbnailId))
-                .build();
+            .title(title)
+            .content(title)
+            .url(videoUrl)
+            .uploadedDate(uploadedDate)
+            .duration(duration)
+            .thumbnailUrl(MessageFormat.format(THUMBNAIL_URL, thumbnailId))
+            .build();
     }
 
 }

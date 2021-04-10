@@ -37,21 +37,21 @@ public class BingParachuteGeneralSearchEngine extends GeneralSearchEngine {
     private final HttpClientProviderService httpClientService;
 
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("4bc36d87-108c-4168-b4a9-9cb41708bcb4"))
-            .engineName(EngineConstant.ENGINE_BING_PARACHUTE)
-            .engineType(EngineType.GENERAL)
-            .hasLocationSupport(false)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(false)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("4bc36d87-108c-4168-b4a9-9cb41708bcb4"))
+        .engineName(EngineConstant.ENGINE_BING_PARACHUTE)
+        .engineType(EngineType.GENERAL)
+        .hasLocationSupport(false)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(false)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(false)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(false)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -73,9 +73,9 @@ public class BingParachuteGeneralSearchEngine extends GeneralSearchEngine {
     public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("s.bingparachute.com").setPath("/search")
-                .addParameter("q", searchEntity.getQuery())
-                .build();
+            .setScheme("https").setHost("s.bingparachute.com").setPath("/search")
+            .addParameter("q", searchEntity.getQuery())
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -99,8 +99,8 @@ public class BingParachuteGeneralSearchEngine extends GeneralSearchEngine {
         }
 
         SearchResultEntityBuilder<GeneralSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<GeneralSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<GeneralSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (ObjectUtils.isNotEmpty(searchResultEntity)) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -132,8 +132,8 @@ public class BingParachuteGeneralSearchEngine extends GeneralSearchEngine {
         if (isInvalidContent) return null;
 
         return GeneralSearchResultEntity.builder()
-                .url(url).title(title).content(content)
-                .build();
+            .url(url).title(title).content(content)
+            .build();
     }
 
 }

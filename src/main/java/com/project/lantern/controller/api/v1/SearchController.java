@@ -19,10 +19,10 @@ public class SearchController {
 
     @GetMapping("/{searchType}")
     public SearchResponseEntity<?> search(
-            @PathVariable("searchType") String searchType,
-            @RequestParam String query,
-            @RequestParam(required = false) String location,
-            @RequestParam(required = false) String language) {
+        @PathVariable("searchType") String searchType,
+        @RequestParam String query,
+        @RequestParam(required = false) String location,
+        @RequestParam(required = false) String language) {
         SearchRequestEntity searchEntity = new SearchRequestEntity();
         searchEntity.setQuery(query);
         searchEntity.setLocation(location);

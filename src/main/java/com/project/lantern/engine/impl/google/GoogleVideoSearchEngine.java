@@ -40,27 +40,24 @@ import java.util.regex.Matcher;
 @RequiredArgsConstructor
 public class GoogleVideoSearchEngine extends VideoSearchEngine {
 
-    private final HttpClientProviderService httpClientService;
-
-    private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("3f336ebc-862a-4c4f-b540-9bed5bfb8aa0"))
-            .engineName(EngineConstant.ENGINE_GOOGLE_VIDEO)
-            .engineType(EngineType.VIDEO)
-            .hasLocationSupport(true)
-            .hasLanguageSupport(true)
-            .hasPaginationSupport(true)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
-
-    private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
-
     private static final String YOUTUBE_SITE = "site:.youtube.com";
     private static final String THUMBNAIL_URL = "https://i.ytimg.com/vi/{0}/default.jpg";
+    private final HttpClientProviderService httpClientService;
+    private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
+        .engineId(UUID.fromString("3f336ebc-862a-4c4f-b540-9bed5bfb8aa0"))
+        .engineName(EngineConstant.ENGINE_GOOGLE_VIDEO)
+        .engineType(EngineType.VIDEO)
+        .hasLocationSupport(true)
+        .hasLanguageSupport(true)
+        .hasPaginationSupport(true)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
+    private final EngineStateEntity engineState = EngineStateEntity.builder()
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -87,13 +84,13 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
         String searchQuery = searchEntity.getQuery() + StringUtils.SPACE + YOUTUBE_SITE;
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost(hostAddress).setPath("/search")
-                .addParameter("q", searchQuery)
-                .addParameter("hl", language)
-                .addParameter("gl", region)
-                .addParameter("tbm", "vid")
-                .addParameter("start", pageNo)
-                .build();
+            .setScheme("https").setHost(hostAddress).setPath("/search")
+            .addParameter("q", searchQuery)
+            .addParameter("hl", language)
+            .addParameter("gl", region)
+            .addParameter("tbm", "vid")
+            .addParameter("start", pageNo)
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -120,8 +117,8 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
         }
 
         SearchResultEntityBuilder<VideoSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<VideoSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<VideoSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         // Result Delivery
         if (ObjectUtils.isNotEmpty(searchResultEntity)) {
@@ -138,7 +135,7 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
     private VideoSearchResultEntity extractEntity(Element element) {
 
         Element anchorElement = element.selectFirst("div.yuRUbf > a");
-        Element titleElement = element.selectFirst("div.yuRUbf > a > h3 > span");
+        Element titleElement = element.selectFirst("div.yuRUbf > a > h3");
         Element contentElement = element.selectFirst("div.IsZvec span.aCOpRe");
         Element uploadedDateElement = element.selectFirst("div.IsZvec div.fG8Fp");
         Element durationElement = element.selectFirst("div.ij69rd.UHe5G");
@@ -159,11 +156,11 @@ public class GoogleVideoSearchEngine extends VideoSearchEngine {
         if (isInvalidContent) return null;
 
         return VideoSearchResultEntity.builder()
-                .url(url).title(title).content(content)
-                .duration(duration)
-                .uploadedDate(uploadedDate)
-                .thumbnailUrl(thumbnailUrl)
-                .build();
+            .url(url).title(title).content(content)
+            .duration(duration)
+            .uploadedDate(uploadedDate)
+            .thumbnailUrl(thumbnailUrl)
+            .build();
     }
 
     private String extractThumbnailUrl(String url) {

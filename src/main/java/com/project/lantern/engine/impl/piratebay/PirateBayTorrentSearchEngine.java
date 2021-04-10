@@ -40,21 +40,21 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
     private final HttpClientProviderService httpClientService;
 
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("0a8758ad-980c-41a6-8e2d-5dbdf8c61efe"))
-            .engineName(EngineConstant.ENGINE_PIRATEBAY)
-            .engineType(EngineType.TORRENT)
-            .hasLocationSupport(false)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(false)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("0a8758ad-980c-41a6-8e2d-5dbdf8c61efe"))
+        .engineName(EngineConstant.ENGINE_PIRATEBAY)
+        .engineType(EngineType.TORRENT)
+        .hasLocationSupport(false)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(false)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -75,10 +75,10 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
     @SneakyThrows
     public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("apibay.org").setPath("/q.php")
-                .addParameter("q", searchEntity.getQuery())
-                .addParameter("cat", "0")
-                .build();
+            .setScheme("https").setHost("apibay.org").setPath("/q.php")
+            .addParameter("q", searchEntity.getQuery())
+            .addParameter("cat", "0")
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -108,8 +108,8 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
         }
 
         SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<TorrentSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<TorrentSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (ObjectUtils.isNotEmpty(searchResultEntity)) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -138,15 +138,15 @@ public class PirateBayTorrentSearchEngine extends TorrentSearchEngine {
         int leechers = jsonObject.getInt("leechers");
 
         return searchResultEntityBuilder
-                .torrentName(torrentName)
-                .torrentSize(ConversionUtil.convertBytesToReadable(torrentSize))
-                .torrentUrl("https://thepiratebay.org/description.php?id=" + torrentId)
-                .magneticLink("magnet:?xt=urn:btih:" + infoHash)
-                .uploadedDate(ConversionUtil.parseDate(uploadedDate))
-                .category(TorrentUtil.getCategory(category))
-                .seeders(seeders)
-                .leechers(leechers)
-                .build();
+            .torrentName(torrentName)
+            .torrentSize(ConversionUtil.convertBytesToReadable(torrentSize))
+            .torrentUrl("https://thepiratebay.org/description.php?id=" + torrentId)
+            .magneticLink("magnet:?xt=urn:btih:" + infoHash)
+            .uploadedDate(ConversionUtil.parseDate(uploadedDate))
+            .category(TorrentUtil.getCategory(category))
+            .seeders(seeders)
+            .leechers(leechers)
+            .build();
     }
 
 }

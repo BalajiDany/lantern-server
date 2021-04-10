@@ -51,8 +51,8 @@ public class NetworkStatusServiceImpl implements NetworkStatusService {
     public boolean isNetworkAliveNow() {
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("api.ipify.org")
-                .build();
+            .setScheme("https").setHost("api.ipify.org")
+            .build();
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
         request.addHeader(HttpHeaders.ACCEPT, RequestHeaders.VALUE_ACCEPT_HTML);

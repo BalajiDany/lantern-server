@@ -21,15 +21,15 @@ import org.springframework.scheduling.TaskScheduler;
 @Configuration
 @RequiredArgsConstructor
 @Import({
-        AsyncConfiguration.class,
-        PropertySourceConfiguration.class,
+    AsyncConfiguration.class,
+    PropertySourceConfiguration.class,
 
-        GeneralSearchEngineConfiguration.class,
-        CodeSearchEngineConfiguration.class,
-        TorrentSearchEngineConfiguration.class,
-        VideoSearchEngineConfiguration.class,
+    GeneralSearchEngineConfiguration.class,
+    CodeSearchEngineConfiguration.class,
+    TorrentSearchEngineConfiguration.class,
+    VideoSearchEngineConfiguration.class,
 
-        ServiceConfiguration.class,
+    ServiceConfiguration.class,
 })
 public class BaseConfiguration {
 

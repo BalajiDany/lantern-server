@@ -45,7 +45,7 @@ public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
         if (!engineState.isEnabled()) return;
 
         log.info("Disabling the Engine : {} Type : {}",
-                engineSpec.getEngineName(), engineSpec.getEngineType());
+            engineSpec.getEngineName(), engineSpec.getEngineType());
         engineState.setEnabled(false);
     }
 
@@ -56,7 +56,7 @@ public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
         if (engineState.isEnabled()) return;
 
         log.info("Enabling the Engine : {} Type : {}",
-                engineSpec.getEngineName(), engineSpec.getEngineType());
+            engineSpec.getEngineName(), engineSpec.getEngineType());
         engineState.setEnabled(true);
     }
 
@@ -68,9 +68,9 @@ public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
         engineState.setContinuousBreakdownCount(++breakdownCount);
         disableEngine(searchEngine);
 
-        if (breakdownCount > engineSpec.getMaxAllowdedContinousBreakdownCount()) {
+        if (breakdownCount > engineSpec.getMaxAllowedContinuousBreakdownCount()) {
             log.error("Shutting down the engine : {} - {} Type",
-                    engineSpec.getEngineName(), engineSpec.getEngineType());
+                engineSpec.getEngineName(), engineSpec.getEngineType());
             log.error("\t Reason: Reached Max allowed breakdown");
         } else {
             Date enableDate = new Date(System.currentTimeMillis() + ENGINE_HALT_TIME);
@@ -85,10 +85,10 @@ public class EngineDiagnosisServiceImpl implements EngineDiagnosisService {
         int timeoutCount = engineState.getContinuousTimeoutCount();
         engineState.setContinuousTimeoutCount(++timeoutCount);
 
-        if (timeoutCount > engineSpec.getMaxAllowdedContinousTimeoutCount()) {
+        if (timeoutCount > engineSpec.getMaxAllowedContinuousTimeoutCount()) {
             disableEngine(searchEngine);
             log.error("Shutting down the engine : {} type : {} Reason: Reached Max allowed timeout",
-                    engineSpec.getEngineName(), engineSpec.getEngineType());
+                engineSpec.getEngineName(), engineSpec.getEngineType());
         }
     }
 

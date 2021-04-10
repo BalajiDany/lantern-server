@@ -28,8 +28,8 @@ public class EngineSpecEntity {
 
     private boolean hasPaginationSupport;
 
-    private int maxAllowdedContinousTimeoutCount = 5;
+    private int maxAllowedContinuousTimeoutCount = 5;
 
-    private int maxAllowdedContinousBreakdownCount = 5;
+    private int maxAllowedContinuousBreakdownCount = 5;
 
 }

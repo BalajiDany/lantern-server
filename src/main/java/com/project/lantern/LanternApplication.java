@@ -56,7 +56,7 @@ public class LanternApplication {
         log.info("---------------------------------------------------------");
 
         Map<RequestMappingInfo, HandlerMethod> handlerMethodsMap = context.getBean(RequestMappingHandlerMapping.class)
-                .getHandlerMethods();
+            .getHandlerMethods();
 
         log.info("All Registered End point(s) - local");
         for (Map.Entry<RequestMappingInfo, HandlerMethod> handlerMethod : handlerMethodsMap.entrySet()) {

@@ -40,21 +40,21 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
     private final HttpClientProviderService httpClientProviderService;
 
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("349adcf2-52f7-4a19-a746-cf4b8a713180"))
-            .engineName(EngineConstant.ENGINE_DUCK_DUCK_GO)
-            .engineType(EngineType.TORRENT)
-            .hasLocationSupport(true)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(false)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("349adcf2-52f7-4a19-a746-cf4b8a713180"))
+        .engineName(EngineConstant.ENGINE_DUCK_DUCK_GO)
+        .engineType(EngineType.TORRENT)
+        .hasLocationSupport(true)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(false)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -77,10 +77,10 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
         String location = DuckDuckGoRequestUtil.getRegion(searchEntity.getLocation());
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("html.duckduckgo.com").setPath("/html")
-                .addParameter("q", searchEntity.getQuery())
-                .addParameter("kl", location)
-                .build();
+            .setScheme("https").setHost("html.duckduckgo.com").setPath("/html")
+            .addParameter("q", searchEntity.getQuery())
+            .addParameter("kl", location)
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -103,8 +103,8 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
         }
 
         SearchResultEntityBuilder<GeneralSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<GeneralSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<GeneralSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (searchResultEntity.size() != 0) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -137,8 +137,8 @@ public class DuckDuckGoGeneralSearchEngine extends GeneralSearchEngine {
         if (isInvalidContent) return null;
 
         return GeneralSearchResultEntity.builder()
-                .url(this.extractUrl(url)).title(title).content(content)
-                .build();
+            .url(this.extractUrl(url)).title(title).content(content)
+            .build();
     }
 
     private String extractUrl(String url) {

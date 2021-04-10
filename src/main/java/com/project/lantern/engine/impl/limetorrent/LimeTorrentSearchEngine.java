@@ -38,21 +38,21 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
     private final HttpClientProviderService httpClientProviderService;
 
     private final EngineSpecEntity engineSpec = EngineSpecEntity.builder()
-            .engineId(UUID.fromString("5759f1f4-4a7d-499f-9ce3-84fab3a607e2"))
-            .engineName(EngineConstant.ENGINE_LIME_TORRENT)
-            .engineType(EngineType.TORRENT)
-            .hasLocationSupport(false)
-            .hasLanguageSupport(false)
-            .hasPaginationSupport(true)
-            .maxAllowdedContinousTimeoutCount(5)
-            .maxAllowdedContinousBreakdownCount(5)
-            .build();
+        .engineId(UUID.fromString("5759f1f4-4a7d-499f-9ce3-84fab3a607e2"))
+        .engineName(EngineConstant.ENGINE_LIME_TORRENT)
+        .engineType(EngineType.TORRENT)
+        .hasLocationSupport(false)
+        .hasLanguageSupport(false)
+        .hasPaginationSupport(true)
+        .maxAllowedContinuousTimeoutCount(5)
+        .maxAllowedContinuousBreakdownCount(5)
+        .build();
 
     private final EngineStateEntity engineState = EngineStateEntity.builder()
-            .isEnabled(true)
-            .continuousTimeoutCount(0)
-            .continuousBreakdownCount(0)
-            .build();
+        .isEnabled(true)
+        .continuousTimeoutCount(0)
+        .continuousBreakdownCount(0)
+        .build();
 
     @Override
     public EngineSpecEntity getEngineSpec() {
@@ -73,12 +73,12 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
     @SneakyThrows
     public HttpUriRequest getSearchRequest(SearchRequestEntity searchEntity) {
         String pathWithQuery = "/search/all/" + ConversionUtil.encodeURL(searchEntity.getQuery()) +
-                "/seeds/" + (searchEntity.getPageNo() + 1) + "/";
+            "/seeds/" + (searchEntity.getPageNo() + 1) + "/";
 
         URI uri = new URIBuilder()
-                .setScheme("https").setHost("limetorrents.unblockninja.com")
-                .setPath(pathWithQuery)
-                .build();
+            .setScheme("https").setHost("limetorrents.unblockninja.com")
+            .setPath(pathWithQuery)
+            .build();
 
         HttpGet request = new HttpGet(uri);
         request.addHeader(HttpHeaders.ACCEPT_LANGUAGE, RequestHeaders.VALUE_ACCEPT_LANGUAGE);
@@ -103,8 +103,8 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
         }
 
         SearchResultEntity.SearchResultEntityBuilder<TorrentSearchResultEntity> resultEntityBuilder = SearchResultEntity
-                .<TorrentSearchResultEntity>builder()
-                .searchResults(searchResultEntity);
+            .<TorrentSearchResultEntity>builder()
+            .searchResults(searchResultEntity);
 
         if (ObjectUtils.isNotEmpty(searchResultEntity)) {
             resultEntityBuilder.engineResultType(EngineResultType.FOUND_SEARCH_RESULT);
@@ -133,16 +133,16 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
         String seedCount = seederElement.text().replace(",", "");
         String leechCount = leechElement.text().replace(",", "");
         searchResultEntity
-                .seeders(ConversionUtil.parseInt(seedCount))
-                .leechers(ConversionUtil.parseInt(leechCount));
+            .seeders(ConversionUtil.parseInt(seedCount))
+            .leechers(ConversionUtil.parseInt(leechCount));
 
         for (Element anchorElement : anchorElements) {
             if (anchorElement.hasAttr("rel")) {
                 String url = anchorElement.attr("href");
                 String magneticLink = this.extractMagneticLink(url);
                 searchResultEntity
-                        .torrentUrl(url)
-                        .magneticLink(magneticLink);
+                    .torrentUrl(url)
+                    .magneticLink(magneticLink);
             } else {
                 searchResultEntity.torrentName(anchorElement.text());
             }
@@ -153,8 +153,8 @@ public class LimeTorrentSearchEngine extends TorrentSearchEngine {
             String[] splittedContent = content.split(" - in ");
             if (splittedContent.length > 1) {
                 searchResultEntity
-                        .uploadedDate(splittedContent[0])
-                        .category(splittedContent[1]);
+                    .uploadedDate(splittedContent[0])
+                    .category(splittedContent[1]);
             } else {
                 searchResultEntity.torrentSize(content);
             }

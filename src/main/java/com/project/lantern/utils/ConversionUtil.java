@@ -47,8 +47,8 @@ public class ConversionUtil {
     public static String decodeURL(String url) {
         try {
             return URLDecoder
-                    .decode(url.replace("+", "%2B"), "UTF-8")
-                    .replace("%2B", "+");
+                .decode(url.replace("+", "%2B"), "UTF-8")
+                .replace("%2B", "+");
         } catch (UnsupportedEncodingException exception) {
             return null;
         }

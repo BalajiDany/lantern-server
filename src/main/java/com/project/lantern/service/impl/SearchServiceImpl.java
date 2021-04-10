@@ -59,26 +59,26 @@ public class SearchServiceImpl implements SearchService {
     }
 
     private <T, E extends BaseSearchEngine<T>> SearchResponseEntity<T> coreSearch(
-            List<E> searchEngine, SearchRequestEntity requestEntity) {
+        List<E> searchEngine, SearchRequestEntity requestEntity) {
         long startTime = System.currentTimeMillis();
         this.cleanRequestEntity(requestEntity);
 
         List<SearchResultEntity<T>> resultEntity = searchEngine.stream().parallel()
-                .filter(engine -> engine.getEngineState().isEnabled())
-                .map(engine -> this.searchAndDiagnosis(engine, requestEntity))
-                .filter(this::isValidResponse)
-                .collect(Collectors.toList());
+            .filter(engine -> engine.getEngineState().isEnabled())
+            .map(engine -> this.searchAndDiagnosis(engine, requestEntity))
+            .filter(this::isValidResponse)
+            .collect(Collectors.toList());
 
         long stopTime = System.currentTimeMillis();
         long runTime = stopTime - startTime;
         return SearchResponseEntity.<T>builder()
-                .searchResults(resultEntity)
-                .duration(runTime)
-                .build();
+            .searchResults(resultEntity)
+            .duration(runTime)
+            .build();
     }
 
     private <T> SearchResultEntity<T> searchAndDiagnosis(
-            BaseSearchEngine<T> searchEngine, SearchRequestEntity searchEntity) {
+        BaseSearchEngine<T> searchEngine, SearchRequestEntity searchEntity) {
         SearchResultEntity<T> response = searchEngine.performSearch(searchEntity);
         afterSearch(searchEngine, response);
         return response;
