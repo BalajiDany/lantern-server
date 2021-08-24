@@ -20,7 +20,7 @@
         <org.apache.commons.commons-lang3>3.11</org.apache.commons.commons-lang3>
         <org.apache.httpcomponents.httpclient>4.5.13</org.apache.httpcomponents.httpclient>
         <org.projectlombok.lombok>1.18.16</org.projectlombok.lombok>
-        <org.jsoup.jsoup>1.13.1</org.jsoup.jsoup>
+        <org.jsoup.jsoup>1.14.2</org.jsoup.jsoup>
         <org.json.json>20201115</org.json.json>
     </properties>
 
